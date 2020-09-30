@@ -30,226 +30,69 @@
 #' @export
 #' @examples
 #' \dontrun{
-#'
-#'
-#' ########################################################
-#'
-#'
-#' rm(list = ls())
-#'
-#' library(sampling)
-#'
-#' N <- 1000
-#'
-#' Xcat <-as.matrix(data.frame(cat1 = rep(1:40,each = N/40),
-#'                     cat2 = rep(1:50,each = N/50),
-#'                     cat2 = rep(1:100,each = N/100)))
-#'
-#'
-#' p <- 30
-#' X <- matrix(rnorm(N*p),ncol = 30)
-#'
-#'
-#' Xcat_tmp <- disjMatrix(Xcat)
-#' Xcat_tmp <- do.call(cbind,apply(Xcat,MARGIN = 2,disjunctive))
-#' Xred <- as.matrix(cbind(X,Xcat_tmp))
-#'
-#' pik <- rep(300/N,N)
-#' A <- Xred/pik
-#'
-#'
-#' system.time(s1 <- fastcube(Xred,pik))
-#' system.time(s1 <- ffphase(X,pik,Xcat))
-#' system.time(s1 <- fastcube(X,pik))
-#' as.vector(t(A)%*%s1)
-#' as.vector(t(A)%*%pik)
-#'
-#' system.time(s2 <- ReducedSamplecube(Xred,pik,redux = TRUE))
-#' A <- Xred/pik
-#' as.vector(t(A)%*%s2)
-#' as.vector(t(A)%*%pik)
-#'
-#' system.time(s3 <- fastflightcube(Xred,pik,order = 2,comment = FALSE))
-#' as.vector(t(A)%*%s3)
-#' as.vector(t(A)%*%pik)
-#'
-#'
-#'
-#' system.time(s4 <- BalancedSampling::flightphase(pik,Xred))
-#' as.vector(t(A)%*%s4)
-#' as.vector(t(A)%*%pik)
-#'
-#'
-#'
-#' rm(list = ls())
+#' 
 #' N <- 100
-#' Xcat <-data.frame(cat1 = rep(1:50,each = 2))
-#' pik <- rep(10/N,N)
-#' X <- cbind(pik,matrix(rnorm(N),ncol = 1))
-#' sum(ffphase(X,pik,Xcat))
-#'
-#'
-#' rm(list = ls())
-#' N <- 10000
-#' Xcat <- as.matrix(rep(1:1250,each = N/1250))
-#' Xcat_tmp <- disjMatrix(Xcat)
-#' sum(ncat(Xcat))
-#' pikInit <- rep(0.25,N)
-#' X <- cbind(pikInit,matrix(rnorm(N),ncol = 1))
-#' Xconc <- as.matrix(cbind(X,Xcat_tmp))
-#'
-#'
-#' AInit <- Xconc/pikInit
-#' pik <- pikInit
-#' system.time(s <- ffphase(X,pik,Xcat))
-#'
-#' system.time(sampling::balancedstratification(X,Xcat,pik,comment=TRUE,method=1))
-#'
-#' head(t(AInit)%*%pikInit)
-#' head(t(AInit)%*%s)
-#' system.time(s <- BalancedSampling::flightphase(pik,Xconc))
-#'
-#'
+#' n <- 10
+#' p <- 4
+#' 
+#' pik <- sampling::inclusionprobabilities(runif(N),n)
+#' pik <- rep(n/N,N)
+#' 
+#' X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+#' s <- ffphase(X,pik) 
+#' 
+#' 
+#' sum(s)
+#' 
 #' }
-ffphase <- function(X, pik, Xcat){
+ffphase <- function(X, pik){
 
   ##----------------------------------------------------------------
   ##                        Initialization                         -
   ##----------------------------------------------------------------
-
-  Xcat <- as.matrix(Xcat)
-
   EPS = 1e-8
-  A = X/pik
+  A <- X/pik
+  N <- length(pik)  
   p = ncol(X)
-  if(!missing(Xcat)){
-    CAT = TRUE
-    n_all_cat <- sum(ncat(Xcat))
-  }else{
-    CAT = FALSE
-    n_all_cat <- 0
-  }
-
-
-
+  
   ##----------------------------------------------------------------
   ##                Number of non 0-1 inclusion prob               -
   ##----------------------------------------------------------------
-
+  
   i <- which(pik > EPS & pik < (1-EPS))
   i_size = length(i)
-
-  ##---------------------------------------------------------------
-  ##                          Main loop                           -
-  ##---------------------------------------------------------------
-
-
-  while(i_size > p + n_all_cat){
-    uCat <- i[duplicated(Xcat[i,]) | duplicated(Xcat[i,], fromLast = TRUE)]
-
-
-    # cat("i_size : ",i_size,"\n\n")
-
-    ##-----------------------------------
-    ##  Find B
-    ##-----------------------------------
-
-    # if(i_size <= p + n_all_cat){
-    #   Xdev <- disjMatrix(as.matrix(Xcat[i,]))
-    #   B <- cbind(A[i,],Xdev)
-    # }else{
-      B <- findB(as.matrix(A[uCat,]),as.matrix(Xcat[uCat,]))
-      # Sys.sleep(3)
-      # print(image(as(B,"sparseMatrix")))
-      # print(dim(B))
-    # }
-    tmp <-  onestep(B,pik[uCat[1:nrow(B)]],EPS)
-    if(is.null(tmp)){
-      break;
-    }else{
-      pik[uCat[1:nrow(B)]] <- tmp
-    }
-
-
-
-    # cat("i_size : ",i_size,"\n\n")
-    # ##-----------------------------------
-    # ##  Find B
-    # ##-----------------------------------
-    #
-    # if(i_size <= p + n_all_cat){
-    #   if(CAT == TRUE){
-    #     Xdev <- disjMatrix(as.matrix(Xcat[i,]))
-    #     B <- cbind(A[i,],Xdev)
-    #   }else{
-    #     B <- A[i,]
-    #   }
-    # }else{
-    #   if(CAT == TRUE){
-    #     B <- findB(A[i,],Xcat[i,])
-    #
-    #     # Sys.sleep(3)
-    #     # print(image(as(B,"sparseMatrix")))
-    #     print(dim(B))
-    #   }else{
-    #     B <- A[i[1:(p+1)],]
-    #   }
-    # }
-    # tmp <-  onestep(B,pik[i[1:nrow(B)]],EPS)
-    # if(is.null(tmp)){
-    #   break;
-    # }else{
-    #   pik[i[1:nrow(B)]] <- tmp
-    # }
-
-
-    ##------------
-    ##  update i
-    ##------------
-
-    i <- which(pik > EPS & pik < (1-EPS))
-    i_size = length(i)
-
-  }
-
-
-
-  image(as(disjMatrix(as.matrix(Xcat[i,])),"sparseMatrix"))
-  head(t(AInit)%*%pik)
-  head(t(AInit)%*%pikInit)
-
+  
+  ##----------------------------------------------------------------
+  ##                          flight phase                         -
+  ##----------------------------------------------------------------
+  
   while(i_size > 0){
-
-    ##-----------------------------------
-    ##  Find B
-    ##-----------------------------------
-
-
-    if(i_size <= p){
-      B <- as.matrix(A[i,])
+    ##------ Find B
+    if(i_size >= (p+1)){
+      i_tmp <- i[1:(p+1)]
+      pik_tmp <- pik[i_tmp]
     }else{
-      B <- as.matrix(A[i[1:(p+1)],])
+      i_tmp <- i
+      pik_tmp <- pik[i_tmp]
     }
-    tmp <-  onestep(B,pik[i[1:nrow(B)]],EPS)
+    
+    B <- A[i_tmp,]
+
+    ##------ onestep and check if null
+    tmp <-  onestep(B,pik_tmp,EPS)
     if(is.null(tmp)){
       break;
     }else{
-      pik[i[1:nrow(B)]] <- tmp
+      pik[i_tmp] <- tmp
     }
-
-    ##------------
-    ##  update i
-    ##------------
-
+    
+    ##------ update i
     i <- which(pik > EPS & pik < (1-EPS))
     i_size = length(i)
-
   }
-
-  head(t(AInit)%*%pik)
-  head(t(AInit)%*%pikInit)
-
-
+  
+  
+  
   return(pik)
 }
 

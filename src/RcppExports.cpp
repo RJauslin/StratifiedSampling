@@ -63,6 +63,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// disj_to_cat
+arma::uvec disj_to_cat(arma::umat Xcat);
+RcppExport SEXP _StratifiedSampling_disj_to_cat(SEXP XcatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::umat >::type Xcat(XcatSEXP);
+    rcpp_result_gen = Rcpp::wrap(disj_to_cat(Xcat));
+    return rcpp_result_gen;
+END_RCPP
+}
 // findBarma
 arma::mat findBarma(arma::mat X, arma::umat Xcat);
 RcppExport SEXP _StratifiedSampling_findBarma(SEXP XSEXP, SEXP XcatSEXP) {
@@ -105,6 +116,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},
+    {"_StratifiedSampling_disj_to_cat", (DL_FUNC) &_StratifiedSampling_disj_to_cat, 1},
     {"_StratifiedSampling_findBarma", (DL_FUNC) &_StratifiedSampling_findBarma, 2},
     {"_StratifiedSampling_samplen", (DL_FUNC) &_StratifiedSampling_samplen, 2},
     {"_StratifiedSampling_systematicDesign", (DL_FUNC) &_StratifiedSampling_systematicDesign, 1},

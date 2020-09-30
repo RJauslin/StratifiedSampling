@@ -160,8 +160,60 @@ system.time(test <- apply(as.matrix(Xcat),MARGIN = 2,FUN <- function(x){as.matri
 system.time(test <-  disjMatrix(Xcat))
 
 
-
 disjMatrix(as.matrix(Xcat[,1]))
+
+*/
+
+
+// [[Rcpp::depends(RcppArmadillo)]]
+//' @title findBarma
+//'
+//' @description
+//' findB
+//'
+//' @param X a Matrix
+//' @param Xcat a Matrix
+//'
+//' @return a matrix
+//'
+//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+//'
+//' @export
+// [[Rcpp::export]]
+arma::uvec disj_to_cat(arma::umat Xcat) {
+  int p = Xcat.n_cols;
+  int N = Xcat.n_rows;
+  arma::uvec out(N,arma::fill::zeros); 
+  for(arma::uword i = 0; i < p; i++){
+    out.elem(find(Xcat.col(i) == 1)) += i+1;
+  }
+  return(out);
+}
+
+
+// Rcpp::IntegerVector catRcpp(Rcpp::LogicalMatrix Xcat) {
+//   int p = Xcat.ncol();
+//   int N = Xcat.nrow();
+//   Rcpp::IntegerVector out(N); 
+//   for(int i = 0; i < p; i++){
+//     out[Xcat.column(i)] = (i+1);
+//   }
+//   return(out);
+// }
+
+
+/*** R
+Xcat <- disjMatrix(as.matrix(c(1,1,1,2,2,3,3)))
+disj_to_cat(Xcat)
+
+
+# Xcat <- disjMatrix(as.matrix(rep(1:500,each = 500)))
+# system.time(catCpp(Xcat))
+# system.time(cat(Xcat))
+# system.time(catRcpp(Xcat))
+
+
+microbenchmark::microbenchmark(catCpp(Xcat),cat(Xcat),catRcpp(Xcat),times = 30)
 
 */
 

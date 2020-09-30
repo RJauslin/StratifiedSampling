@@ -4,7 +4,7 @@
 \alias{landingRM}
 \title{Landing by suppression of variables}
 \usage{
-landingRM(X, pikstar, pik, Xcat)
+landingRM(X, pikstar, pik)
 }
 \arguments{
 \item{X}{matrix of auxiliary variables on which the sample must be balanced.}
@@ -21,46 +21,20 @@ This function does the landing phase of the cube method using suppression of var
 }
 \examples{
 \dontrun{
-
 rm(list = ls())
-
-library(sampling)
-
 N <- 100
-Xcat <-as.matrix(data.frame(cat1 = rep(1:4,each = N/4),
-                    cat2 = rep(1:5,each = N/5),
-                    cat2 = rep(1:10,each = N/10)))
-p <- 3
-X <- cbind(rep(1,N),matrix(rnorm(N*p),ncol = 3))
+n <- 10
+p <- 4
 
-Xcat_tmp <- disjMatrix(Xcat)
-Xcat_tmp <- do.call(cbind,apply(Xcat,MARGIN = 2,disjunctive))
-Xred <- as.matrix(cbind(X,Xcat_tmp))
+pik <- sampling::inclusionprobabilities(runif(N),n)
 
-pik <- rep(10/N,N)
-A <- Xred/pik
-
-
-# WITH Xcat
-
-pikstar <- fastcube(X,pik,Xcat)
-s <- landingRM(X,pikstar,pik,Xcat)
-s
-sum(s)
-t(t(Xred/pik)\%*\%pik)
-t(t(Xred/pik)\%*\%pikstar)
-t(t(Xred/pik)\%*\%s)
-t(t(Xred/pik)\%*\%samplecube(Xred,pik,comment = FALSE,method = 2))
-
-# WITHOUT Xcat
-pikstar <- fastcube(cbind(rep(1,nrow(X)),X),pik)
+X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+pikstar <- ffphase(X,pik) 
 s <- landingRM(X,pikstar,pik)
-s
 sum(s)
-t(cbind(rep(1,nrow(X)),X)/pik)\%*\%pik
-t(cbind(rep(1,nrow(X)),X)/pik)\%*\%pikstar
-t(cbind(rep(1,nrow(X)),X)/pik)\%*\%s
-t(cbind(rep(1,nrow(X)),X)/pik)\%*\%samplecube(X,pik,comment = FALSE,method = 2)
+t(X/pik)\%*\%pik
+t(X/pik)\%*\%pikstar
+t(X/pik)\%*\%s
 }
 }
 \references{

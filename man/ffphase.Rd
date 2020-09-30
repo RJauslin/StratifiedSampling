@@ -4,7 +4,7 @@
 \alias{ffphase}
 \title{Cube method with reduction of the auxiliary variables matrix}
 \usage{
-ffphase(X, pik, Xcat)
+ffphase(X, pik)
 }
 \arguments{
 \item{X}{a matrix of size (N x p) of auxiliary variables on which the sample must be balanced.}
@@ -28,84 +28,18 @@ It considers a reduced matrix \code{X} by removing columns and rows that sum to 
 \examples{
 \dontrun{
 
-
-########################################################
-
-
-rm(list = ls())
-
-library(sampling)
-
-N <- 1000
-
-Xcat <-as.matrix(data.frame(cat1 = rep(1:40,each = N/40),
-                    cat2 = rep(1:50,each = N/50),
-                    cat2 = rep(1:100,each = N/100)))
-
-
-p <- 30
-X <- matrix(rnorm(N*p),ncol = 30)
-
-
-Xcat_tmp <- disjMatrix(Xcat)
-Xcat_tmp <- do.call(cbind,apply(Xcat,MARGIN = 2,disjunctive))
-Xred <- as.matrix(cbind(X,Xcat_tmp))
-
-pik <- rep(300/N,N)
-A <- Xred/pik
-
-
-system.time(s1 <- fastcube(Xred,pik))
-system.time(s1 <- ffphase(X,pik,Xcat))
-system.time(s1 <- fastcube(X,pik))
-as.vector(t(A)\%*\%s1)
-as.vector(t(A)\%*\%pik)
-
-system.time(s2 <- ReducedSamplecube(Xred,pik,redux = TRUE))
-A <- Xred/pik
-as.vector(t(A)\%*\%s2)
-as.vector(t(A)\%*\%pik)
-
-system.time(s3 <- fastflightcube(Xred,pik,order = 2,comment = FALSE))
-as.vector(t(A)\%*\%s3)
-as.vector(t(A)\%*\%pik)
-
-
-
-system.time(s4 <- BalancedSampling::flightphase(pik,Xred))
-as.vector(t(A)\%*\%s4)
-as.vector(t(A)\%*\%pik)
-
-
-
-rm(list = ls())
 N <- 100
-Xcat <-data.frame(cat1 = rep(1:50,each = 2))
-pik <- rep(10/N,N)
-X <- cbind(pik,matrix(rnorm(N),ncol = 1))
-sum(ffphase(X,pik,Xcat))
+n <- 10
+p <- 4
+
+pik <- sampling::inclusionprobabilities(runif(N),n)
+pik <- rep(n/N,N)
+
+X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+s <- ffphase(X,pik) 
 
 
-rm(list = ls())
-N <- 10000
-Xcat <- as.matrix(rep(1:1250,each = N/1250))
-Xcat_tmp <- disjMatrix(Xcat)
-sum(ncat(Xcat))
-pikInit <- rep(0.25,N)
-X <- cbind(pikInit,matrix(rnorm(N),ncol = 1))
-Xconc <- as.matrix(cbind(X,Xcat_tmp))
-
-
-AInit <- Xconc/pikInit
-pik <- pikInit
-system.time(s <- ffphase(X,pik,Xcat))
-
-system.time(sampling::balancedstratification(X,Xcat,pik,comment=TRUE,method=1))
-
-head(t(AInit)\%*\%pikInit)
-head(t(AInit)\%*\%s)
-system.time(s <- BalancedSampling::flightphase(pik,Xconc))
-
+sum(s)
 
 }
 }

@@ -1,7 +1,7 @@
 #' find the sub-matrix B in the flight phase
 #'
 #' @description
-#' This function is used in the \code{\link{ffphase}} function to find the smallest matrix B.
+#' 
 #'
 #' @param X matrix of auxiliary variables.
 #' @param Xcat matrix of categorical variables.
@@ -16,21 +16,13 @@
 #' @export
 #'
 #' @examples
-#' rm(list = ls())
-#'
-#' library(sampling)
-#'
 #' N <- 1000
+#' strata <-  sample(x = 1:6, size = N, replace = TRUE)
 #'
-#' Xcat <-data.frame(cat1 = rep(1:40,each = N/40),
-#'                     cat2 = rep(1:50,each = N/50),
-#'                     cat3 = rep(1:500,times = 2))
-#'                     #cat3 = rep(1:100,each = N/100))
-#'
-#' pik <- inclusionprobastrata(Xcat[,1],rep(1,40))
-#' p <- 30
-#' X <- matrix(rnorm(N*p),ncol = 30)
-#'
+#' p <- 3
+#' X <- matrix(rnorm(N*p),ncol = 3)
+#' findB(X,strata)
+#' 
 #'
 #' N <- 100
 #' Xcat <-data.frame(cat1 = rep(1:50,each = 2))
@@ -43,40 +35,40 @@
 #'
 #'
 findB <- function(X,
-                  Xcat){
+                  strata){
 
-
-  Xcat <- as.matrix(Xcat)
+  strata <- as.matrix(strata)
   X <- as.matrix(X)
   eps <- 1e-9
   N <- nrow(X)
   pInit <- ncol(X)
 
-  if(pInit > nrow(Xcat)){
-    Xcat_tmp <- as.matrix(Xcat[1:(pInit+1),])
+  if(pInit > nrow(strata)){
+    strata_tmp <- as.matrix(strata[1:(pInit+1),])
   }else{
-    Xcat_tmp <- as.matrix(Xcat)
+    strata_tmp <- as.matrix(strata[1:pInit,])
   }
+  
+  
+  nstrata <- sum(ncat(strata_tmp))
+  nstrata_tmp <- 0
 
-  n_all_cat <- sum(ncat(Xcat_tmp))
-  n_all_cat_tmp <- 0
-
-  while(n_all_cat != n_all_cat_tmp){
-    n_all_cat_tmp = n_all_cat
-    p =  pInit  + n_all_cat
+  while(nstrata != nstrata_tmp){
+    nstrata_tmp = nstrata
+    p =  pInit  + nstrata
     if(p >= nrow(X)){
       p <- nrow(X)-1
-      Xcat_tmp <- as.matrix(Xcat[1:(p+1),])
-      n_all_cat <- sum(ncat(Xcat_tmp))
+      strata_tmp <- as.matrix(strata[1:(p+1),])
+      nstrata <- sum(ncat(strata_tmp))
       break;
     }
-    Xcat_tmp <- as.matrix(Xcat[1:(p+1),])
-    n_all_cat <- sum(ncat(Xcat_tmp))
+    strata_tmp <- as.matrix(strata[1:(p+1),])
+    nstrata <- sum(ncat(strata_tmp))
   }
 
-  Xcat_tmp <- as.matrix(Xcat_tmp)
-  Xdev <- disjMatrix(Xcat_tmp)
+  strata_tmp <- as.matrix(strata_tmp)
+  disj_strata <- disjMatrix(strata_tmp)
 
-  return(list(X = as.matrix(X[1:(p+1),]),Xcat = Xdev))
+  return(list(X = as.matrix(X[1:(p+1),]),Xcat = disj_strata))
 
 }

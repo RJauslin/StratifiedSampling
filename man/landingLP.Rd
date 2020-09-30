@@ -4,7 +4,7 @@
 \alias{landingLP}
 \title{Landing by linear programming}
 \usage{
-landingLP(X, pikstar, pik, Xcat)
+landingLP(X, pikstar, pik)
 }
 \arguments{
 \item{X}{matrix of auxiliary variables on which the sample must be balanced.}
@@ -21,27 +21,18 @@ This function does the landing phase of the cube method using linear programming
 }
 \examples{
 \dontrun{
-
 rm(list = ls())
-library(sampling)
-
 N <- 100
 n <- 10
-Xcat <-as.matrix(data.frame(cat1 = rep(1:4,each = N/4),
-                    cat2 = rep(1:5,each = N/5),
-                    cat2 = rep(1:10,each = N/10)))
+p <- 4
 
-p <- 3
-X <- cbind(rep(1,N),matrix(rnorm(N*p),ncol = 3))
-Xcat_tmp <- disjMatrix(Xcat)
-Xred <- as.matrix(cbind(X,Xcat_tmp))
+pik <- sampling::inclusionprobabilities(runif(N),n)
 
-pik <- rep(n/N,N)
-A <- Xred/pik
-
-pikstar <- fastcube(X,pik,Xcat)
-s <- landingLP(X,pikstar,pik,Xcat)
+X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+pikstar <- ffphase(X,pik) 
+s <- landingLP(X,pikstar,pik)
 sum(s)
+
 }
 }
 \references{

@@ -120,6 +120,23 @@ disjMatrix <- function(strata) {
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' @export
+disj_to_cat <- function(Xcat) {
+    .Call(`_StratifiedSampling_disj_to_cat`, Xcat)
+}
+
+#' @title findBarma
+#'
+#' @description
+#' findB
+#'
+#' @param X a Matrix
+#' @param Xcat a Matrix
+#'
+#' @return a matrix
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#'
+#' @export
 findBarma <- function(X, Xcat) {
     .Call(`_StratifiedSampling_findBarma`, X, Xcat)
 }
