@@ -2,7 +2,7 @@
 % Please edit documentation in R/ffphase.R
 \name{ffphase}
 \alias{ffphase}
-\title{Cube method with reduction of the auxiliary variables matrix}
+\title{fast flight phase}
 \usage{
 ffphase(X, pik)
 }
@@ -12,18 +12,15 @@ ffphase(X, pik)
 \item{pik}{a vector of size N of inclusion probabilities.}
 }
 \value{
-the updated vector of \code{pik} that contains only 0s and 1s that indicates if a unit is selected or not at each wave.
+the updated vector of \code{pik} that contains 0s and 1s that indicates if a unit is selected.
 }
 \description{
-Modified cube method.
-This function reduces considerably the execution time when the matrix of auxiliary variables \code{X} contains lot of 0s.
-It is based on the function \code{\link[sampling:samplecube]{samplecube}} from the package \code{sampling}.
+This function is computing the flight phase of the cube method.
 }
 \details{
-In case where the number of auxiliary variables is great (i.e. p very large), even if we use the fast implementation proposed by
-(Chauvet and Tille 2005), the problem is time consuming.
-This function reduces considerably the execution time when the matrix of auxiliary variables \code{X} contains lot of 0s.
-It considers a reduced matrix \code{X} by removing columns and rows that sum to 0 in the flight phase of the method (see  \code{\link{ReducedMatrix}} and \code{\link{ReducedFlightphase}}).
+This function implements the method proposed by (Chauvet and Tille 2006).
+It progressively transform the vector of inclusion probabilities \code{pik} into a sample while respecting the balancing equations.
+The algorithm stops when the null space of the matrix B is empty. For more information see (Chauvet and Tille 2006).
 }
 \examples{
 \dontrun{
@@ -32,14 +29,13 @@ N <- 100
 n <- 10
 p <- 4
 
-pik <- sampling::inclusionprobabilities(runif(N),n)
 pik <- rep(n/N,N)
 
 X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
-s <- ffphase(X,pik) 
-
-
-sum(s)
+pikstar <- ffphase(X,pik) 
+t(X/pik)\%*\%pikstar
+t(X/pik)\%*\%pik
+pikstar
 
 }
 }
@@ -47,8 +43,8 @@ sum(s)
 Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62
 }
 \seealso{
-\code{\link[sampling:samplecube]{samplecube}}, \code{\link[sampling:landingcube]{landingcube}}, \code{\link{ReducedFlightphase}}, \code{\link{ReducedMatrix}}
+\code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:flightphase]{flightphase}}.
 }
 \author{
-Esther Eustache \email{esther.eustache@unine.ch}
+Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }

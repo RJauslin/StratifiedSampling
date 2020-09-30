@@ -30,5 +30,6 @@ X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
 A <- cbind(X,disjunctive(as.matrix(Xcat)))
 
 system.time(s <- fbs(X,Xcat,pik))
+system.time(s <- stratifiedcube(cbind(pik,X),Xcat,pik))
 
 }

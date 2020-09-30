@@ -24,6 +24,7 @@
 #' A <- cbind(X,disjunctive(as.matrix(Xcat)))
 #'
 #' system.time(s <- fbs(X,Xcat,pik))
+#' system.time(s <- stratifiedcube(cbind(pik,X),Xcat,pik))
 #'
 fbs <- function(X,Xcat,pik){
   
@@ -40,7 +41,7 @@ fbs <- function(X,Xcat,pik){
     # pik_tmp[Xcat == k] <- sampling::fastflightcube(cbind(pik[which(Xcat == k)],as.matrix(X[which(Xcat == k),])),
     #                                                pik[Xcat == k],
     #                                                comment = FALSE)
-    pik_tmp[Xcat == k] <- ffphase(cbind(pik[which(Xcat == k)],as.matrix(X[which(Xcat == k),])),
+    pik_tmp[Xcat == k] <- ffphase(as.matrix(cbind(pik[which(Xcat == k)],as.matrix(X[which(Xcat == k),]))),
                                                    pik[Xcat == k])
     
   }
@@ -51,7 +52,7 @@ fbs <- function(X,Xcat,pik){
   ##----------------------------------------------------------------
   Xnn <- disjMatrix(as.matrix(Xcat))
   for(k in 1:H){
-    print(k)
+    # print(k)
     
     i <- which(Xcat <= k & (pik_tmp > EPS & pik_tmp < (1-EPS)))
     
@@ -89,5 +90,5 @@ fbs <- function(X,Xcat,pik){
                           pik[i])
   
   
-  return(pik_tmp)
+  return(round(pik_tmp,10))
 }
