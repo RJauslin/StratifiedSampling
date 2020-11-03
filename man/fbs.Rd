@@ -14,7 +14,7 @@ fbs(X, Xcat, pik)
 \item{pik}{vector of inclusion probabilities.}
 }
 \value{
-A vector of size \eqn{N} with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for non-selected units.
+A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 }
 \description{
 This function implements the method proposed by Hasler and Tille (2019). It should be used for selecting a sample for highly stratified population.

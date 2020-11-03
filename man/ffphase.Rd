@@ -2,7 +2,7 @@
 % Please edit documentation in R/ffphase.R
 \name{ffphase}
 \alias{ffphase}
-\title{fast flight phase}
+\title{Fast flight phase}
 \usage{
 ffphase(X, pik)
 }
@@ -12,32 +12,32 @@ ffphase(X, pik)
 \item{pik}{a vector of size N of inclusion probabilities.}
 }
 \value{
-the updated vector of \code{pik} that contains 0s and 1s that indicates if a unit is selected.
+the updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
 }
 \description{
 This function is computing the flight phase of the cube method.
 }
 \details{
-This function implements the method proposed by (Chauvet and Tille 2006).
-It progressively transform the vector of inclusion probabilities \code{pik} into a sample while respecting the balancing equations.
-The algorithm stops when the null space of the matrix B is empty. For more information see (Chauvet and Tille 2006).
+This function implements the method proposed by (Chauvet and Tille 2006). It progressively transform the vector of inclusion probabilities \code{pik} into a sample while respecting the balancing equations.
+The algorithm stops when the null space of the matrix \eqn{B} is empty. For more information see (Chauvet and Tille 2006).
+
+The function uses the function \code{\link[MASS:Null]{Null}} to find the null space of the matrix \eqn{B}.
 }
 \examples{
-\dontrun{
 
 N <- 100
 n <- 10
 p <- 4
 
+X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 pik <- rep(n/N,N)
 
-X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 pikstar <- ffphase(X,pik) 
+
 t(X/pik)\%*\%pikstar
 t(X/pik)\%*\%pik
 pikstar
 
-}
 }
 \references{
 Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62

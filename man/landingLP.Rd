@@ -9,31 +9,25 @@ landingLP(X, pikstar, pik)
 \arguments{
 \item{X}{matrix of auxiliary variables on which the sample must be balanced.}
 
-\item{pikstar}{vector of updated inclusion probabilities by the flight phase.}
+\item{pikstar}{vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}.}
 
 \item{pik}{vector of inclusion probabilities.}
-
-\item{Xcat}{matrix of categorical variable (not in its disjunctive form).}
 }
 \description{
 This function does the landing phase of the cube method using linear programming.
- It allows you to put some categorical variable using the \code{Xcat} variable.
 }
 \examples{
-\dontrun{
-rm(list = ls())
-N <- 100
+N <- 1000
 n <- 10
 p <- 4
-
 pik <- sampling::inclusionprobabilities(runif(N),n)
-
 X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 pikstar <- ffphase(X,pik) 
 s <- landingLP(X,pikstar,pik)
 sum(s)
-
-}
+t(X/pik)\%*\%pik
+t(X/pik)\%*\%pikstar
+t(X/pik)\%*\%s
 }
 \references{
 Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62

@@ -1,5 +1,4 @@
-
-#' Internal function of ReducedSamplecube
+#' Internal function of ffphase
 #' @noRd
 onestep <- function(B,pik,EPS){
 

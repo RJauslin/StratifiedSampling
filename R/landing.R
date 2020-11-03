@@ -1,17 +1,13 @@
-
 #' @title Landing by linear programming
 #'
 #' @param X matrix of auxiliary variables on which the sample must be balanced.
-#' @param pikstar vector of updated inclusion probabilities by the flight phase.
+#' @param pikstar vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}.
 #' @param pik vector of inclusion probabilities.
-#' @param Xcat matrix of categorical variable (not in its disjunctive form).
 #'
 #' @description
 #' This function does the landing phase of the cube method using linear programming.
-#'  It allows you to put some categorical variable using the \code{Xcat} variable.
 #'
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
-#'
 #'
 #' @references
 #' Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62
@@ -19,20 +15,17 @@
 #'
 #' @export
 #' @examples
-#' \dontrun{
-#' rm(list = ls())
-#' N <- 100
+#' N <- 1000
 #' n <- 10
 #' p <- 4
-#' 
 #' pik <- sampling::inclusionprobabilities(runif(N),n)
-#' 
 #' X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 #' pikstar <- ffphase(X,pik) 
 #' s <- landingLP(X,pikstar,pik)
 #' sum(s)
-#'
-#' }
+#' t(X/pik)%*%pik
+#' t(X/pik)%*%pikstar
+#' t(X/pik)%*%s
 landingLP <- function(X,pikstar,pik){
 
   ##----------------------------------------------------------------
@@ -90,7 +83,6 @@ landingLP <- function(X,pikstar,pik){
   ##                  Choose a sampleSet randomly                 -
   ##---------------------------------------------------------------
 
-
   u = runif(1, 0, 1)
   s = 0
   ccc = 0
@@ -117,13 +109,11 @@ landingLP <- function(X,pikstar,pik){
 #' @title Landing by suppression of variables
 #'
 #' @param X matrix of auxiliary variables on which the sample must be balanced.
-#' @param pikstar vector of updated inclusion probabilities by the flight phase.
+#' @param pikstar vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}
 #' @param pik vector of inclusion probabilities.
-#' @param Xcat matrix of categorical variable (not in its disjunctive form).
 #'
 #' @description
 #' This function does the landing phase of the cube method using suppression of variables.
-#'  It allows you to put some categorical variable using the \code{Xcat} variable.
 #'
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
@@ -133,14 +123,11 @@ landingLP <- function(X,pikstar,pik){
 #'
 #' @export
 #' @examples
-#' \dontrun{
-#' rm(list = ls())
-#' N <- 100
+#' 
+#' N <- 1000
 #' n <- 10
 #' p <- 4
-#' 
 #' pik <- sampling::inclusionprobabilities(runif(N),n)
-#' 
 #' X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 #' pikstar <- ffphase(X,pik) 
 #' s <- landingRM(X,pikstar,pik)
@@ -148,7 +135,6 @@ landingLP <- function(X,pikstar,pik){
 #' t(X/pik)%*%pik
 #' t(X/pik)%*%pikstar
 #' t(X/pik)%*%s
-#' }
 landingRM <- function(X,pikstar,pik){
 
 

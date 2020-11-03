@@ -1,38 +1,28 @@
-#' Title
+#' @title Balanced Stratification
+#' 
+#' @description 
+#' 
+#' Select a strafitifed balanced sample. The function is similar to \code{\link[sampling:balancedstratification]{balancedstratification}} unless it uses internal functions that are more stable.
+#' 
+#' @param X matrix of auxiliary variables.
+#' @param strata vector of integer that specifies the stratification.
+#' @param pik vector of inclusion probabilities.
 #'
-#' @param X 
-#' @param strata 
-#' @param pik 
-#' @param comment 
-#' @param method 
-#'
-#' @return
-#' @export
+#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
 #' @examples
 #' 
-#' rm(list = ls())
-#' N <- 10000
-#' n <- c(25,50,100,250)
-#' p <- 3
+#' N <- 1000
+#' n <- 100
+#' p <- 4
 #' X_tmp <- matrix(rgamma(N*p,4,25),ncol = p)
-#' 
-#' l <- list()
-#' sizeStrata <- c(1,1.5)
-#' step <- 1
-#' 
-#' i = 4
-#' j = 1
-#' strata <- as.matrix(rep(1:n[i],each = N/n[i]))
-#' pik <- inclusionprobastrata(strata,rep(sizeStrata[j],n[i]))
+#' strata <- as.matrix(rep(1:n,each = N/n))
+#' pik <- rep(n/N,N)
 #' X <- cbind(pik,X_tmp)
-#' comment = TRUE
-#' 
-#' balancedstratification2(X,strata,pik,comment=TRUE))[3]
-#' 
-balancedstratification2 <- function (X, strata, pik) 
+#' balstrat(X,strata,pik)
+#' @export
+balstrat <- function (X, strata, pik) 
 {
-  
   
   
   ##----------------------------------------------------------------
@@ -82,26 +72,6 @@ balancedstratification2 <- function (X, strata, pik)
                           pikstar[i],
                           pik[i])
   pikstar <- round(pikstar,8)
-  
-  
-  if (comment) {
-    A_tmp <- as.matrix(cbind(sampling::disjunctive(strata)* pik,X))
-    A = A_tmp[pik > EPS, ]/pik[pik > EPS]
-    TOT = t(A) %*% pik[pik > EPS]
-    EST = t(A) %*% pikstar[pik > EPS]
-    DEV = 100 * (EST - TOT)/TOT
-    cat("\n\nQUALITY OF BALANCING\n")
-    if (is.null(colnames(X))){
-      Vn = as.character(1:length(TOT))
-    }else{
-      Vn = colnames(A)
-    }
-    for (i in 1:length(TOT)) if (Vn[i] == "") 
-      Vn[i] = as.character(i)
-    d = data.frame(TOTALS = c(TOT), HorvitzThompson_estimators = c(EST), 
-                   Relative_deviation = c(DEV))
-    rownames(d) <- Vn
-    print(d)
-  }
+
   return(pikstar)
 }
