@@ -30,40 +30,60 @@
 #' 
 #' balancedstratification2(X,strata,pik,comment=TRUE))[3]
 #' 
-balancedstratification2 <- function (X, strata, pik, comment = TRUE) 
+balancedstratification2 <- function (X, strata, pik) 
 {
+  
+  
+  
+  ##----------------------------------------------------------------
+  ##                          Initializing                         -
+  ##----------------------------------------------------------------
+  
   
   EPS = 1e-8
   strata = sampling::cleanstrata(strata)
   H = max(strata)
   N = dim(X)[1]
   pikstar = rep(0, times = N)
+  
+  
+  ##----------------------------------------------------------------
+  ##                            Step 1                             -
+  ##----------------------------------------------------------------
+  
+  
   for (h in 1:H) {
-    if (comment == TRUE) 
-      cat("\nFLIGHT PHASE OF STRATUM", h)
     pikstar[strata == h] = ffphase(cbind(pik[strata == h],X[strata == h, ]), pik[strata == h])
   }
-  if (comment == TRUE) 
-    cat("\nFINAL TREATMENT")
+  
+  
+  ##----------------------------------------------------------------
+  ##                            Step 2                             -
+  ##----------------------------------------------------------------
+  
+  
   XN = cbind(sampling::disjunctive(strata) * pik, X)/pik * pikstar
   if (is.null(colnames(X)) == FALSE) 
     colnames(XN) <- c(paste("Stratum", 1:H, sep = ""), 
                       colnames(X))
-  # samplecube(XN, pikstar, 1, comment, method)
-  i <- which(pikstar > EPS & pikstar < (1-EPS))
   
+  i <- which(pikstar > EPS & pikstar < (1-EPS))
   pikstar[i] = ffphase(as.matrix(cbind(X[i,],XN[i,])), pikstar[i])
   
-  # pik_tmp[i] <- samplecube(as.matrix(cbind(X[i,],Xnn[i,])),
-  #                          pik_tmp[i],
-  #                          order = 1,
-  #                          comment = FALSE,
-  #                          method = 2)
+  
+  
+  ##----------------------------------------------------------------
+  ##                            Step 3                             -
+  ##----------------------------------------------------------------
+  
+  
   i <- which(pikstar > EPS & pikstar < (1-EPS))
   pikstar[i] <- landingRM(as.matrix(cbind(X[i,],XN[i,])),
                           pikstar[i],
                           pik[i])
   pikstar <- round(pikstar,8)
+  
+  
   if (comment) {
     A_tmp <- as.matrix(cbind(sampling::disjunctive(strata)* pik,X))
     A = A_tmp[pik > EPS, ]/pik[pik > EPS]

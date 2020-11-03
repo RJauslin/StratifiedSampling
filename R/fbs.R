@@ -1,31 +1,38 @@
-
-
-#' Title
+#' @title  Fast balanced Sampling
+#' 
+#' @description 
+#' 
+#' This function implements the method proposed by Hasler and Tille (2019). It should be used for selecting a sample for highly stratified population.
 #'
-#' @param X
-#' @param Xcat
-#' @param pik
+#' @param X matrix of auxiliary variables.
+#' @param Xcat matrix of categorical variables.
+#' @param pik vector of inclusion probabilities.
 #'
-#' @return
-#' @export
+#' @details 
+#' If the number of element selected in each strata is not equal to a integer, the function can be very time-consuming.
+#'
+#' @return A vector of size \eqn{N} with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for non-selected units.
 #'
 #' @examples
-#' rm(list = ls())
-#' N <- 10000
-#' n <- 1000
+#' 
+#' N <- 1000
+#' n <- 100
 #' x1 <- rgamma(N,4,25)
 #' x2 <- rgamma(N,4,25)
 #'
 #' Xcat <- as.matrix(rep(1:n,each = N/n))
 #'
-#' pik <- inclusionprobastrata(Xcat,rep(1,n))
+#' pik <- sampling::inclusionprobastrata(Xcat,rep(1,n))
 #' X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
+#' A <- cbind(X,sampling::disjunctive(as.matrix(Xcat)))
+#' 
+#' s <- fbs(X,Xcat,pik)
 #'
-#' A <- cbind(X,disjunctive(as.matrix(Xcat)))
-#'
-#' system.time(s <- fbs(X,Xcat,pik))
-#' system.time(s <- stratifiedcube(cbind(pik,X),Xcat,pik))
-#'
+#' @references 
+#' Hasler, C. and Tille Y. (2014). Fast balanced sampling for highly stratified population.
+#' \emph{Computational Statistics and Data Analysis}, 74, 81-94
+#' 
+#' @export
 fbs <- function(X,Xcat,pik){
   
   H <- as.numeric(ncat(Xcat))
