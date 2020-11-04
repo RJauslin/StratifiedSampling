@@ -29,7 +29,8 @@ N <- 100
 n <- 10
 p <- 4
 
-pik <- rep(n/N,N)
+#pik <- rep(n/N,N)
+pik <- inclusionprobabilities(runif(N),n)
 X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 
 pikstar <- ffphase(X,pik) 
@@ -37,6 +38,18 @@ pikstar <- ffphase(X,pik)
 t(X/pik)\%*\%pikstar
 t(X/pik)\%*\%pik
 pikstar
+
+
+
+
+X <- cbind(matrix(rep(0,2*10),nrow = 2),c(0.45,0.55))
+X <- matrix(c(1,1),ncol = 1)
+pik <- c(0.1260076, 0.8739924)
+
+fastflightcube(X,pik)
+s <- ffphase(X*pik,pik)
+
+t(X/pik)\%*\%pik
 
 }
 \references{

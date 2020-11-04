@@ -130,14 +130,20 @@ landingLP <- function(X,pikstar,pik){
 #' pik <- sampling::inclusionprobabilities(runif(N),n)
 #' X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 #' pikstar <- ffphase(X,pik) 
-#' s <- landingRM(X,pikstar,pik)
+#' s <- landingRM(X/pik,pikstar)
 #' sum(s)
 #' t(X/pik)%*%pik
 #' t(X/pik)%*%pikstar
 #' t(X/pik)%*%s
-landingRM <- function(X,pikstar,pik){
+#' t(X/pik)%*%samplecube(X,pik)
+landingRM <- function(X,pikstar){
 
 
+  
+  # Xcat_tmp3 <- as.matrix(Xnn[i,]*pik_tmp[i])
+  # X <- as.matrix(cbind(Xcat_tmp3, X[i,]/pik[i]*pik_tmp[i]))
+  # pikstar <- pik_tmp[i]
+  # pik <- pik[i]
   ##----------------------------------------------------------------
   ##                          Initializing                         -
   ##----------------------------------------------------------------
@@ -146,12 +152,21 @@ landingRM <- function(X,pikstar,pik){
   N = nrow(X)
   i = which(pikstar > EPS & pikstar < (1 - EPS))
   i_size = length(i)
+  
+  pikland <- pikstar[i]
+  # pikland = pikstar[i]
+  # Xland <- X[i,]/pik[i]
   Xland <- X[i,]
-  pikland = pikstar[i]
   Nland = length(pikland)
   nland = sum(pikland)
   p <- ncol(Xland)
   
+  
+  j <-  which(pikland > EPS & pikland < (1 - EPS))
+  j_size <- length(j)
+  
+  # t(Xland)%*%pikland
+  # t(Xland)%*%pikstar[i]
   ##---------------------------------------------------------------
   ##                          Main loop                           -
   ##---------------------------------------------------------------
@@ -159,25 +174,32 @@ landingRM <- function(X,pikstar,pik){
   
   for(k in 0:(p-1)){
 
-    Bland <- X[i,]
+    Bland <- Xland[j,]*pikland[j]
     Bland <- Bland[,1:(p-k)]
 
-    
     kern <- MASS::Null(Bland)
-
     if(length(kern)!=0){
-      pikstar[i] <- onestep(Bland/pik[i]*pikland,pikland,EPS)
-      i = which(pikstar > EPS & pikstar < (1 - EPS))
-      pikland = pikstar[i]
-      Nland = length(pikland)
-      i_size <- length(i)
+      
+      pikland[j] <- ffphase(as.matrix(Bland),pikland[j])
+      
+      # pikstar[i] <- onestep(Bland/pik[i]*pikland,pikland,EPS)
+      j = which(pikland > EPS & pikland < (1 - EPS))
+      
+      
+      j_size <- length(j)
       # print(i_size)
     }
-    if(i_size == 1){
+    if(j_size == 1){
       break;
     }
 
   }
+  
+  t(Xland)%*%pikland
+  t(Xland)%*%pikstar[i]
+  
+  pikstar[i] = pikland
+  i <- which(pikstar > EPS & pikstar < (1 - EPS))
 
   if(length(i) > 1){
     stop("error not possible")

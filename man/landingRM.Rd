@@ -4,7 +4,7 @@
 \alias{landingRM}
 \title{Landing by suppression of variables}
 \usage{
-landingRM(X, pikstar, pik)
+landingRM(X, pikstar)
 }
 \arguments{
 \item{X}{matrix of auxiliary variables on which the sample must be balanced.}
@@ -24,11 +24,12 @@ p <- 4
 pik <- sampling::inclusionprobabilities(runif(N),n)
 X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 pikstar <- ffphase(X,pik) 
-s <- landingRM(X,pikstar,pik)
+s <- landingRM(X/pik,pikstar)
 sum(s)
 t(X/pik)\%*\%pik
 t(X/pik)\%*\%pikstar
 t(X/pik)\%*\%s
+t(X/pik)\%*\%samplecube(X,pik)
 }
 \references{
 Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62

@@ -36,8 +36,8 @@
 #' ##----------------------------------------------------------------
 #' 
 #' rm(list = ls())
-#' N <- 10000
-#' n <- 1000
+#' N <- 1000
+#' n <- 100
 #' x1 <- rgamma(N,4,25)
 #' x2 <- rgamma(N,4,25)
 #' strata <- as.matrix(rep(1:n,each = N/n))
@@ -52,14 +52,17 @@
 #'  #-------- CASE 0 pik equal and only pik as variable
 #'  
 #'  pik <- inclusionprobastrata(strata,rep(1,n))
-#'  X <- as.matrix(pik)
+#'  # X <- as.matrix(pik)
+#'  
+#'  X <- matrix(c(x1,x2),ncol = 2)
+#'  Xcat <- strata
 #'  system.time(s <- fbs(X,strata,pik))
 #'  sum(s)
 #'  t(X/pik)%*%s
 #'  t(X/pik)%*%pik
 #'  
-#'  t(Xcat)%*%s
-#'  t(Xcat)%*%pik
+#'  t(disjMatrix(strata))%*%s
+#'  t(disjMatrix(strata))%*%pik
 #' 
 #' 
 #'
@@ -87,7 +90,7 @@ fbs <- function(X,Xcat,pik){
                                                    pik[Xcat == k])
     
   }
-  
+  sum(pik_tmp)
   
   ##----------------------------------------------------------------
   ##          Flightphase on the uninon of strata U1 -- Uk         -
@@ -114,23 +117,22 @@ fbs <- function(X,Xcat,pik){
                                              pik_tmp[i])
     }
   }
-  # sum(pik_tmp)
-  
+  sum(pik_tmp)
+
   ##---------------------------------------------------------------
   ##              Landing by suppression of variables             -
   ##---------------------------------------------------------------
   
   i <- which(pik_tmp > EPS & pik_tmp < (1-EPS))
+
   
-  # pik_tmp[i] <- samplecube(as.matrix(cbind(X[i,],Xnn[i,])),
-  #                          pik_tmp[i],
-  #                          order = 1,
-  #                          comment = FALSE,
-  #                          method = 2)
   if(length(i) != 0){
-  pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,], as.matrix((X[i,]*pik_tmp[i]/pik[i])) )),
-                          pik_tmp[i],
-                          pik[i])
+  Xcat_tmp3 <- as.matrix(Xnn[i,]*pik_tmp[i])
+  pik_tmp[i] <- landingRM(as.matrix(cbind(Xcat_tmp3, X[i,]/pik[i]*pik_tmp[i])),
+                          pik_tmp[i])
+  # pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,], X[i,])),
+  #                         pik_tmp[i],
+  #                         pik[i])
   
   }
   return(round(pik_tmp,10))

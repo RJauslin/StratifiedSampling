@@ -61,7 +61,7 @@ varApp <- function(X,strata,pik,y){
   for(k in 1:N){
     z_k <- X_tmp[k,]
     b_k <- pik[k]*(1-pik[k])*(N/(N-(H+q)))
-    tmp <- tmp + b_k*y[k]/pik[k]*(z_k/pik[k])
+    tmp <- tmp + b_k*(y[k]/pik[k])*(z_k/pik[k])
   } 
   
   beta <- beta%*%tmp

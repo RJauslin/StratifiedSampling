@@ -31,7 +31,8 @@
 #' n <- 10
 #' p <- 4
 #' 
-#' pik <- rep(n/N,N)
+#' #pik <- rep(n/N,N)
+#' pik <- inclusionprobabilities(runif(N),n)
 #' X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 #' 
 #' pikstar <- ffphase(X,pik) 
@@ -40,6 +41,18 @@
 #' t(X/pik)%*%pik
 #' pikstar
 #' 
+#' 
+#' 
+#' 
+#' X <- cbind(matrix(rep(0,2*10),nrow = 2),c(0.45,0.55))
+#' X <- matrix(c(1,1),ncol = 1)
+#' pik <- c(0.1260076, 0.8739924)
+#' 
+#' fastflightcube(X,pik)
+#' s <- ffphase(X*pik,pik)
+#' 
+#' t(X/pik)%*%pik
+#' 
 #' @export
 ffphase <- function(X, pik){
 
@@ -47,7 +60,9 @@ ffphase <- function(X, pik){
   ##                        Initialization                         -
   ##----------------------------------------------------------------
   EPS = 1e-8
-  A <- X/pik
+  pikInit <- pik
+  # AInit <- X/pik
+  A <- X/pikInit
   N <- length(pik)  
   p = ncol(X)
   
@@ -62,7 +77,11 @@ ffphase <- function(X, pik){
   ##                          flight phase                         -
   ##----------------------------------------------------------------
   
+  # print(i_size)
+  # print(p)
   while(i_size > 0){
+  
+    # print(i_size)
     ##------ Find B
     if(i_size >= (p+1)){
       i_tmp <- i[1:(p+1)]
@@ -72,10 +91,11 @@ ffphase <- function(X, pik){
       pik_tmp <- pik[i_tmp]
     }
     
-    B <- A[i_tmp,]
+    B <- as.matrix(A[i_tmp,])
 
     ##------ onestep and check if null
     tmp <-  onestep(B,pik_tmp,EPS)
+    # print(tmp)
     if(is.null(tmp)){
       break;
     }else{
@@ -85,8 +105,12 @@ ffphase <- function(X, pik){
     ##------ update i
     i <- which(pik > EPS & pik < (1-EPS))
     i_size = length(i)
+    
+    if(i_size == 1){
+      break;
+    }
+    # A <- X*(pik/pikInit)
   }
-  
   
   return(pik)
 }
