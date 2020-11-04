@@ -14,7 +14,7 @@ LazyData: true
 LinkingTo: RcppArmadillo, Rcpp
 Imports: Rcpp
 Depends: Matrix,
-    R (>= 2.10),
+    R (>= 3.5.0),
     sampling
 Suggests: 
     knitr,

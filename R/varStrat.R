@@ -39,7 +39,7 @@
 #'  
 #'  varApp(X,strata,pik,s,y)
 #'  
-varApp <- function(X,strata,pik,s,y){
+varApp <- function(X,strata,pik,y){
   
   Xcat <- disjMatrix(strata)
   X_tmp <- cbind(Xcat,X)
@@ -126,14 +126,14 @@ varApp <- function(X,strata,pik,s,y){
 #' X <- as.matrix(matrix(c(x1,x2),ncol = 2))
 #'  
 #' s <- stratifiedcube(cbind(pik,X),strata,pik)
+#' s <- fbs(X,strata,pik)
 #'  
-#'  
-#'  y <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
+#'  y <- 20*strata + rnorm(1000,120)
+#'  y2 <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
 #'  
 #'  y_ht <- sum(y[which(s==1)]/pik[which(s == 1)])
 #'  
 #'  (sum(y_ht) - sum(y))^2
-#'  
 #'  varEst(X,strata,pik,s,y)
 #'  varApp(X,strata,pik,s,y)
 #'  

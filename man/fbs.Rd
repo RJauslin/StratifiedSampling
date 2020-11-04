@@ -37,6 +37,41 @@ A <- cbind(X,sampling::disjunctive(as.matrix(Xcat)))
 
 s <- fbs(X,Xcat,pik)
 
+
+
+
+##----------------------------------------------------------------
+##                              Data                             -
+##----------------------------------------------------------------
+
+rm(list = ls())
+N <- 10000
+n <- 1000
+x1 <- rgamma(N,4,25)
+x2 <- rgamma(N,4,25)
+strata <- as.matrix(rep(1:n,each = N/n))
+
+
+
+##---------------------------------------------------------------
+##                        different cases                       -
+##---------------------------------------------------------------
+
+
+ #-------- CASE 0 pik equal and only pik as variable
+ 
+ pik <- inclusionprobastrata(strata,rep(1,n))
+ X <- as.matrix(pik)
+ system.time(s <- fbs(X,strata,pik))
+ sum(s)
+ t(X/pik)\%*\%s
+ t(X/pik)\%*\%pik
+ 
+ t(Xcat)\%*\%s
+ t(Xcat)\%*\%pik
+
+
+
 }
 \references{
 Hasler, C. and Tille Y. (2014). Fast balanced sampling for highly stratified population.

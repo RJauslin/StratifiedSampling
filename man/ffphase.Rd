@@ -29,8 +29,8 @@ N <- 100
 n <- 10
 p <- 4
 
-X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 pik <- rep(n/N,N)
+X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
 
 pikstar <- ffphase(X,pik) 
 

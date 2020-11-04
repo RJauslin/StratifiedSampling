@@ -27,6 +27,41 @@
 #' A <- cbind(X,sampling::disjunctive(as.matrix(Xcat)))
 #' 
 #' s <- fbs(X,Xcat,pik)
+#' 
+#' 
+#' 
+#' 
+#' ##----------------------------------------------------------------
+#' ##                              Data                             -
+#' ##----------------------------------------------------------------
+#' 
+#' rm(list = ls())
+#' N <- 10000
+#' n <- 1000
+#' x1 <- rgamma(N,4,25)
+#' x2 <- rgamma(N,4,25)
+#' strata <- as.matrix(rep(1:n,each = N/n))
+#' 
+#' 
+#' 
+#' ##---------------------------------------------------------------
+#' ##                        different cases                       -
+#' ##---------------------------------------------------------------
+#' 
+#' 
+#'  #-------- CASE 0 pik equal and only pik as variable
+#'  
+#'  pik <- inclusionprobastrata(strata,rep(1,n))
+#'  X <- as.matrix(pik)
+#'  system.time(s <- fbs(X,strata,pik))
+#'  sum(s)
+#'  t(X/pik)%*%s
+#'  t(X/pik)%*%pik
+#'  
+#'  t(Xcat)%*%s
+#'  t(Xcat)%*%pik
+#' 
+#' 
 #'
 #' @references 
 #' Hasler, C. and Tille Y. (2014). Fast balanced sampling for highly stratified population.
@@ -57,27 +92,28 @@ fbs <- function(X,Xcat,pik){
   ##----------------------------------------------------------------
   ##          Flightphase on the uninon of strata U1 -- Uk         -
   ##----------------------------------------------------------------
-  Xnn <- disjMatrix(as.matrix(Xcat))
-  for(k in 1:H){
-    # print(k)
-    
-    i <- which(Xcat <= k & (pik_tmp > EPS & pik_tmp < (1-EPS)))
-    
-    # Xcat_tmp2 <- Xnn[i,1:k]
-    Xcat_tmp2 <- disjMatrix(as.matrix(Xcat[i,]))
-    Xcat_tmp2 <- Xcat_tmp2*pik_tmp[i]
-    
-    X_tmp <- as.matrix((X[i,]*pik_tmp[i]/pik[i]))
-    
-    # pik_tmp[i] <- sampling::fastflightcube(as.matrix(cbind(X_tmp,Xcat_tmp2)),
-    #                                        pik_tmp[i],
-    #                                        1,
-    #                                        comment = FALSE)
-    pik_tmp[i] <- ffphase(as.matrix(cbind(X_tmp,Xcat_tmp2)),
-                                           pik_tmp[i])
+  i <- which(pik_tmp > EPS & pik_tmp < (1-EPS))
+  if(length(i) != 0){
+    Xnn <- disjMatrix(as.matrix(Xcat))
+    for(k in 1:H){
+      # print(k)
+      
+      i <- which(Xcat <= k & (pik_tmp > EPS & pik_tmp < (1-EPS)))
+      
+      # Xcat_tmp2 <- Xnn[i,1:k]
+      Xcat_tmp2 <- disjMatrix(as.matrix(Xcat[i,]))
+      Xcat_tmp2 <- Xcat_tmp2*pik_tmp[i]
+      
+      X_tmp <- as.matrix((X[i,]*pik_tmp[i]/pik[i]))
+      
+      # pik_tmp[i] <- sampling::fastflightcube(as.matrix(cbind(X_tmp,Xcat_tmp2)),
+      #                                        pik_tmp[i],
+      #                                        1,
+      #                                        comment = FALSE)
+      pik_tmp[i] <- ffphase(as.matrix(cbind(X_tmp,Xcat_tmp2)),
+                                             pik_tmp[i])
+    }
   }
-  
-  
   # sum(pik_tmp)
   
   ##---------------------------------------------------------------
@@ -91,11 +127,11 @@ fbs <- function(X,Xcat,pik){
   #                          order = 1,
   #                          comment = FALSE,
   #                          method = 2)
-  
-  pik_tmp[i] <- landingRM(as.matrix(cbind(X[i,],Xnn[i,])),
+  if(length(i) != 0){
+  pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,],X[i,])),
                           pik_tmp[i],
                           pik[i])
   
-  
+  }
   return(round(pik_tmp,10))
 }
