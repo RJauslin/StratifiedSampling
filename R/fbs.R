@@ -128,7 +128,7 @@ fbs <- function(X,Xcat,pik){
   #                          comment = FALSE,
   #                          method = 2)
   if(length(i) != 0){
-  pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,],X[i,])),
+  pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,], as.matrix((X[i,]*pik_tmp[i]/pik[i])) )),
                           pik_tmp[i],
                           pik[i])
   
