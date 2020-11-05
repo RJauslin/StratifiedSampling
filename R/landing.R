@@ -128,7 +128,7 @@ landingLP <- function(X,pikstar,pik){
 #' n <- 10
 #' p <- 4
 #' pik <- sampling::inclusionprobabilities(runif(N),n)
-#' X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+#' X <- cbind(pik,matrix(rgamma(N*p,8,50),ncol= p))
 #' pikstar <- ffphase(X,pik) 
 #' s <- landingRM(X/pik,pikstar)
 #' sum(s)
@@ -139,14 +139,14 @@ landingLP <- function(X,pikstar,pik){
 landingRM <- function(X,pikstar){
 
 
-  
-  # Xcat_tmp3 <- as.matrix(Xnn[i,]*pik_tmp[i])
-  # X <- as.matrix(cbind(Xcat_tmp3, X[i,]/pik[i]*pik_tmp[i]))
-  # pikstar <- pik_tmp[i]
-  # pik <- pik[i]
+  # 
+  # Xcat_tmp3 <- as.matrix(Xnn)
+  # X <- as.matrix(cbind(Xcat_tmp3, X/pik))
+  # pikstar <- pik_tmp
   ##----------------------------------------------------------------
   ##                          Initializing                         -
   ##----------------------------------------------------------------
+
 
   EPS = 1e-11
   N = nrow(X)
@@ -165,8 +165,7 @@ landingRM <- function(X,pikstar){
   j <-  which(pikland > EPS & pikland < (1 - EPS))
   j_size <- length(j)
   
-  # t(Xland)%*%pikland
-  # t(Xland)%*%pikstar[i]
+
   ##---------------------------------------------------------------
   ##                          Main loop                           -
   ##---------------------------------------------------------------
@@ -182,29 +181,24 @@ landingRM <- function(X,pikstar){
       
       pikland[j] <- ffphase(as.matrix(Bland),pikland[j])
       
-      # pikstar[i] <- onestep(Bland/pik[i]*pikland,pikland,EPS)
       j = which(pikland > EPS & pikland < (1 - EPS))
-      
-      
       j_size <- length(j)
       # print(i_size)
     }
-    if(j_size == 1){
+    if(j_size <= 1){
       break;
     }
 
   }
   
-  t(Xland)%*%pikland
-  t(Xland)%*%pikstar[i]
+
   
   pikstar[i] = pikland
   i <- which(pikstar > EPS & pikstar < (1 - EPS))
-
-  if(length(i) > 1){
-    stop("error not possible")
-  }else{
+  
+  if(length(i) != 0){
     pikstar[i] <- rbinom(1,1,pikstar[i])
+    cat("it remains",length(i), "units that are not put to 0 or 1")
   }
 
   return(round(pikstar,10))

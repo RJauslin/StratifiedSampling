@@ -22,7 +22,7 @@ N <- 1000
 n <- 10
 p <- 4
 pik <- sampling::inclusionprobabilities(runif(N),n)
-X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+X <- cbind(pik,matrix(rgamma(N*p,8,50),ncol= p))
 pikstar <- ffphase(X,pik) 
 s <- landingRM(X/pik,pikstar)
 sum(s)
