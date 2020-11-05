@@ -4,17 +4,17 @@ n <- 1000
 # x1 <- rgamma(N,4,25)
 # x2 <- rgamma(N,4,25)
 
-Xcat <- as.matrix(rep(1:n,each = N/n))
-Xcat_tmp <- disjMatrix(Xcat)
-pik <- inclusionprobastrata(Xcat,rep(1,n))
+strata <- as.matrix(rep(1:n,each = N/n))
+Xcat <- disjMatrix(strata)
+pik <- inclusionprobastrata(strata,rep(1.5,n))
 # X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
 p <- 10
 X <- as.matrix(matrix(rgamma(N*p,4,25),ncol = p))
 
 
 
-system.time(s <- balcat(X,Xcat,pik))
-system.time(s3 <- fbstratification(X,Xcat,pik))
+system.time(s <- stratifiedcube(X,strata,pik))
+system.time(s3 <- fbs(X,strata,pik))
 
 t(X/pik)%*%s
 t(X/pik)%*%pik

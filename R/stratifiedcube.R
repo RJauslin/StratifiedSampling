@@ -95,9 +95,20 @@
 #'  
 #' #-------- CASE 4 pik unequal and NOT integer in each strata 
 #'  
-#'  pik <- rep(inclusionprobabilities(runif(N/n),2.5),n)
-#'  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
-#'  system.time(s <- stratifiedcube(X,strata,pik))
+#'  
+#'  
+#' rm(list = ls())
+#' N <- 10000
+#' n <- 1000
+#' x1 <- rgamma(N,4,25)
+#' x2 <- rgamma(N,4,25)
+#' strata <- as.matrix(rep(1:n,each = N/n))
+#' Xcat <- disjMatrix(strata)
+#' 
+#' pik <- rep(inclusionprobabilities(runif(N/n),1),n)
+#' X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
+#' 
+#' system.time(s <- stratifiedcube(X,strata,pik))
 #'  sum(s)
 #'  t(X/pik)%*%s
 #'  t(X/pik)%*%pik
@@ -134,6 +145,9 @@ stratifiedcube <- function(X,strata,pik){
                                    pikstar[strata == k])
   }
   
+  ###################### CHECK
+  # t(X/pik)%*%pikstar
+  # t(X/pik)%*%pik
   
   ##----------------------------------------------------------------
   ##                Number of non 0-1 inclusion prob               -
@@ -184,8 +198,8 @@ stratifiedcube <- function(X,strata,pik){
   # t(X/pik)%*%pik
   # t(X/pik)%*%pikstar
   # 
-  # t(Xcat)%*%pik
-  # t(Xcat)%*%pikstar
+  # all(t(Xcat)%*%pik == 1)
+  # all(round(t(Xcat)%*%pikstar,10) == 1)
   
   ##----------------------------------------------------------------
   ##            end of flight phase without categories             -
@@ -197,16 +211,36 @@ stratifiedcube <- function(X,strata,pik){
     i_size <- length(i)
   }
   
-  
+  #---------------- check
+  # Xcat <- disjMatrix(strata)
+  # 
+  # t(X/pik)%*%pik
+  # t(X/pik)%*%pikstar
+  # 
+  # all(t(Xcat)%*%pik == 1)
+  # all(round(t(Xcat)%*%pikstar,10) == 1)
   
   ##----------------------------------------------------------------
   ##                 LANDING by droping step by step               -
   ##----------------------------------------------------------------
   if(i_size > 0){
-  pikstar[i] <- landingRM(X[i,],
-            pikstar[i],
-            pik[i])
+    
+    Xcat <- disjMatrix(strata)
+    pikstar <- landingRM(cbind(Xcat, X/pik),pikstar)
+  # pikstar <- landingRM(X/pik,
+            # pikstar)
   }
+  
+  
+  #---------------- check
+  # Xcat <- disjMatrix(strata)
+  # 
+  # t(X/pik)%*%pik
+  # t(X/pik)%*%pikstar
+  # 
+  # all(t(Xcat)%*%pik == 1)
+  # all(round(t(Xcat)%*%pikstar,10) == 1)
+  
   
   pikstar <- round(pikstar,10)
  

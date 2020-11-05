@@ -139,23 +139,18 @@ landingLP <- function(X,pikstar,pik){
 landingRM <- function(X,pikstar){
 
 
-  # 
-  # Xcat_tmp3 <- as.matrix(Xnn)
-  # X <- as.matrix(cbind(Xcat_tmp3, X/pik))
-  # pikstar <- pik_tmp
   ##----------------------------------------------------------------
   ##                          Initializing                         -
   ##----------------------------------------------------------------
 
 
-  EPS = 1e-11
+  EPS = 1e-8
   N = nrow(X)
   i = which(pikstar > EPS & pikstar < (1 - EPS))
   i_size = length(i)
   
   pikland <- pikstar[i]
-  # pikland = pikstar[i]
-  # Xland <- X[i,]/pik[i]
+
   Xland <- X[i,]
   Nland = length(pikland)
   nland = sum(pikland)

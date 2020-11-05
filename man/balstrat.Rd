@@ -24,9 +24,9 @@ Select a strafitifed balanced sample. The function is similar to \code{\link[sam
 N <- 1000
 n <- 100
 p <- 4
-X_tmp <- matrix(rgamma(N*p,4,25),ncol = p)
+X <- matrix(rgamma(N*p,4,25),ncol = p)
 strata <- as.matrix(rep(1:n,each = N/n))
 pik <- rep(n/N,N)
-X <- cbind(pik,X_tmp)
+
 balstrat(X,strata,pik)
 }

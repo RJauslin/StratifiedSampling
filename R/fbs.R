@@ -75,7 +75,7 @@ fbs <- function(X,Xcat,pik){
   
   H <- as.numeric(ncat(Xcat))
   pik_tmp <- pik
-  EPS <- 1e-7
+  EPS <- 1e-8
   
   ##----------------------------------------------------------------
   ##                  Flightphase on each strata                   -

@@ -100,9 +100,20 @@ Xcat <- disjMatrix(strata)
  
 #-------- CASE 4 pik unequal and NOT integer in each strata 
  
- pik <- rep(inclusionprobabilities(runif(N/n),2.5),n)
- X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
- system.time(s <- stratifiedcube(X,strata,pik))
+ 
+ 
+rm(list = ls())
+N <- 10000
+n <- 1000
+x1 <- rgamma(N,4,25)
+x2 <- rgamma(N,4,25)
+strata <- as.matrix(rep(1:n,each = N/n))
+Xcat <- disjMatrix(strata)
+
+pik <- rep(inclusionprobabilities(runif(N/n),1),n)
+X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
+
+system.time(s <- stratifiedcube(X,strata,pik))
  sum(s)
  t(X/pik)\%*\%s
  t(X/pik)\%*\%pik

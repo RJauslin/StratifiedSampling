@@ -87,17 +87,6 @@ varApp <- function(X,strata,pik,y){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 #' Title
 #'
 #' @param X 

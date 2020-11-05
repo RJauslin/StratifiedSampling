@@ -15,63 +15,86 @@
 #' N <- 1000
 #' n <- 100
 #' p <- 4
-#' X_tmp <- matrix(rgamma(N*p,4,25),ncol = p)
+#' X <- matrix(rgamma(N*p,4,25),ncol = p)
 #' strata <- as.matrix(rep(1:n,each = N/n))
 #' pik <- rep(n/N,N)
-#' X <- cbind(pik,X_tmp)
+#' 
 #' balstrat(X,strata,pik)
 #' @export
 balstrat <- function (X, strata, pik) 
 {
   
+  H <- as.numeric(ncat(strata))
+  pik_tmp <- pik
+  EPS <- 1e-7
   
   ##----------------------------------------------------------------
-  ##                          Initializing                         -
-  ##----------------------------------------------------------------
-  
-  
-  EPS = 1e-8
-  strata = sampling::cleanstrata(strata)
-  H = max(strata)
-  N = dim(X)[1]
-  pikstar = rep(0, times = N)
-  
-  
-  ##----------------------------------------------------------------
-  ##                            Step 1                             -
+  ##                  Flightphase on each strata                   -
   ##----------------------------------------------------------------
   
   
-  for (h in 1:H) {
-    pikstar[strata == h] = ffphase(cbind(pik[strata == h],X[strata == h, ]), pik[strata == h])
+  for(k in 1:H){
+    # pik_tmp[Xcat == k] <- sampling::fastflightcube(cbind(pik[which(Xcat == k)],as.matrix(X[which(Xcat == k),])),
+    #                                                pik[Xcat == k],
+    #                                                comment = FALSE)
+    pik_tmp[strata == k] <- ffphase(as.matrix(cbind(pik[which(strata == k)],as.matrix(X[which(strata == k),]))),
+                                  pik[strata == k])
+    
   }
-  
-  
-  ##----------------------------------------------------------------
-  ##                            Step 2                             -
-  ##----------------------------------------------------------------
-  
-  
-  XN = cbind(sampling::disjunctive(strata) * pik, X)/pik * pikstar
-  if (is.null(colnames(X)) == FALSE) 
-    colnames(XN) <- c(paste("Stratum", 1:H, sep = ""), 
-                      colnames(X))
-  
-  i <- which(pikstar > EPS & pikstar < (1-EPS))
-  pikstar[i] = ffphase(as.matrix(cbind(X[i,],XN[i,])), pikstar[i])
-  
-  
+  sum(pik_tmp)
   
   ##----------------------------------------------------------------
-  ##                            Step 3                             -
+  ##          Flightphase on the uninon of strata U1 -- Uk         -
   ##----------------------------------------------------------------
-  
-  
-  i <- which(pikstar > EPS & pikstar < (1-EPS))
-  pikstar[i] <- landingRM(as.matrix(cbind(X[i,],XN[i,])),
-                          pikstar[i],
-                          pik[i])
-  pikstar <- round(pikstar,8)
+  i <- which(pik_tmp > EPS & pik_tmp < (1-EPS))
+  if(length(i) != 0){
 
-  return(pikstar)
+    Xcat_tmp2 <- disjMatrix(as.matrix(strata[i,]))
+    Xcat_tmp2 <- Xcat_tmp2*pik_tmp[i]
+    
+    X_tmp <- as.matrix((X[i,]*pik_tmp[i]/pik[i]))
+    pik_tmp[i] <- ffphase(as.matrix(cbind(X_tmp,Xcat_tmp2)),pik_tmp[i])
+    
+    
+    # for(k in 1:H){
+    #   # print(k)
+    #   
+    #   i <- which(Xcat <= k & (pik_tmp > EPS & pik_tmp < (1-EPS)))
+    #   
+    #   # Xcat_tmp2 <- Xnn[i,1:k]
+    #   Xcat_tmp2 <- disjMatrix(as.matrix(Xcat[i,]))
+    #   Xcat_tmp2 <- Xcat_tmp2*pik_tmp[i]
+    #   
+    #   X_tmp <- as.matrix((X[i,]*pik_tmp[i]/pik[i]))
+    #   
+    #   # pik_tmp[i] <- sampling::fastflightcube(as.matrix(cbind(X_tmp,Xcat_tmp2)),
+    #   #                                        pik_tmp[i],
+    #   #                                        1,
+    #   #                                        comment = FALSE)
+    #   pik_tmp[i] <- ffphase(as.matrix(cbind(X_tmp,Xcat_tmp2)),
+    #                         pik_tmp[i])
+    # }
+  }
+  sum(pik_tmp)
+  
+  ##---------------------------------------------------------------
+  ##              Landing by suppression of variables             -
+  ##---------------------------------------------------------------
+  
+  i <- which(pik_tmp > EPS & pik_tmp < (1-EPS))
+  
+  
+  if(length(i) != 0){
+    Xnn <- disjMatrix(as.matrix(strata))
+    Xcat_tmp3 <- as.matrix(Xnn)
+    # Xcat_tmp3 <- as.matrix(Xnn[i,])
+    pik_tmp <- landingRM(as.matrix(cbind(Xcat_tmp3, X/pik)),
+                         pik_tmp)
+    # pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,], X[i,])),
+    #                         pik_tmp[i],
+    #                         pik[i])
+    
+  }
+  return(round(pik_tmp,10))
+
 }
