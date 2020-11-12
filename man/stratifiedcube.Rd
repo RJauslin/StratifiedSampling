@@ -34,31 +34,6 @@ Xcat <- disjMatrix(strata)
 ##---------------------------------------------------------------
 ##                        different cases                       -
 ##---------------------------------------------------------------
-
-
- #-------- CASE 0 pik equal and only pik as variable
- 
- pik <- inclusionprobastrata(strata,rep(1,n))
- X <- as.matrix(pik)
- system.time(s <- stratifiedcube(X,strata,pik))
- sum(s)
- t(X/pik)\%*\%s
- t(X/pik)\%*\%pik
- 
- t(Xcat)\%*\%s
- t(Xcat)\%*\%pik
- 
-#-------- CASE 0.1 pik equal and only pik as variable
- 
- pik <- rep(inclusionprobabilities(runif(N/n),1),n)
- X <- as.matrix(pik)
- system.time(s <- stratifiedcube(X,strata,pik))
- sum(s)
- t(X/pik)\%*\%s
- t(X/pik)\%*\%pik
- 
- t(Xcat)\%*\%s
- t(Xcat)\%*\%pik
   
 
 #-------- CASE 1 pik equal and integer in each strata 
@@ -66,6 +41,7 @@ Xcat <- disjMatrix(strata)
  pik <- inclusionprobastrata(strata,rep(1,n))
  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
  system.time(s <- stratifiedcube(X,strata,pik))
+ system.time(s <- fbs(X,strata,pik))
  sum(s)
  t(X/pik)\%*\%s
  t(X/pik)\%*\%pik
@@ -79,6 +55,7 @@ Xcat <- disjMatrix(strata)
  pik <- rep(inclusionprobabilities(runif(N/n),1),n)
  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
  system.time(s <- stratifiedcube(X,strata,pik))
+ system.time(s <- fbs(X,strata,pik))
  sum(s)
  t(X/pik)\%*\%s
  t(X/pik)\%*\%pik
@@ -91,6 +68,7 @@ Xcat <- disjMatrix(strata)
  pik <- rep(0.25,N)
  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
  system.time(s <- stratifiedcube(X,strata,pik))
+ system.time(s <- fbs(X,strata,pik))
  sum(s)
  t(X/pik)\%*\%s
  t(X/pik)\%*\%pik
@@ -122,4 +100,28 @@ system.time(s <- stratifiedcube(X,strata,pik))
  t(Xcat)\%*\%pik
 
 
+
+##----------------------------------------------------------------
+##                              Data                             -
+##----------------------------------------------------------------
+
+rm(list = ls())
+N <- 100
+n <- 10
+x1 <- rgamma(N,4,25)
+x2 <- rgamma(N,4,25)
+strata <- as.matrix(rep(1:n,each = N/n))
+Xcat <- disjMatrix(strata)
+X <- matrix(c(x1,x2),ncol = 2)
+pik <- inclusionprobastrata(strata,rep(2,n)) # 2 per stratum and 10 stratum
+pik <- rep(0.25,N)
+
+
+system.time(s <- stratifiedcube(X,strata,pik))
+s
+t(X/pik)\%*\%pik
+t(X/pik)\%*\%s
+t(Xcat)\%*\%s
+t(Xcat)\%*\%pik
+sum(s)
 }

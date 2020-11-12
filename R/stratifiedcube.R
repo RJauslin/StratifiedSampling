@@ -29,31 +29,6 @@
 #' ##---------------------------------------------------------------
 #' ##                        different cases                       -
 #' ##---------------------------------------------------------------
-#' 
-#' 
-#'  #-------- CASE 0 pik equal and only pik as variable
-#'  
-#'  pik <- inclusionprobastrata(strata,rep(1,n))
-#'  X <- as.matrix(pik)
-#'  system.time(s <- stratifiedcube(X,strata,pik))
-#'  sum(s)
-#'  t(X/pik)%*%s
-#'  t(X/pik)%*%pik
-#'  
-#'  t(Xcat)%*%s
-#'  t(Xcat)%*%pik
-#'  
-#' #-------- CASE 0.1 pik equal and only pik as variable
-#'  
-#'  pik <- rep(inclusionprobabilities(runif(N/n),1),n)
-#'  X <- as.matrix(pik)
-#'  system.time(s <- stratifiedcube(X,strata,pik))
-#'  sum(s)
-#'  t(X/pik)%*%s
-#'  t(X/pik)%*%pik
-#'  
-#'  t(Xcat)%*%s
-#'  t(Xcat)%*%pik
 #'   
 #' 
 #' #-------- CASE 1 pik equal and integer in each strata 
@@ -61,6 +36,7 @@
 #'  pik <- inclusionprobastrata(strata,rep(1,n))
 #'  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
 #'  system.time(s <- stratifiedcube(X,strata,pik))
+#'  system.time(s <- fbs(X,strata,pik))
 #'  sum(s)
 #'  t(X/pik)%*%s
 #'  t(X/pik)%*%pik
@@ -74,6 +50,7 @@
 #'  pik <- rep(inclusionprobabilities(runif(N/n),1),n)
 #'  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
 #'  system.time(s <- stratifiedcube(X,strata,pik))
+#'  system.time(s <- fbs(X,strata,pik))
 #'  sum(s)
 #'  t(X/pik)%*%s
 #'  t(X/pik)%*%pik
@@ -86,6 +63,7 @@
 #'  pik <- rep(0.25,N)
 #'  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
 #'  system.time(s <- stratifiedcube(X,strata,pik))
+#'  system.time(s <- fbs(X,strata,pik))
 #'  sum(s)
 #'  t(X/pik)%*%s
 #'  t(X/pik)%*%pik
@@ -117,6 +95,30 @@
 #'  t(Xcat)%*%pik
 #'
 #' 
+#' 
+#' ##----------------------------------------------------------------
+#' ##                              Data                             -
+#' ##----------------------------------------------------------------
+#' 
+#' rm(list = ls())
+#' N <- 100
+#' n <- 10
+#' x1 <- rgamma(N,4,25)
+#' x2 <- rgamma(N,4,25)
+#' strata <- as.matrix(rep(1:n,each = N/n))
+#' Xcat <- disjMatrix(strata)
+#' X <- matrix(c(x1,x2),ncol = 2)
+#' pik <- inclusionprobastrata(strata,rep(2,n)) # 2 per stratum and 10 stratum
+#' pik <- rep(0.25,N)
+#' 
+#' 
+#' system.time(s <- stratifiedcube(X,strata,pik))
+#' s
+#' t(X/pik)%*%pik
+#' t(X/pik)%*%s
+#' t(Xcat)%*%s
+#' t(Xcat)%*%pik
+#' sum(s)
 stratifiedcube <- function(X,strata,pik){
   
   ##----------------------------------------------------------------
@@ -141,13 +143,15 @@ stratifiedcube <- function(X,strata,pik){
     #
     # pikstar[strata == k] <-ffphase(cbind(pik[which(strata == k)],as.matrix(X[which(strata == k),])),
     #        pikstar[strata == k])
-    pikstar[strata == k] <-ffphase(as.matrix(X[which(strata == k),]),
+    pikstar[strata == k] <-ffphase(as.matrix(cbind(pikstar[strata == k],X[which(strata == k),])),
                                    pikstar[strata == k])
   }
   
   ###################### CHECK
   # t(X/pik)%*%pikstar
   # t(X/pik)%*%pik
+  # t(Xcat)%*%pik
+  # t(Xcat)%*%pikstar
   
   ##----------------------------------------------------------------
   ##                Number of non 0-1 inclusion prob               -
@@ -155,6 +159,7 @@ stratifiedcube <- function(X,strata,pik){
   
   i <- which(pikstar > EPS & pikstar < (1-EPS))
   i_size = length(i)
+  i_size
   
   
   ##----------------------------------------------------------------
@@ -192,23 +197,32 @@ stratifiedcube <- function(X,strata,pik){
     # print(sum(pikstar))
   }
   
-  #---------------- check
-  # Xcat <- disjMatrix(strata)
-  # 
-  # t(X/pik)%*%pik
-  # t(X/pik)%*%pikstar
-  # 
-  # all(t(Xcat)%*%pik == 1)
-  # all(round(t(Xcat)%*%pikstar,10) == 1)
   
-  ##----------------------------------------------------------------
-  ##            end of flight phase without categories             -
-  ##----------------------------------------------------------------
-
-  if(i_size > 0){
-    pikstar[i] <- ffphase(cbind(pikstar[i],X[i,]),pikstar[i])  
+  # ##----------------------------------------------------------------
+  # ##          end of flight phase on strata categories             -
+  # ##----------------------------------------------------------------
+  # Sometimes some stata does could not be balanced at the end and so we 
+  # drop some auxiliary variable such that we could have only one unit that
+  # are not put equal to 0 or 1 within each strata
+  #
+  
+  p <- ncol(X)
+  k = 1
+  while(length(uCat) != 0){
+    ##------ Find B
+    if(k == p){
+      B <- as.matrix(pikstar[uCat])/pikstar[uCat]
+    }else{
+      A_tmp <- as.matrix(as.matrix(X[uCat,1:(p-k)])/pik[uCat])
+      B <- findB(A_tmp,as.matrix(strata[uCat,]))
+      B <- cbind(B$X,B$Xcat)
+    }
+    tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
+    pikstar[uCat[1:nrow(B)]] <- tmp
     i <- which(pikstar > EPS & pikstar < (1-EPS))
-    i_size <- length(i)
+    i_size = length(i)
+    uCat <- i[duplicated(strata[i,]) | duplicated(strata[i,], fromLast = TRUE)]
+    k = k + 1
   }
   
   #---------------- check
@@ -216,34 +230,20 @@ stratifiedcube <- function(X,strata,pik){
   # 
   # t(X/pik)%*%pik
   # t(X/pik)%*%pikstar
-  # 
-  # all(t(Xcat)%*%pik == 1)
-  # all(round(t(Xcat)%*%pikstar,10) == 1)
+  # t(Xcat)%*%pik
+  # t(Xcat)%*%pikstar
+  # length(i)
+  # sum(pikstar)
   
-  ##----------------------------------------------------------------
-  ##                 LANDING by droping step by step               -
-  ##----------------------------------------------------------------
-  if(i_size > 0){
-    
-    Xcat <- disjMatrix(strata)
-    pikstar <- landingRM(cbind(Xcat, X/pik),pikstar)
-  # pikstar <- landingRM(X/pik,
-            # pikstar)
+  
+  # ##----------------------------------------------------------------
+  # ##            Landing on unit that are alone in the strata       -
+  # ##----------------------------------------------------------------
+  if(length(i) > 0){
+    pikstar[i] <- landingRM(cbind(pikstar[i],X[i,]/pik[i]),pikstar[i])    
   }
+
   
-  
-  #---------------- check
-  # Xcat <- disjMatrix(strata)
-  # 
-  # t(X/pik)%*%pik
-  # t(X/pik)%*%pikstar
-  # 
-  # all(t(Xcat)%*%pik == 1)
-  # all(round(t(Xcat)%*%pikstar,10) == 1)
-  
-  
-  pikstar <- round(pikstar,10)
- 
-  return(pikstar)
+  return(round(pikstar,10))
 }
 

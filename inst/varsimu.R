@@ -1,13 +1,13 @@
 rm(list = ls())
 set.seed(1)
-N <- 10000
+N <- 1000
 
 x1 <- rgamma(N,4,25)
 x2 <- rgamma(N,4,25)
 x3 <- rgamma(N,4,25)
 x4 <- rgamma(N,4,25)
 
-nstrata <- 100
+nstrata <- 25
 
 strata <- as.matrix(rep((1:nstrata),each = (N/nstrata))) 
 Xcat <- disjMatrix(strata)
@@ -16,8 +16,8 @@ Xcat <- disjMatrix(strata)
 
 pik <- inclusionprobastrata(strata,rep(12,nstrata)) #↓ one by strata
 sum(pik)
-# X <- as.matrix(matrix(c(x1,x2),ncol = 2))
-X <- readRDS("C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling/inst/article/results/varaux.rds")
+X <- as.matrix(matrix(c(x1,x2),ncol = 2))
+# X <- readRDS("C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling/inst/article/results/varaux.rds")
 
 # 
 # s <- fbs(X,strata,pik)
@@ -42,7 +42,7 @@ X <- readRDS("C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSamplin
    print(i)
    
     
-   s <- stratifiedcube(cbind(pik,X),strata,pik)
+   s <- stratifiedcube(X,strata,pik)
    # s <- fbs(X,strata,pik)
    # s <- balstrat(X,strata,pik)
    y <- y
