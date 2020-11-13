@@ -38,7 +38,7 @@ balstrat <- function (X, strata, pik)
     #                                                pik[Xcat == k],
     #                                                comment = FALSE)
     pik_tmp[strata == k] <- ffphase(as.matrix(cbind(pik[which(strata == k)],as.matrix(X[which(strata == k),]))),
-                                  pik[strata == k])
+                                    pik[strata == k])
     
   }
   sum(pik_tmp)
@@ -48,7 +48,7 @@ balstrat <- function (X, strata, pik)
   ##----------------------------------------------------------------
   i <- which(pik_tmp > EPS & pik_tmp < (1-EPS))
   if(length(i) != 0){
-
+    
     Xcat_tmp2 <- disjMatrix(as.matrix(strata[i,]))
     Xcat_tmp2 <- Xcat_tmp2*pik_tmp[i]
     
@@ -96,5 +96,5 @@ balstrat <- function (X, strata, pik)
     
   }
   return(round(pik_tmp,10))
-
+  
 }

@@ -2,24 +2,25 @@
 % Please edit documentation in R/findB.R
 \name{findB}
 \alias{findB}
-\title{find the sub-matrix B in the flight phase}
+\title{Find best sub-matrix B in stratifiedcube}
 \usage{
 findB(X, strata)
 }
 \arguments{
-\item{X}{matrix of auxiliary variables.}
+\item{X}{A matrix of auxiliary variables.}
 
-\item{Xcat}{matrix of categorical variables.}
+\item{strata}{A vector of categories.}
 }
 \value{
-matrix B
+A list of two components. The sub-matrix of X and the corresponding disjunctive matrix.
+ If we \code{cbind} the two matrix, the resulting matrix have only one more row than the number of column.
 }
 \description{
-
+This function is computing a sub-matrix used in stratifiedcube.
 }
 \details{
-The function find the smallest matrix B such that is contains only one additional row.
- It consecutively add the right number of row depending of the number of categroies that is added.
+The function find the smallest matrix B such that is contains only one more row than the number of column.
+It consecutively add the right number of row depending of the number of categories that is added.
 }
 \examples{
 N <- 1000
@@ -28,16 +29,5 @@ strata <-  sample(x = 1:6, size = N, replace = TRUE)
 p <- 3
 X <- matrix(rnorm(N*p),ncol = 3)
 findB(X,strata)
-
-
-N <- 100
-Xcat <-data.frame(cat1 = rep(1:50,each = 2))
-Xcat <- as.matrix(Xcat[-2,])
-Xcat <- as.matrix(Xcat[-4,])
-X <- matrix(rnorm(N),ncol = 1)
-
-findB(X,Xcat)
-
-
 
 }

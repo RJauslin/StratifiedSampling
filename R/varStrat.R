@@ -1,11 +1,11 @@
-
-
-#' Title
-#'
-#' @param X 
-#' @param strata 
-#' @param pik 
-#' @param s 
+#' @title Approximated variance
+#' 
+#' @description 
+#' 
+#' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param strata A vector of integer that represents the categories.
+#' @param pik vector of inclusion probabilities.
+#' @param s a sample (vector of 0 and 1, if rejected or selected).
 #'
 #' @return
 #' @export
@@ -48,6 +48,7 @@ varApp <- function(X,strata,pik,y){
   q <- ncol(X)
   
   beta <- matrix(rep(0,(H+q)^2),ncol = (H+q),nrow = (H+q))
+  
   #compute beta
   for(k in 1:N){
     z_k <- X_tmp[k,]
@@ -80,10 +81,6 @@ varApp <- function(X,strata,pik,y){
   
   
 }
-
-
-
-
 
 
 

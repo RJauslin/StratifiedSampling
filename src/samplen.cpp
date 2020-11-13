@@ -8,28 +8,28 @@
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
-//' @title title
+//' @title Samples of fixed size 
 //'
 //' @description
-//' description Rosetta code combn
+//' Gives a matrix that contains in each column a possible sample of size \eqn{n}.
 //'
-//'
-//' @param x x
+//' @param N An integer, the size of the population
+//' @param n An integer, the sample size.
 //'
 //' @details
+//' It uses a fast implementation. See References.
 //'
-//' details
+//' @return A matrix of indicator variables.
 //'
-//' @return a vector
-//'
-//'
+//' @references \url{http://www.rosettacode.org/wiki/Rosetta_Code}
 //' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' @seealso
-//' func
+//' \code{\link{landingLP}}
 //'
 //' @examples
-//'
+//' samplen(4,2)
+//' 
 //' @export
 // [[Rcpp::export]]
 arma::mat samplen(int N, int n){
@@ -62,9 +62,10 @@ arma::mat samplen(int N, int n){
 
 /*** R
 
-system.time(test <- IneqCube::choose(10,3))
+system.time(test <- StratifiedSampling::choose(10,3))
 system.time(test <- base::choose(10,3))
 
+samplen(4,2)
 
 system.time(test <- samplen(26,10))
 system.time(test2 <- combn(26,10))

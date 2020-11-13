@@ -6,18 +6,6 @@
 
 using namespace Rcpp;
 
-// chooseRec
-long long int chooseRec(int n, int k);
-RcppExport SEXP _StratifiedSampling_chooseRec(SEXP nSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< int >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(chooseRec(n, k));
-    return rcpp_result_gen;
-END_RCPP
-}
 // choose
 long long int choose(int n, int k);
 RcppExport SEXP _StratifiedSampling_choose(SEXP nSEXP, SEXP kSEXP) {
@@ -63,29 +51,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// disj_to_cat
-arma::uvec disj_to_cat(arma::umat Xcat);
-RcppExport SEXP _StratifiedSampling_disj_to_cat(SEXP XcatSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::umat >::type Xcat(XcatSEXP);
-    rcpp_result_gen = Rcpp::wrap(disj_to_cat(Xcat));
-    return rcpp_result_gen;
-END_RCPP
-}
-// findBarma
-arma::mat findBarma(arma::mat X, arma::umat Xcat);
-RcppExport SEXP _StratifiedSampling_findBarma(SEXP XSEXP, SEXP XcatSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::umat >::type Xcat(XcatSEXP);
-    rcpp_result_gen = Rcpp::wrap(findBarma(X, Xcat));
-    return rcpp_result_gen;
-END_RCPP
-}
 // samplen
 arma::mat samplen(int N, int n);
 RcppExport SEXP _StratifiedSampling_samplen(SEXP NSEXP, SEXP nSEXP) {
@@ -98,28 +63,13 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// systematicDesign
-Rcpp::List systematicDesign(arma::vec pik);
-RcppExport SEXP _StratifiedSampling_systematicDesign(SEXP pikSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type pik(pikSEXP);
-    rcpp_result_gen = Rcpp::wrap(systematicDesign(pik));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_StratifiedSampling_chooseRec", (DL_FUNC) &_StratifiedSampling_chooseRec, 2},
     {"_StratifiedSampling_choose", (DL_FUNC) &_StratifiedSampling_choose, 2},
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},
-    {"_StratifiedSampling_disj_to_cat", (DL_FUNC) &_StratifiedSampling_disj_to_cat, 1},
-    {"_StratifiedSampling_findBarma", (DL_FUNC) &_StratifiedSampling_findBarma, 2},
     {"_StratifiedSampling_samplen", (DL_FUNC) &_StratifiedSampling_samplen, 2},
-    {"_StratifiedSampling_systematicDesign", (DL_FUNC) &_StratifiedSampling_systematicDesign, 1},
     {NULL, NULL, 0}
 };
 

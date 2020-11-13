@@ -1,20 +1,20 @@
-#' @title Fast flight phase
+#' @title Fast flight phase of the cube method
 #'
 #' @description 
 #' 
-#' This function is computing the flight phase of the cube method. 
+#' This function is computing the flight phase of the cube method. (Chauvet and Tille 2006)
 #'
-#' @param X a matrix of size (N x p) of auxiliary variables on which the sample must be balanced.
-#' @param pik a vector of size N of inclusion probabilities.
+#' @param X a matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param pik vector of inclusion probabilities.
 #'
 #' @details 
-#' This function implements the method proposed by (Chauvet and Tille 2006). It progressively transform the vector of inclusion probabilities \code{pik} into a sample while respecting the balancing equations.
-#' The algorithm stops when the null space of the matrix \eqn{B} is empty. For more information see (Chauvet and Tille 2006).
+#' This function implements the method proposed by (Chauvet and Tille 2006). It recursively transform the vector of inclusion probabilities \code{pik} into a
+#' sample that respect the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
+#' For more information see (Chauvet and Tille 2006).
 #' 
-#' The function uses the function \code{\link[MASS:Null]{Null}} to find the null space of the matrix \eqn{B}.
+#' The function uses the function \code{\link[MASS:Null]{Null}} to find the null space of the sub-matrix \eqn{B}.
 #'
-#' @return the updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
-#'
+#' @return Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
 #'
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
@@ -31,27 +31,14 @@
 #' n <- 10
 #' p <- 4
 #' 
-#' #pik <- rep(n/N,N)
-#' pik <- inclusionprobabilities(runif(N),n)
-#' X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+#' pik <- rep(n/N,N)
+#' X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
 #' 
 #' pikstar <- ffphase(X,pik) 
-#' 
 #' t(X/pik)%*%pikstar
 #' t(X/pik)%*%pik
 #' pikstar
 #' 
-#' 
-#' 
-#' 
-#' X <- cbind(matrix(rep(0,2*10),nrow = 2),c(0.45,0.55))
-#' X <- matrix(c(1,1),ncol = 1)
-#' pik <- c(0.1260076, 0.8739924)
-#' 
-#' fastflightcube(X,pik)
-#' s <- ffphase(X*pik,pik)
-#' 
-#' t(X/pik)%*%pik
 #' 
 #' @export
 ffphase <- function(X, pik){
@@ -60,9 +47,7 @@ ffphase <- function(X, pik){
   ##                        Initialization                         -
   ##----------------------------------------------------------------
   EPS = 1e-8
-  pikInit <- pik
-  # AInit <- X/pik
-  A <- X/pikInit
+  A <- X/pik
   N <- length(pik)  
   p = ncol(X)
   
@@ -77,11 +62,9 @@ ffphase <- function(X, pik){
   ##                          flight phase                         -
   ##----------------------------------------------------------------
   
-  # print(i_size)
-  # print(p)
-  while(i_size > 0){
   
-    # print(i_size)
+  while(i_size > 0){
+    
     ##------ Find B
     if(i_size >= (p+1)){
       i_tmp <- i[1:(p+1)]
@@ -95,7 +78,6 @@ ffphase <- function(X, pik){
 
     ##------ onestep and check if null
     tmp <-  onestep(B,pik_tmp,EPS)
-    # print(tmp)
     if(is.null(tmp)){
       break;
     }else{
@@ -109,7 +91,7 @@ ffphase <- function(X, pik){
     if(i_size == 1){
       break;
     }
-    # A <- X*(pik/pikInit)
+  
   }
   
   return(pik)

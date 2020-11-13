@@ -7,7 +7,7 @@
 landingRM(X, pikstar)
 }
 \arguments{
-\item{X}{matrix of auxiliary variables on which the sample must be balanced.}
+\item{X}{matrix of auxiliary variables on which the sample must be balanced. (The matrix should be divided by the original inclusion probabilities.)}
 
 \item{pikstar}{vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}}
 
@@ -22,17 +22,19 @@ N <- 1000
 n <- 10
 p <- 4
 pik <- sampling::inclusionprobabilities(runif(N),n)
-X <- cbind(pik,matrix(rgamma(N*p,8,50),ncol= p))
+X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
 pikstar <- ffphase(X,pik) 
 s <- landingRM(X/pik,pikstar)
 sum(s)
 t(X/pik)\%*\%pik
 t(X/pik)\%*\%pikstar
 t(X/pik)\%*\%s
-t(X/pik)\%*\%samplecube(X,pik)
 }
 \references{
 Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62
+}
+\seealso{
+\code{\link{fbs}}, \code{\link{balstrat}}.
 }
 \author{
 Raphaël Jauslin \email{raphael.jauslin@unine.ch}

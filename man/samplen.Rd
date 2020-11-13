@@ -2,27 +2,33 @@
 % Please edit documentation in R/RcppExports.R
 \name{samplen}
 \alias{samplen}
-\title{title}
+\title{Samples of fixed size}
 \usage{
 samplen(N, n)
 }
 \arguments{
-\item{x}{x}
+\item{N}{An integer, the size of the population}
+
+\item{n}{An integer, the sample size.}
 }
 \value{
-a vector
+A matrix of indicator variables.
 }
 \description{
-description Rosetta code combn
+Gives a matrix that contains in each column a possible sample of size \eqn{n}.
 }
 \details{
-details
+It uses a fast implementation. See References.
 }
 \examples{
+samplen(4,2)
 
 }
+\references{
+\url{http://www.rosettacode.org/wiki/Rosetta_Code}
+}
 \seealso{
-func
+\code{\link{landingLP}}
 }
 \author{
 Raphaël Jauslin \email{raphael.jauslin@unine.ch}

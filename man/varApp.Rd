@@ -2,24 +2,24 @@
 % Please edit documentation in R/varStrat.R
 \name{varApp}
 \alias{varApp}
-\title{Title}
+\title{Approximated variance}
 \usage{
 varApp(X, strata, pik, y)
 }
 \arguments{
-\item{X}{}
+\item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{}
+\item{strata}{A vector of integer that represents the categories.}
 
-\item{pik}{}
+\item{pik}{vector of inclusion probabilities.}
 
-\item{s}{}
+\item{s}{a sample (vector of 0 and 1, if rejected or selected).}
 }
 \value{
 
 }
 \description{
-Title
+
 }
 \examples{
 

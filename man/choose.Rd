@@ -2,28 +2,27 @@
 % Please edit documentation in R/RcppExports.R
 \name{choose}
 \alias{choose}
-\title{title}
+\title{Binomial Coefficient}
 \usage{
 choose(n, k)
 }
 \arguments{
-\item{x}{x}
+\item{n}{An integer. (greater than k)}
+
+\item{k}{An integer.}
 }
 \value{
-a vector
+An integer "n choose k".
 }
 \description{
-description
-}
-\details{
-details
+It calculates the number of sets with size \eqn{k} that can be chosen from a set of size \eqn{n}.
 }
 \examples{
-
+choose(10,5)
 }
 \seealso{
-func
+\code{\link[base:choose]{base::choose}}
 }
 \author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
+Raphael Jauslin \email{raphael.jauslin@unine.ch}
 }

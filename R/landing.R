@@ -19,7 +19,7 @@
 #' n <- 10
 #' p <- 4
 #' pik <- sampling::inclusionprobabilities(runif(N),n)
-#' X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+#' X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
 #' pikstar <- ffphase(X,pik) 
 #' s <- landingLP(X,pikstar,pik)
 #' sum(s)
@@ -108,7 +108,7 @@ landingLP <- function(X,pikstar,pik){
 
 #' @title Landing by suppression of variables
 #'
-#' @param X matrix of auxiliary variables on which the sample must be balanced.
+#' @param X matrix of auxiliary variables on which the sample must be balanced. (The matrix should be divided by the original inclusion probabilities.)
 #' @param pikstar vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}
 #' @param pik vector of inclusion probabilities.
 #'
@@ -117,7 +117,8 @@ landingLP <- function(X,pikstar,pik){
 #'
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
-#'
+#' @seealso \code{\link{fbs}}, \code{\link{balstrat}}.
+#' 
 #' @references
 #' Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62
 #'
@@ -128,14 +129,13 @@ landingLP <- function(X,pikstar,pik){
 #' n <- 10
 #' p <- 4
 #' pik <- sampling::inclusionprobabilities(runif(N),n)
-#' X <- cbind(pik,matrix(rgamma(N*p,8,50),ncol= p))
+#' X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
 #' pikstar <- ffphase(X,pik) 
 #' s <- landingRM(X/pik,pikstar)
 #' sum(s)
 #' t(X/pik)%*%pik
 #' t(X/pik)%*%pikstar
 #' t(X/pik)%*%s
-#' t(X/pik)%*%samplecube(X,pik)
 landingRM <- function(X,pikstar){
 
 
@@ -186,7 +186,6 @@ landingRM <- function(X,pikstar){
 
   }
   
-
   
   pikstar[i] = pikland
   i <- which(pikstar > EPS & pikstar < (1 - EPS))

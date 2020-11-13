@@ -1,59 +1,23 @@
 #include <RcppArmadillo.h>
 
 // [[Rcpp::depends(RcppArmadillo)]]
-//' @title title
+//' @title Binomial Coefficient
 //'
 //' @description
-//' description
+//' It calculates the number of sets with size \eqn{k} that can be chosen from a set of size \eqn{n}.
 //'
+//' @param n An integer. (greater than k)
+//' @param k An integer.
 //'
-//' @param x x
+//' @return An integer "n choose k".
 //'
-//' @details
-//'
-//' details
-//'
-//' @return a vector
-//'
-//'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+//' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' @seealso
-//' func
+//' \code{\link[base:choose]{base::choose}}
 //'
 //' @examples
-//'
-//' @export
-// [[Rcpp::export]]
-long long int chooseRec(int n, int k) {
-  if (k == 0 || k == n)
-    return 1;
-  return chooseRec(n - 1, k - 1) + chooseRec(n - 1, k);
-}
-
-// [[Rcpp::depends(RcppArmadillo)]]
-//' @title title
-//'
-//' @description
-//' description
-//'
-//'
-//' @param x x
-//'
-//' @details
-//'
-//' details
-//'
-//' @return a vector
-//'
-//'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
-//'
-//' @seealso
-//' func
-//'
-//' @examples
-//'
+//' choose(10,5)
 //' @export
 // [[Rcpp::export]]
 long long int choose(int n, int k)

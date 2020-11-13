@@ -2,26 +2,27 @@
 % Please edit documentation in R/ffphase.R
 \name{ffphase}
 \alias{ffphase}
-\title{Fast flight phase}
+\title{Fast flight phase of the cube method}
 \usage{
 ffphase(X, pik)
 }
 \arguments{
-\item{X}{a matrix of size (N x p) of auxiliary variables on which the sample must be balanced.}
+\item{X}{a matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{pik}{a vector of size N of inclusion probabilities.}
+\item{pik}{vector of inclusion probabilities.}
 }
 \value{
-the updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
+Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
 }
 \description{
-This function is computing the flight phase of the cube method.
+This function is computing the flight phase of the cube method. (Chauvet and Tille 2006)
 }
 \details{
-This function implements the method proposed by (Chauvet and Tille 2006). It progressively transform the vector of inclusion probabilities \code{pik} into a sample while respecting the balancing equations.
-The algorithm stops when the null space of the matrix \eqn{B} is empty. For more information see (Chauvet and Tille 2006).
+This function implements the method proposed by (Chauvet and Tille 2006). It recursively transform the vector of inclusion probabilities \code{pik} into a
+sample that respect the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
+For more information see (Chauvet and Tille 2006).
 
-The function uses the function \code{\link[MASS:Null]{Null}} to find the null space of the matrix \eqn{B}.
+The function uses the function \code{\link[MASS:Null]{Null}} to find the null space of the sub-matrix \eqn{B}.
 }
 \examples{
 
@@ -29,27 +30,14 @@ N <- 100
 n <- 10
 p <- 4
 
-#pik <- rep(n/N,N)
-pik <- inclusionprobabilities(runif(N),n)
-X <- cbind(pik,matrix(rnorm(N*p),ncol= p))
+pik <- rep(n/N,N)
+X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
 
 pikstar <- ffphase(X,pik) 
-
 t(X/pik)\%*\%pikstar
 t(X/pik)\%*\%pik
 pikstar
 
-
-
-
-X <- cbind(matrix(rep(0,2*10),nrow = 2),c(0.45,0.55))
-X <- matrix(c(1,1),ncol = 1)
-pik <- c(0.1260076, 0.8739924)
-
-fastflightcube(X,pik)
-s <- ffphase(X*pik,pik)
-
-t(X/pik)\%*\%pik
 
 }
 \references{

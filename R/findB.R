@@ -1,17 +1,18 @@
-#' find the sub-matrix B in the flight phase
+#' @title Find best sub-matrix B in stratifiedcube
 #'
 #' @description
+#' This function is computing a sub-matrix used in stratifiedcube.
 #' 
-#'
-#' @param X matrix of auxiliary variables.
-#' @param Xcat matrix of categorical variables.
+#' @param X A matrix of auxiliary variables.
+#' @param strata A vector of categories.
 #'
 #' @details
 #'
-#' The function find the smallest matrix B such that is contains only one additional row.
-#'  It consecutively add the right number of row depending of the number of categroies that is added.
+#' The function find the smallest matrix B such that is contains only one more row than the number of column.
+#' It consecutively add the right number of row depending of the number of categories that is added.
 #'
-#' @return matrix B
+#' @return A list of two components. The sub-matrix of X and the corresponding disjunctive matrix.
+#'  If we \code{cbind} the two matrix, the resulting matrix have only one more row than the number of column. 
 #'
 #' @export
 #'
@@ -22,17 +23,6 @@
 #' p <- 3
 #' X <- matrix(rnorm(N*p),ncol = 3)
 #' findB(X,strata)
-#' 
-#'
-#' N <- 100
-#' Xcat <-data.frame(cat1 = rep(1:50,each = 2))
-#' Xcat <- as.matrix(Xcat[-2,])
-#' Xcat <- as.matrix(Xcat[-4,])
-#' X <- matrix(rnorm(N),ncol = 1)
-#'
-#' findB(X,Xcat)
-#'
-#'
 #'
 findB <- function(X,
                   strata){
