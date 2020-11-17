@@ -1,13 +1,13 @@
-
-
-
-#' Title
+#' @title Stratified Sampling
+#' 
+#' @description  
+#' sndgj
 #'
-#' @param X
-#' @param Xcat
-#' @param pik
+#' @param X matrix of auxiliary variables.
+#' @param strata matrix of categorical variables.
+#' @param pik vector of inclusion probabilities.
 #'
-#' @return
+#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #' @export
 #'
 #' @examples
@@ -17,8 +17,8 @@
 #' ##----------------------------------------------------------------
 #' 
 #' rm(list = ls())
-#' N <- 10000
-#' n <- 1000
+#' N <- 1000
+#' n <- 100
 #' x1 <- rgamma(N,4,25)
 #' x2 <- rgamma(N,4,25)
 #' strata <- as.matrix(rep(1:n,each = N/n))
@@ -33,10 +33,9 @@
 #' 
 #' #-------- CASE 1 pik equal and integer in each strata 
 #' 
-#'  pik <- inclusionprobastrata(strata,rep(1,n))
+#'  pik <- sampling::inclusionprobastrata(strata,rep(1,n))
 #'  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
 #'  system.time(s <- stratifiedcube(X,strata,pik))
-#'  system.time(s <- fbs(X,strata,pik))
 #'  sum(s)
 #'  t(X/pik)%*%s
 #'  t(X/pik)%*%pik
@@ -47,10 +46,9 @@
 #' 
 #' #-------- CASE 2 pik unequal and integer in each strata  
 #' 
-#'  pik <- rep(inclusionprobabilities(runif(N/n),1),n)
+#'  pik <- rep(sampling::inclusionprobabilities(runif(N/n),1),n)
 #'  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
 #'  system.time(s <- stratifiedcube(X,strata,pik))
-#'  system.time(s <- fbs(X,strata,pik))
 #'  sum(s)
 #'  t(X/pik)%*%s
 #'  t(X/pik)%*%pik
@@ -63,7 +61,6 @@
 #'  pik <- rep(0.25,N)
 #'  X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
 #'  system.time(s <- stratifiedcube(X,strata,pik))
-#'  system.time(s <- fbs(X,strata,pik))
 #'  sum(s)
 #'  t(X/pik)%*%s
 #'  t(X/pik)%*%pik
@@ -73,52 +70,15 @@
 #'  
 #' #-------- CASE 4 pik unequal and NOT integer in each strata 
 #'  
-#'  
-#'  
-#' rm(list = ls())
-#' N <- 10000
-#' n <- 1000
-#' x1 <- rgamma(N,4,25)
-#' x2 <- rgamma(N,4,25)
-#' strata <- as.matrix(rep(1:n,each = N/n))
-#' Xcat <- disjMatrix(strata)
-#' 
-#' pik <- rep(inclusionprobabilities(runif(N/n),1),n)
+#' pik <- rep(sampling::inclusionprobabilities(runif(N/n),2.5),n)
 #' X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
-#' 
 #' system.time(s <- stratifiedcube(X,strata,pik))
-#'  sum(s)
-#'  t(X/pik)%*%s
-#'  t(X/pik)%*%pik
-#'  
-#'  t(Xcat)%*%s
-#'  t(Xcat)%*%pik
-#'
-#' 
-#' 
-#' ##----------------------------------------------------------------
-#' ##                              Data                             -
-#' ##----------------------------------------------------------------
-#' 
-#' rm(list = ls())
-#' N <- 100
-#' n <- 10
-#' x1 <- rgamma(N,4,25)
-#' x2 <- rgamma(N,4,25)
-#' strata <- as.matrix(rep(1:n,each = N/n))
-#' Xcat <- disjMatrix(strata)
-#' X <- matrix(c(x1,x2),ncol = 2)
-#' pik <- inclusionprobastrata(strata,rep(2,n)) # 2 per stratum and 10 stratum
-#' pik <- rep(0.25,N)
-#' 
-#' 
-#' system.time(s <- stratifiedcube(X,strata,pik))
-#' s
-#' t(X/pik)%*%pik
+#' sum(s)
 #' t(X/pik)%*%s
+#' t(X/pik)%*%pik
+#' 
 #' t(Xcat)%*%s
 #' t(Xcat)%*%pik
-#' sum(s)
 stratifiedcube <- function(X,strata,pik){
   
   ##----------------------------------------------------------------

@@ -21,8 +21,8 @@ Select a strafitifed balanced sample. The function is similar to \code{\link[sam
 }
 \examples{
 
-N <- 1000
-n <- 100
+N <- 100
+n <- 10
 p <- 4
 X <- matrix(rgamma(N*p,4,25),ncol = p)
 strata <- as.matrix(rep(1:n,each = N/n))

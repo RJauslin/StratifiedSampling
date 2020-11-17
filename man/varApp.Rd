@@ -13,16 +13,15 @@ varApp(X, strata, pik, y)
 
 \item{pik}{vector of inclusion probabilities.}
 
-\item{s}{a sample (vector of 0 and 1, if rejected or selected).}
+\item{y}{variable of interest.}
 }
 \value{
-
+a scalar, the value of the approximated variance.
 }
 \description{
 
 }
 \examples{
-
 
 rm(list = ls())
 N <- 1000
@@ -35,19 +34,18 @@ Xcat <- disjMatrix(strata)
 
 #-------- CASE 1 pik equal and integer in each strata 
 
-pik <- inclusionprobastrata(strata,rep(1,n))
+pik <- rep(n/N,N)
 X <- as.matrix(matrix(c(x1,x2),ncol = 2))
  
 s <- stratifiedcube(cbind(pik,X),strata,pik)
+s <- fbs(X,strata,pik)
  
- 
- y <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
+ y <- 20*strata + rnorm(1000,120)
+ y2 <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
  
  y_ht <- sum(y[which(s==1)]/pik[which(s == 1)])
  
- sum(y)
- sum(y_ht)
- 
- varApp(X,strata,pik,s,y)
- 
+ (sum(y_ht) - sum(y))^2
+ varEst(X,strata,pik,s,y)
+ varApp(X,strata,pik,y)
 }

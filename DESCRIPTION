@@ -7,7 +7,8 @@ Authors@R: c(
   person("Esther", "Eustache", email = "esther.eustache@unine.ch",role = c("aut")),
   person("Yves", "Tillé",role = c("aut"),comment = c(ORCID = "0000-0003-0904-5523"))
   )
-Description: Implements fast cube method with reduction of the auxiliary matrix.
+Description: If population on which we would like to select a sample is stratified, using a stratified sampling procedure is very powerful to reduce the variance
+  of the Horvitz-Thompson estimator. This package implements different way of selecting a stratified sample. 
 License: GPL (>=2)
 Encoding: UTF-8
 LazyData: true
@@ -21,8 +22,9 @@ Suggests:
     rmarkdown,
     ggplot2,
     ggvoronoi,
-    sampling,
     BalancedSampling,
+    MASS,
+    lpSolve,
     sp,
     sf,
     stats,

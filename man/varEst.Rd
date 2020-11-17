@@ -2,24 +2,26 @@
 % Please edit documentation in R/varStrat.R
 \name{varEst}
 \alias{varEst}
-\title{Title}
+\title{Estimated variance}
 \usage{
 varEst(X, strata, pik, s, y)
 }
 \arguments{
-\item{X}{}
+\item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{}
+\item{strata}{A vector of integer that represents the categories.}
 
-\item{pik}{}
+\item{pik}{vector of inclusion probabilities.}
 
-\item{s}{}
+\item{s}{a sample (vector of 0 and 1, if rejected or selected).}
+
+\item{y}{variable of interest.}
 }
 \value{
-
+a scalar, the value of the estimamted variance.
 }
 \description{
-Title
+Estimated variance
 }
 \examples{
 
@@ -48,6 +50,6 @@ s <- fbs(X,strata,pik)
  
  (sum(y_ht) - sum(y))^2
  varEst(X,strata,pik,s,y)
- varApp(X,strata,pik,s,y)
+ varApp(X,strata,pik,y)
  
 }

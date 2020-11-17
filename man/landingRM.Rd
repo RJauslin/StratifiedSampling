@@ -10,8 +10,6 @@ landingRM(X, pikstar)
 \item{X}{matrix of auxiliary variables on which the sample must be balanced. (The matrix should be divided by the original inclusion probabilities.)}
 
 \item{pikstar}{vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}}
-
-\item{pik}{vector of inclusion probabilities.}
 }
 \description{
 This function does the landing phase of the cube method using suppression of variables.

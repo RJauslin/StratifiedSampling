@@ -20,50 +20,13 @@
 #' x1 <- rgamma(N,4,25)
 #' x2 <- rgamma(N,4,25)
 #'
-#' Xcat <- as.matrix(rep(1:n,each = N/n))
-#'
-#' pik <- sampling::inclusionprobastrata(Xcat,rep(1,n))
-#' X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
-#' A <- cbind(X,sampling::disjunctive(as.matrix(Xcat)))
-#' 
-#' s <- fbs(X,Xcat,pik)
-#' 
-#' 
-#' 
-#' 
-#' ##----------------------------------------------------------------
-#' ##                              Data                             -
-#' ##----------------------------------------------------------------
-#' 
-#' rm(list = ls())
-#' N <- 1000
-#' n <- 100
-#' x1 <- rgamma(N,4,25)
-#' x2 <- rgamma(N,4,25)
 #' strata <- as.matrix(rep(1:n,each = N/n))
+#'
+#' pik <- sampling::inclusionprobastrata(strata,rep(1,n))
+#' X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
+#' A <- cbind(X,disjMatrix(as.matrix(strata)))
 #' 
-#' 
-#' 
-#' ##---------------------------------------------------------------
-#' ##                        different cases                       -
-#' ##---------------------------------------------------------------
-#' 
-#' 
-#'  #-------- CASE 0 pik equal and only pik as variable
-#'  
-#'  pik <- inclusionprobastrata(strata,rep(1,n))
-#'  # X <- as.matrix(pik)
-#'  
-#'  X <- matrix(c(x1,x2),ncol = 2)
-#'  Xcat <- strata
-#'  system.time(s <- fbs(X,strata,pik))
-#'  sum(s)
-#'  t(X/pik)%*%s
-#'  t(X/pik)%*%pik
-#'  
-#'  t(disjMatrix(strata))%*%s
-#'  t(disjMatrix(strata))%*%pik
-#' 
+#' s <- fbs(X,strata,pik)
 #' 
 #'
 #' @references 

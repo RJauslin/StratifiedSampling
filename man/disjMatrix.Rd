@@ -7,7 +7,7 @@
 disjMatrix(strata)
 }
 \arguments{
-\item{A}{matrix of integer that contains categorical vector in each column.}
+\item{strata}{A matrix of integer that contains categorical vector in each column.}
 }
 \value{
 A matrix of indicators.

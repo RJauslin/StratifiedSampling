@@ -83,7 +83,7 @@ landingLP <- function(X,pikstar,pik){
   ##                  Choose a sampleSet randomly                 -
   ##---------------------------------------------------------------
 
-  u = runif(1, 0, 1)
+  u = stats::runif(1, 0, 1)
   s = 0
   ccc = 0
   while (ccc < u) {
@@ -110,7 +110,6 @@ landingLP <- function(X,pikstar,pik){
 #'
 #' @param X matrix of auxiliary variables on which the sample must be balanced. (The matrix should be divided by the original inclusion probabilities.)
 #' @param pikstar vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}
-#' @param pik vector of inclusion probabilities.
 #'
 #' @description
 #' This function does the landing phase of the cube method using suppression of variables.
@@ -191,7 +190,7 @@ landingRM <- function(X,pikstar){
   i <- which(pikstar > EPS & pikstar < (1 - EPS))
   
   if(length(i) != 0){
-    pikstar[i] <- rbinom(1,1,pikstar[i])
+    pikstar[i] <- stats::rbinom(1,1,pikstar[i])
     cat("it remains",length(i), "units that are not put to 0 or 1")
   }
 

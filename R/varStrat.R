@@ -5,13 +5,12 @@
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integer that represents the categories.
 #' @param pik vector of inclusion probabilities.
-#' @param s a sample (vector of 0 and 1, if rejected or selected).
+#' @param y variable of interest.
 #'
-#' @return
+#' @return a scalar, the value of the approximated variance.
 #' @export
 #'
 #' @examples
-#' 
 #' 
 #' rm(list = ls())
 #' N <- 1000
@@ -24,21 +23,20 @@
 #' 
 #' #-------- CASE 1 pik equal and integer in each strata 
 #' 
-#' pik <- inclusionprobastrata(strata,rep(1,n))
+#' pik <- rep(n/N,N)
 #' X <- as.matrix(matrix(c(x1,x2),ncol = 2))
 #'  
 #' s <- stratifiedcube(cbind(pik,X),strata,pik)
+#' s <- fbs(X,strata,pik)
 #'  
-#'  
-#'  y <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
+#'  y <- 20*strata + rnorm(1000,120)
+#'  y2 <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
 #'  
 #'  y_ht <- sum(y[which(s==1)]/pik[which(s == 1)])
 #'  
-#'  sum(y)
-#'  sum(y_ht)
-#'  
-#'  varApp(X,strata,pik,s,y)
-#'  
+#'  (sum(y_ht) - sum(y))^2
+#'  varEst(X,strata,pik,s,y)
+#'  varApp(X,strata,pik,y)
 varApp <- function(X,strata,pik,y){
   
   Xcat <- disjMatrix(strata)
@@ -83,15 +81,15 @@ varApp <- function(X,strata,pik,y){
 }
 
 
-
-#' Title
+#' @title Estimated variance
 #'
-#' @param X 
-#' @param strata 
-#' @param pik 
-#' @param s 
+#' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param strata A vector of integer that represents the categories.
+#' @param pik vector of inclusion probabilities.
+#' @param s a sample (vector of 0 and 1, if rejected or selected).
+#' @param y variable of interest.
 #'
-#' @return
+#' @return a scalar, the value of the estimamted variance.
 #' @export
 #'
 #' @examples
@@ -121,7 +119,7 @@ varApp <- function(X,strata,pik,y){
 #'  
 #'  (sum(y_ht) - sum(y))^2
 #'  varEst(X,strata,pik,s,y)
-#'  varApp(X,strata,pik,s,y)
+#'  varApp(X,strata,pik,y)
 #'  
 varEst <- function(X,strata,pik,s,y){
   

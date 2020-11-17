@@ -121,7 +121,7 @@ system.time(test <- ncat(Xcat))
 //' @description
 //' This function transform a categorical matrix into a matrix of indicators variables.
 //'
-//' @param A matrix of integer that contains categorical vector in each column.
+//' @param strata A matrix of integer that contains categorical vector in each column.
 //'
 //' @return A matrix of indicators.
 //'
