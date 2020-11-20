@@ -23,14 +23,15 @@ sh <- as.vector(do.call(rbind,lapply(nhanes_split,FUN = function(x){ var(x$HI_CH
 
 den <- sum(Nh*sh)
 
-nh <- ceiling(n*Nh*sh/den)
+# nh <- ceiling(n*Nh*sh/den)
+nh <- n*Nh*sh/den
 
 y <- nhanes$HI_CHOL
 pik <- as.vector(inclusionprobastrata(strata,nh))
 X <- as.matrix(nhanes[,c(5,7)])
-s <- stratifiedcube(cbind(pik,X),strata,pik)
+s <- stratifiedcube(X,strata,pik)
 
-s <- fbs(X,as.matrix(strata),pik)
+# s <- fbs(X,as.matrix(strata),pik)
 
 t(X/pik)%*%pik
 t(X/pik)%*%s

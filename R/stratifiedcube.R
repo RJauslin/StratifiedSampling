@@ -126,63 +126,65 @@ stratifiedcube <- function(X,strata,pik){
   ##            flight phase with categorical variable             -
   ##----------------------------------------------------------------
   
-  while(i_size > 0){
-  
-    ##------ Remove unique category
+  if(i_size > 0 ){
+    while(i_size > 0){
     
-    uCat <- i[duplicated(strata[i,]) | duplicated(strata[i,], fromLast = TRUE)]
-    if(length(uCat) == 0){
-      break;
-    }
-    
-    ##------ Find B
-    A_tmp <- as.matrix(X[uCat,]/pik[uCat])
-    B <- findB(A_tmp,as.matrix(strata[uCat,]))
-    # B <- cbind(B$X,B$Xcat/pik[uCat[1:nrow(B$X)]])
-    B <- cbind(B$X,B$Xcat)
-    # print(B)
-  
-    ##------ onestep and check if null
-    tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
-    if(is.null(tmp)){
-      break;
-    }else{
-      pikstar[uCat[1:nrow(B)]] <- tmp
-    }
-    
-    ##------ update i
-    
-    i <- which(pikstar > EPS & pikstar < (1-EPS))
-    i_size = length(i)
-    # print(sum(pikstar))
-  }
-  
-  
-  # ##----------------------------------------------------------------
-  # ##          end of flight phase on strata categories             -
-  # ##----------------------------------------------------------------
-  # Sometimes some stata does could not be balanced at the end and so we 
-  # drop some auxiliary variable such that we could have only one unit that
-  # are not put equal to 0 or 1 within each strata
-  #
-  
-  p <- ncol(X)
-  k = 1
-  while(length(uCat) != 0){
-    ##------ Find B
-    if(k == p){
-      B <- as.matrix(pikstar[uCat])/pikstar[uCat]
-    }else{
-      A_tmp <- as.matrix(as.matrix(X[uCat,1:(p-k)])/pik[uCat])
+      ##------ Remove unique category
+      
+      uCat <- i[duplicated(strata[i,]) | duplicated(strata[i,], fromLast = TRUE)]
+      if(length(uCat) == 0){
+        break;
+      }
+      
+      ##------ Find B
+      A_tmp <- as.matrix(X[uCat,]/pik[uCat])
       B <- findB(A_tmp,as.matrix(strata[uCat,]))
+      # B <- cbind(B$X,B$Xcat/pik[uCat[1:nrow(B$X)]])
       B <- cbind(B$X,B$Xcat)
+      # print(B)
+    
+      ##------ onestep and check if null
+      tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
+      if(is.null(tmp)){
+        break;
+      }else{
+        pikstar[uCat[1:nrow(B)]] <- tmp
+      }
+      
+      ##------ update i
+      
+      i <- which(pikstar > EPS & pikstar < (1-EPS))
+      i_size = length(i)
+      # print(sum(pikstar))
     }
-    tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
-    pikstar[uCat[1:nrow(B)]] <- tmp
-    i <- which(pikstar > EPS & pikstar < (1-EPS))
-    i_size = length(i)
-    uCat <- i[duplicated(strata[i,]) | duplicated(strata[i,], fromLast = TRUE)]
-    k = k + 1
+    
+    
+    # ##----------------------------------------------------------------
+    # ##          end of flight phase on strata categories             -
+    # ##----------------------------------------------------------------
+    # Sometimes some stata does could not be balanced at the end and so we 
+    # drop some auxiliary variable such that we could have only one unit that
+    # are not put equal to 0 or 1 within each strata
+    #
+    
+    p <- ncol(X)
+    k = 1
+    while(length(uCat) != 0){
+      ##------ Find B
+      if(k == p){
+        B <- as.matrix(pikstar[uCat])/pikstar[uCat]
+      }else{
+        A_tmp <- as.matrix(as.matrix(X[uCat,1:(p-k)])/pik[uCat])
+        B <- findB(A_tmp,as.matrix(strata[uCat,]))
+        B <- cbind(B$X,B$Xcat)
+      }
+      tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
+      pikstar[uCat[1:nrow(B)]] <- tmp
+      i <- which(pikstar > EPS & pikstar < (1-EPS))
+      i_size = length(i)
+      uCat <- i[duplicated(strata[i,]) | duplicated(strata[i,], fromLast = TRUE)]
+      k = k + 1
+    }
   }
   
   #---------------- check
