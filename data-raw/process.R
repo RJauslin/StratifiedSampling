@@ -17,6 +17,7 @@ SwissRegion_LV03 <- read_sf("k4r19_LV03.shp")
 Swiss_LV03 <- read_sf("k4l19_LV03.shp")
 SwissLake_LV03 <- read_sf("k4s19_LV03.shp")
 
+establishement <- readRDS("establishement.rds")
 
 
 
@@ -47,5 +48,6 @@ usethis::use_data(SwissCommune_LV95,
                   Swiss_LV03,
                   SwissLake_LV95,
                   SwissLake_LV03,
+                  establishement,
                   overwrite = T)
 
