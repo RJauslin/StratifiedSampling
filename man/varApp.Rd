@@ -19,7 +19,7 @@ varApp(X, strata, pik, y)
 a scalar, the value of the approximated variance.
 }
 \description{
-
+Variance estimated for balanced sampling
 }
 \examples{
 

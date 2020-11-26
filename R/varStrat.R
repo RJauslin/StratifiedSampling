@@ -1,6 +1,6 @@
 #' @title Approximated variance
 #' 
-#' @description 
+#' @description Variance estimated for balanced sampling
 #' 
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integer that represents the categories.

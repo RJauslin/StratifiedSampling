@@ -1,4 +1,3 @@
 library(testthat)
-library(fastcube)
 
-test_check("fastcube")
+test_check("StratifiedSampling")
