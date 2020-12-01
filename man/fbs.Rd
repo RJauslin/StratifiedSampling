@@ -4,12 +4,12 @@
 \alias{fbs}
 \title{Fast balanced Sampling}
 \usage{
-fbs(X, Xcat, pik)
+fbs(X, strata, pik)
 }
 \arguments{
 \item{X}{matrix of auxiliary variables.}
 
-\item{Xcat}{matrix of categorical variables.}
+\item{strata}{matrix of categorical variables.}
 
 \item{pik}{vector of inclusion probabilities.}
 }
@@ -30,10 +30,10 @@ x1 <- rgamma(N,4,25)
 x2 <- rgamma(N,4,25)
 
 strata <- as.matrix(rep(1:n,each = N/n))
+strata <- rep(1:n,each = N/n)
 
 pik <- sampling::inclusionprobastrata(strata,rep(1,n))
 X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
-A <- cbind(X,disjMatrix(as.matrix(strata)))
 
 s <- fbs(X,strata,pik)
 
