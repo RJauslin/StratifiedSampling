@@ -178,8 +178,13 @@ stratifiedcube <- function(X,strata,pik){
         B <- findB(A_tmp,as.matrix(strata[uCat,]))
         B <- cbind(B$X,B$Xcat)
       }
+      
+      # print(pikstar[uCat[1:nrow(B)]])
       tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
-      pikstar[uCat[1:nrow(B)]] <- tmp
+      # print(tmp)
+      if(!is.null(tmp)){
+        pikstar[uCat[1:nrow(B)]] <- tmp  
+      }
       i <- which(pikstar > EPS & pikstar < (1-EPS))
       i_size = length(i)
       uCat <- i[duplicated(strata[i,]) | duplicated(strata[i,], fromLast = TRUE)]

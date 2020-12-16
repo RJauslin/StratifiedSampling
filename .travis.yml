@@ -1,0 +1,48 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+language: r
+
+r:
+  - devel
+  - release
+
+r_build_args: --no-build-vignettes
+
+os:
+  - linux
+  - osx
+
+dist: xenial
+
+warnings_are_errors: false
+
+addons:
+  apt:
+    packages:
+    - libudunits2-dev
+    - gdal-bin
+    - libgdal1-dev
+    - libproj-dev
+
+brew_packages:
+  - udunits
+
+jobs:
+  exclude:
+  - os: osx
+    r: devel
+
+r_packages:
+  - BalancedSampling
+  - sampling
+  - stats
+  - utils
+  - knitr
+  - rmarkdown
+  - ggplot2
+  - ggvoronoi
+  - MASS
+  - lpSolve
+  - sp
+  - sf
+  - stats
+  - testthat

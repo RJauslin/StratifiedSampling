@@ -39,7 +39,7 @@
 #'  varApp(X,strata,pik,y)
 varApp <- function(X,strata,pik,y){
   
-  Xcat <- disjMatrix(strata)
+  Xcat <- disj(strata)
   X_tmp <- cbind(Xcat,X)
   N <- length(pik)
   H <- ncol(Xcat)
@@ -123,7 +123,8 @@ varApp <- function(X,strata,pik,y){
 #'  
 varEst <- function(X,strata,pik,s,y){
   
-  Xcat <- disjMatrix(strata)
+  
+  Xcat <- pik*disj(strata)
   X_tmp <- cbind(Xcat,X)
   # N <- length(pik)
   n <- sum(s)
@@ -131,7 +132,12 @@ varEst <- function(X,strata,pik,s,y){
   H <- ncol(Xcat)
   q <- ncol(X)
   
+  if( (H+ q) > n){
+    stop("H + q is greater than n.")
+  }
+  
   beta <- matrix(rep(0,(H+q)^2),ncol = (H+q),nrow = (H+q))
+  
   #compute beta
   for(k in index){
     # print(k)
@@ -139,6 +145,9 @@ varEst <- function(X,strata,pik,s,y){
     c_k <- (1-pik[k])*(n/(n-(H+q)))
     beta <- beta + c_k*(z_k/pik[k])%*%t(z_k/pik[k])
   } 
+  
+  
+  
   beta <- solve(beta)
   
   #compute tmp
