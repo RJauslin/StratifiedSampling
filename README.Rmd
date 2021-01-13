@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
 
   
 ## Build 
-[![Build Status](https://travis-ci.org/RJauslin/WaveSampling.svg?branch=master)](https://travis-ci.org/RJauslin/WaveSampling)
+[![Build Status](https://travis-ci.org/RJauslin/StratifiedSampling.svg?branch=master)](https://travis-ci.org/RJauslin/StratifiedSampling)
+
 
 ## Installation
 
@@ -37,7 +38,7 @@ devtools::install_github("Rjauslin/StratifiedSampling")
 
 ## Simple example
 
-This basic example shows you how to solve a common problem. The example is done on the `swissmunicipalities` dataset from the package `sampling`.
+This basic example shows you how to set up a stratified sampling design. The example is done on the `swissmunicipalities` dataset from the package `sampling`.
 
 ```{r}
 library(sampling)
@@ -56,18 +57,38 @@ X <- cbind(swiss$HApoly,
         swiss$Pop65P,
         swiss$H00PTOT )
 
+X <- X[order(swiss$REG),]
+strata <- swiss$REG[order(swiss$REG)]
 ```
 
-Inclusion probabilities `pik` is set up all equal with the function `rep()`.
+Strata are NUTS region of the Switzerland. Inclusion probabilities `pik` is set up equal within strata and such that the sum of the inclusion probabilities within strata is equal to 80.
 
 ```{r}
-pik <- inclusionprobabilities(swiss$POPTOT,400)
+pik <- sampling::inclusionprobastrata(strata,rep(80,7))
 ```
 
 
-It only remains to use the function `wave()`,
+It remains to use the function `stratifiedcube()`.
 
 ```{r}
-s <- stratifiedcube(X,swiss$REG,pik)
+s <- stratifiedcube(X,strata,pik)
+```
+
+
+
+We can check that we have correctly selected the sample. It is balanced and have the right number of units selected in each stratum.
+
+```{r}
+head(s)
+
+sum(s)
+t(X/pik)%*%s
+t(X/pik)%*%pik
+
+Xcat <- disj(strata)
+
+t(Xcat)%*%s
+t(Xcat)%*%pik
+
 ```
 
