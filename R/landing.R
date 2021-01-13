@@ -185,13 +185,12 @@ landingRM <- function(X,pikstar){
 
   }
   
-  
   pikstar[i] = pikland
   i <- which(pikstar > EPS & pikstar < (1 - EPS))
   
   if(length(i) != 0){
     pikstar[i] <- stats::rbinom(1,1,pikstar[i])
-    cat("it remains",length(i), "units that are not put to 0 or 1")
+    # cat("it remains",length(i), "units that are not put to 0 or 1")
   }
 
   return(round(pikstar,10))

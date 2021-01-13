@@ -20,72 +20,21 @@ A vector with elements equal to 0 or 1. The value 1 indicates that the unit is s
 sndgj
 }
 \examples{
-
-##----------------------------------------------------------------
-##                              Data                             -
-##----------------------------------------------------------------
-
-rm(list = ls())
-N <- 1000
-n <- 100
-x1 <- rgamma(N,4,25)
-x2 <- rgamma(N,4,25)
+N <- 100
+n <- 10
+p <- 4
+X <- matrix(rgamma(N*p,4,25),ncol = p)
 strata <- as.matrix(rep(1:n,each = N/n))
-Xcat <- disjMatrix(strata)
+pik <- rep(n/N,N)
 
+s <- stratifiedcube(X,strata,pik)
 
-
-##---------------------------------------------------------------
-##                        different cases                       -
-##---------------------------------------------------------------
-  
-
-#-------- CASE 1 pik equal and integer in each strata 
-
- pik <- sampling::inclusionprobastrata(strata,rep(1,n))
- X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
- system.time(s <- stratifiedcube(X,strata,pik))
- sum(s)
- t(X/pik)\%*\%s
- t(X/pik)\%*\%pik
- 
- t(Xcat)\%*\%s
- t(Xcat)\%*\%pik
- 
-
-#-------- CASE 2 pik unequal and integer in each strata  
-
- pik <- rep(sampling::inclusionprobabilities(runif(N/n),1),n)
- X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
- system.time(s <- stratifiedcube(X,strata,pik))
- sum(s)
- t(X/pik)\%*\%s
- t(X/pik)\%*\%pik
- 
- t(Xcat)\%*\%s
- t(Xcat)\%*\%pik  
-
-#-------- CASE 3 pik equal and NOT integer in each strata 
- 
- pik <- rep(0.25,N)
- X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
- system.time(s <- stratifiedcube(X,strata,pik))
- sum(s)
- t(X/pik)\%*\%s
- t(X/pik)\%*\%pik
- 
- t(Xcat)\%*\%s
- t(Xcat)\%*\%pik
- 
-#-------- CASE 4 pik unequal and NOT integer in each strata 
- 
-pik <- rep(sampling::inclusionprobabilities(runif(N/n),2.5),n)
-X <- as.matrix(cbind(pik,matrix(c(x1,x2),ncol = 2)))
-system.time(s <- stratifiedcube(X,strata,pik))
-sum(s)
 t(X/pik)\%*\%s
 t(X/pik)\%*\%pik
 
+Xcat <- disj(strata)
+
 t(Xcat)\%*\%s
 t(Xcat)\%*\%pik
+
 }

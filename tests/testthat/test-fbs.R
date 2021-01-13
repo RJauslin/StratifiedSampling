@@ -1,4 +1,4 @@
-context("Stratified cube")
+context("Hasler's method")
 
 
 test_that("NO VARIABLES (only fixed size), integer in each strata",{
@@ -9,7 +9,7 @@ test_that("NO VARIABLES (only fixed size), integer in each strata",{
   # equal
   pik <- sampling::inclusionprobastrata(strata,rep(1,n))
   X <- matrix(pik,ncol = 1)
-  s <- stratifiedcube(X,strata,pik)
+  s <- fbs(X,strata,pik)
   
   expect_equal(t(X/pik)%*%s,
                t(X/pik)%*%pik)
@@ -20,7 +20,7 @@ test_that("NO VARIABLES (only fixed size), integer in each strata",{
   # unequal
   pik <- rep(sampling::inclusionprobabilities(runif(N/n),1),n)
   X <- matrix(pik,ncol = 1)
-  s <- stratifiedcube(X,strata,pik)
+  s <- fbs(X,strata,pik)
   
   
   expect_equal(t(X/pik)%*%s,
@@ -40,7 +40,7 @@ test_that("NO VARIABLES (only fixed size), real in each strata",{
   pik <- sampling::inclusionprobastrata(strata,rep(1.5,n))
   # sum(pik[strata == 1]) == 1.5
   X <- matrix(pik,ncol = 1)
-  s <- stratifiedcube(X,strata,pik)
+  s <- fbs(X,strata,pik)
   
   expect_equal(t(X/pik)%*%s,
                t(X/pik)%*%pik)
@@ -50,7 +50,7 @@ test_that("NO VARIABLES (only fixed size), real in each strata",{
   # unequal
   pik <- rep(sampling::inclusionprobabilities(runif(N/n),1),n)
   X <- matrix(pik,ncol = 1)
-  s <- stratifiedcube(X,strata,pik)
+  s <- fbs(X,strata,pik)
   
   expect_equal(t(X/pik)%*%s,
                t(X/pik)%*%pik)
@@ -73,7 +73,7 @@ test_that("VARIABLES, integer in each strata",{
   
   # equal
   pik <- sampling::inclusionprobastrata(strata,rep(1,n))
-  s <- stratifiedcube(X,strata,pik)
+  s <- fbs(X,strata,pik)
   
   # sum(s)
   # t(X/pik)%*%s
@@ -85,7 +85,7 @@ test_that("VARIABLES, integer in each strata",{
   # uneqal 
   
   pik <- rep(sampling::inclusionprobabilities(runif(N/n),1),n)
-  s <- stratifiedcube(X,strata,pik)
+  s <- fbs(X,strata,pik)
   
   # sum(s)
   # t(X/pik)%*%s
@@ -111,9 +111,9 @@ test_that("VARIABLES, real in each strata",{
   
   # equal
   pik <- sampling::inclusionprobastrata(strata,rep(1.5,n))
-  s <- stratifiedcube(X,strata,pik)
+  s <- fbs(X,strata,pik)
   
-  # sum(s)
+  sum(s)
   # t(X/pik)%*%s
   # t(X/pik)%*%pik
   
@@ -122,13 +122,15 @@ test_that("VARIABLES, real in each strata",{
   
   # uneqal 
   
+  abs(sum(t(Xcat)%*%s) - sum(t(Xcat)%*%pik)) <= 1
   pik <- rep(sampling::inclusionprobabilities(runif(N/n),1.5),n)
-  s <- stratifiedcube(X,strata,pik)
+  s <- fbs(X,strata,pik)
   
-  # sum(s)
+  sum(s)
   # t(X/pik)%*%s
   # t(X/pik)%*%pik
   
+  abs(sum(t(Xcat)%*%s) - sum(t(Xcat)%*%pik)) <= 1
   expect_equal(abs(sum(t(Xcat)%*%s) - sum(t(Xcat)%*%pik)) < 1 + 1e-4,TRUE)
   
   

@@ -13,10 +13,9 @@ License: GPL (>=2)
 Encoding: UTF-8
 LazyData: true
 LinkingTo: RcppArmadillo, Rcpp
-Imports: Rcpp
+Imports: Rcpp, sampling
 Depends: Matrix,
-    R (>= 3.5.0),
-    sampling
+    R (>= 3.5.0)
 Suggests: 
     knitr,
     rmarkdown,
@@ -28,6 +27,6 @@ Suggests:
     sp,
     sf,
     stats,
-    testthat
+    testthat,
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1

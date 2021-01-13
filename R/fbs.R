@@ -13,10 +13,11 @@
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
+#' @importFrom sampling inclusionprobastrata
 #' @examples
 #' 
-#' N <- 1000
-#' n <- 100
+#' N <- 100
+#' n <- 10
 #' x1 <- rgamma(N,4,25)
 #' x2 <- rgamma(N,4,25)
 #'
@@ -27,6 +28,14 @@
 #' X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
 #' 
 #' s <- fbs(X,strata,pik)
+#' 
+#' t(X/pik)%*%s
+#' t(X/pik)%*%pik
+#' 
+#' Xcat <- disj(strata)
+#' 
+#' t(Xcat)%*%s
+#' t(Xcat)%*%pik
 #' 
 #'
 #' @references 
@@ -78,8 +87,11 @@ fbs <- function(X,strata,pik){
       #                                        pik_tmp[i],
       #                                        1,
       #                                        comment = FALSE)
-      pik_tmp[i] <- ffphase(as.matrix(cbind(X_tmp,strata_tmp2)),
-                                             pik_tmp[i])
+      if(length(i) > 1){
+        pik_tmp[i] <- ffphase(as.matrix(cbind(X_tmp,strata_tmp2)),
+                              pik_tmp[i]) 
+      }
+    
     }
   }
   sum(pik_tmp)
@@ -92,9 +104,8 @@ fbs <- function(X,strata,pik){
 
   
   if(length(i) != 0){
-  strata_tmp3 <- as.matrix(Xnn)
-  # strata_tmp3 <- as.matrix(Xnn[i,])
-  pik_tmp <- landingRM(as.matrix(cbind(strata_tmp3, X/pik)),
+    strata_tmp3 <- as.matrix(Xnn)
+    pik_tmp <- landingRM(as.matrix(cbind(pik_tmp,strata_tmp3, X/pik)),
                           pik_tmp)
   # pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,], X[i,])),
   #                         pik_tmp[i],

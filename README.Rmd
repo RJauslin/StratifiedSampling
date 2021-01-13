@@ -1,0 +1,73 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# Stratified Sampling
+
+  
+## Build 
+[![Build Status](https://travis-ci.org/RJauslin/WaveSampling.svg?branch=master)](https://travis-ci.org/RJauslin/WaveSampling)
+
+## Installation
+
+<!-- ### CRAN version -->
+
+<!-- ``` -->
+<!-- install.packages("WaveSampling") -->
+<!-- ``` -->
+
+### Latest version 
+
+You can install the latest version of the package `StratifiedSampling` with the following command:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("Rjauslin/StratifiedSampling")
+```
+
+## Simple example
+
+This basic example shows you how to solve a common problem. The example is done on the `swissmunicipalities` dataset from the package `sampling`.
+
+```{r}
+library(sampling)
+library(StratifiedSampling)
+
+data(swissmunicipalities)
+swiss <- swissmunicipalities
+X <- cbind(swiss$HApoly,
+        swiss$Surfacesbois,
+        swiss$P00BMTOT,
+        swiss$P00BWTOT,
+        swiss$POPTOT,
+        swiss$Pop020,
+        swiss$Pop2040,
+        swiss$Pop4065,
+        swiss$Pop65P,
+        swiss$H00PTOT )
+
+```
+
+Inclusion probabilities `pik` is set up all equal with the function `rep()`.
+
+```{r}
+pik <- inclusionprobabilities(swiss$POPTOT,400)
+```
+
+
+It only remains to use the function `wave()`,
+
+```{r}
+s <- stratifiedcube(X,swiss$REG,pik)
+```
+

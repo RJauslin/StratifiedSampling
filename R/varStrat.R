@@ -1,6 +1,4 @@
-#' @title Approximated variance
-#' 
-#' @description Variance estimated for balanced sampling
+#' @title Approximated variance for balanced sampling
 #' 
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integer that represents the categories.
@@ -9,6 +7,16 @@
 #'
 #' @return a scalar, the value of the approximated variance.
 #' @export
+#' 
+#' @details
+#' 
+#' This function gives an approximation of the variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tille Y (2014). 
+#'
+#'  @seealso \code{\link{varEst}} 
+#'
+#'
+#' @references 
+#' Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. Computational Statistics and Data Analysis, 74:81-94.
 #'
 #' @examples
 #' 
@@ -20,23 +28,16 @@
 #' 
 #' strata <- as.matrix(rep(1:40,each = 25)) # 25 strata
 #' Xcat <- disjMatrix(strata)
-#' 
-#' #-------- CASE 1 pik equal and integer in each strata 
-#' 
 #' pik <- rep(n/N,N)
 #' X <- as.matrix(matrix(c(x1,x2),ncol = 2))
 #'  
-#' s <- stratifiedcube(cbind(pik,X),strata,pik)
-#' s <- fbs(X,strata,pik)
+#' s <- stratifiedcube(X,strata,pik)
 #'  
-#'  y <- 20*strata + rnorm(1000,120)
-#'  y2 <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
-#'  
-#'  y_ht <- sum(y[which(s==1)]/pik[which(s == 1)])
-#'  
-#'  (sum(y_ht) - sum(y))^2
-#'  varEst(X,strata,pik,s,y)
-#'  varApp(X,strata,pik,y)
+#' y <- 20*strata + rnorm(1000,120) # variable of interest
+#' # y_ht <- sum(y[which(s==1)]/pik[which(s == 1)]) # Horvitz-Thompson estimator
+#' # (sum(y_ht) - sum(y))^2 # true variance
+#' varEst(X,strata,pik,s,y)
+#' varApp(X,strata,pik,y)
 varApp <- function(X,strata,pik,y){
   
   Xcat <- disj(strata)
@@ -81,19 +82,27 @@ varApp <- function(X,strata,pik,y){
 }
 
 
-#' @title Estimated variance
-#'
+#' @title Estimator of the approximated variance for balanced sampling
+#' 
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integer that represents the categories.
 #' @param pik vector of inclusion probabilities.
 #' @param s a sample (vector of 0 and 1, if rejected or selected).
 #' @param y variable of interest.
 #'
-#' @return a scalar, the value of the estimamted variance.
-#' @export
+#'
+#' @return a scalar, the value of the estimated variance.
+#'
+#' @details
+#' 
+#' This function gives an estimator of the approximated variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tille Y (2014). 
+#' 
+#' @seealso \code{\link{varApp}}
+#' 
+#' @references 
+#' Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. Computational Statistics and Data Analysis, 74:81-94.
 #'
 #' @examples
-#' 
 #' 
 #' rm(list = ls())
 #' N <- 1000
@@ -103,24 +112,17 @@ varApp <- function(X,strata,pik,y){
 #' 
 #' strata <- as.matrix(rep(1:40,each = 25)) # 25 strata
 #' Xcat <- disjMatrix(strata)
-#' 
-#' #-------- CASE 1 pik equal and integer in each strata 
-#' 
 #' pik <- rep(n/N,N)
 #' X <- as.matrix(matrix(c(x1,x2),ncol = 2))
 #'  
-#' s <- stratifiedcube(cbind(pik,X),strata,pik)
-#' s <- fbs(X,strata,pik)
+#' s <- stratifiedcube(X,strata,pik)
 #'  
-#'  y <- 20*strata + rnorm(1000,120)
-#'  y2 <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
-#'  
-#'  y_ht <- sum(y[which(s==1)]/pik[which(s == 1)])
-#'  
-#'  (sum(y_ht) - sum(y))^2
-#'  varEst(X,strata,pik,s,y)
-#'  varApp(X,strata,pik,y)
-#'  
+#' y <- 20*strata + rnorm(1000,120) # variable of interest
+#' # y_ht <- sum(y[which(s==1)]/pik[which(s == 1)]) # Horvitz-Thompson estimator
+#' # (sum(y_ht) - sum(y))^2 # true variance
+#' varEst(X,strata,pik,s,y)
+#' varApp(X,strata,pik,y)
+#' @export 
 varEst <- function(X,strata,pik,s,y){
   
   
@@ -145,9 +147,6 @@ varEst <- function(X,strata,pik,s,y){
     c_k <- (1-pik[k])*(n/(n-(H+q)))
     beta <- beta + c_k*(z_k/pik[k])%*%t(z_k/pik[k])
   } 
-  
-  
-  
   beta <- solve(beta)
   
   #compute tmp

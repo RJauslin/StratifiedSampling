@@ -2,7 +2,7 @@
 % Please edit documentation in R/varStrat.R
 \name{varEst}
 \alias{varEst}
-\title{Estimated variance}
+\title{Estimator of the approximated variance for balanced sampling}
 \usage{
 varEst(X, strata, pik, s, y)
 }
@@ -18,13 +18,15 @@ varEst(X, strata, pik, s, y)
 \item{y}{variable of interest.}
 }
 \value{
-a scalar, the value of the estimamted variance.
+a scalar, the value of the estimated variance.
 }
 \description{
-Estimated variance
+Estimator of the approximated variance for balanced sampling
+}
+\details{
+This function gives an estimator of the approximated variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tille Y (2014).
 }
 \examples{
-
 
 rm(list = ls())
 N <- 1000
@@ -34,22 +36,20 @@ x2 <- rgamma(N,4,25)
 
 strata <- as.matrix(rep(1:40,each = 25)) # 25 strata
 Xcat <- disjMatrix(strata)
-
-#-------- CASE 1 pik equal and integer in each strata 
-
 pik <- rep(n/N,N)
 X <- as.matrix(matrix(c(x1,x2),ncol = 2))
  
-s <- stratifiedcube(cbind(pik,X),strata,pik)
-s <- fbs(X,strata,pik)
+s <- stratifiedcube(X,strata,pik)
  
- y <- 20*strata + rnorm(1000,120)
- y2 <- 500 + 5*x1 + 5*x2 + rnorm(1000,0,270)
- 
- y_ht <- sum(y[which(s==1)]/pik[which(s == 1)])
- 
- (sum(y_ht) - sum(y))^2
- varEst(X,strata,pik,s,y)
- varApp(X,strata,pik,y)
- 
+y <- 20*strata + rnorm(1000,120) # variable of interest
+# y_ht <- sum(y[which(s==1)]/pik[which(s == 1)]) # Horvitz-Thompson estimator
+# (sum(y_ht) - sum(y))^2 # true variance
+varEst(X,strata,pik,s,y)
+varApp(X,strata,pik,y)
+}
+\references{
+Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. Computational Statistics and Data Analysis, 74:81-94.
+}
+\seealso{
+\code{\link{varApp}}
 }

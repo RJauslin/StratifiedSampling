@@ -24,8 +24,8 @@ If the number of element selected in each strata is not equal to a integer, the 
 }
 \examples{
 
-N <- 1000
-n <- 100
+N <- 100
+n <- 10
 x1 <- rgamma(N,4,25)
 x2 <- rgamma(N,4,25)
 
@@ -36,6 +36,14 @@ pik <- sampling::inclusionprobastrata(strata,rep(1,n))
 X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
 
 s <- fbs(X,strata,pik)
+
+t(X/pik)\%*\%s
+t(X/pik)\%*\%pik
+
+Xcat <- disj(strata)
+
+t(Xcat)\%*\%s
+t(Xcat)\%*\%pik
 
 
 }

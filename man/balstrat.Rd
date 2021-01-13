@@ -28,5 +28,13 @@ X <- matrix(rgamma(N*p,4,25),ncol = p)
 strata <- as.matrix(rep(1:n,each = N/n))
 pik <- rep(n/N,N)
 
-balstrat(X,strata,pik)
+s <- balstrat(X,strata,pik)
+
+t(X/pik)\%*\%s
+t(X/pik)\%*\%pik
+
+Xcat <- disj(strata)
+
+t(Xcat)\%*\%s
+t(Xcat)\%*\%pik
 }
