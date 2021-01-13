@@ -23,9 +23,6 @@ addons:
     - libgdal1-dev
     - libproj-dev
 
-brew_packages:
-  - udunits
-
 jobs:
   exclude:
   - os: osx
