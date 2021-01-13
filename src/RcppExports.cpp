@@ -6,18 +6,6 @@
 
 using namespace Rcpp;
 
-// choose
-long long int choose(int n, int k);
-RcppExport SEXP _StratifiedSampling_choose(SEXP nSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< int >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(choose(n, k));
-    return rcpp_result_gen;
-END_RCPP
-}
 // disj
 arma::umat disj(arma::uvec strata);
 RcppExport SEXP _StratifiedSampling_disj(SEXP strataSEXP) {
@@ -51,25 +39,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// samplen
-arma::mat samplen(int N, int n);
-RcppExport SEXP _StratifiedSampling_samplen(SEXP NSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(samplen(N, n));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_StratifiedSampling_choose", (DL_FUNC) &_StratifiedSampling_choose, 2},
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},
-    {"_StratifiedSampling_samplen", (DL_FUNC) &_StratifiedSampling_samplen, 2},
     {NULL, NULL, 0}
 };
 

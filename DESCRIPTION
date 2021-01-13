@@ -20,12 +20,8 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2,
-    ggvoronoi,
     BalancedSampling,
     MASS,
-    lpSolve,
-    sp,
-    sf,
     stats,
     testthat,
 VignetteBuilder: knitr

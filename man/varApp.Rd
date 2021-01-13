@@ -11,9 +11,9 @@ varApp(X, strata, pik, y)
 
 \item{strata}{A vector of integer that represents the categories.}
 
-\item{pik}{vector of inclusion probabilities.}
+\item{pik}{A vector of inclusion probabilities.}
 
-\item{y}{variable of interest.}
+\item{y}{A variable of interest.}
 }
 \value{
 a scalar, the value of the approximated variance.

@@ -7,17 +7,17 @@
 fbs(X, strata, pik)
 }
 \arguments{
-\item{X}{matrix of auxiliary variables.}
+\item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{matrix of categorical variables.}
+\item{strata}{A vector of integer that specifies the stratification.}
 
-\item{pik}{vector of inclusion probabilities.}
+\item{pik}{A vector of inclusion probabilities.}
 }
 \value{
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 }
 \description{
-This function implements the method proposed by Hasler and Tille (2019). It should be used for selecting a sample for highly stratified population.
+This function implements the method proposed by Hasler and Tille (2014). It should be used for selecting a sample for highly stratified population.
 }
 \details{
 If the number of element selected in each strata is not equal to a integer, the function can be very time-consuming.

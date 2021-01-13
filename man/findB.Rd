@@ -7,16 +7,16 @@
 findB(X, strata)
 }
 \arguments{
-\item{X}{A matrix of auxiliary variables.}
+\item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{A vector of categories.}
+\item{strata}{A vector of integer that specifies the stratification.}
 }
 \value{
 A list of two components. The sub-matrix of X and the corresponding disjunctive matrix.
  If we \code{cbind} the two matrix, the resulting matrix have only one more row than the number of column.
 }
 \description{
-This function is computing a sub-matrix used in stratifiedcube.
+This function is computing a sub-matrix used in \code{\link{stratifiedcube}}.
 }
 \details{
 The function find the smallest matrix B such that is contains only one more row than the number of column.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{disj}
 \alias{disj}
-\title{Disjunctive Vector}
+\title{Disjunctive}
 \usage{
 disj(strata)
 }

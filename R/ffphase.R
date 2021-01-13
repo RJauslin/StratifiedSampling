@@ -2,10 +2,10 @@
 #'
 #' @description 
 #' 
-#' This function is computing the flight phase of the cube method. (Chauvet and Tille 2006)
+#' This function computes the flight phase of the cube method. (Chauvet and Tille 2006)
 #'
-#' @param X a matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
-#' @param pik vector of inclusion probabilities.
+#' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param pik A vector of inclusion probabilities.
 #'
 #' @details 
 #' This function implements the method proposed by (Chauvet and Tille 2006). It recursively transform the vector of inclusion probabilities \code{pik} into a

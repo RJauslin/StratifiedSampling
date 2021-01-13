@@ -2,11 +2,11 @@
 #' 
 #' @description 
 #' 
-#' This function implements the method proposed by Hasler and Tille (2019). It should be used for selecting a sample for highly stratified population.
+#' This function implements the method proposed by Hasler and Tille (2014). It should be used for selecting a sample for highly stratified population.
 #'
-#' @param X matrix of auxiliary variables.
-#' @param strata matrix of categorical variables.
-#' @param pik vector of inclusion probabilities.
+#' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param strata A vector of integer that specifies the stratification.
+#' @param pik A vector of inclusion probabilities.
 #'
 #' @details 
 #' If the number of element selected in each strata is not equal to a integer, the function can be very time-consuming.

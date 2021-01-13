@@ -7,15 +7,15 @@
 ffphase(X, pik)
 }
 \arguments{
-\item{X}{a matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
+\item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{pik}{vector of inclusion probabilities.}
+\item{pik}{A vector of inclusion probabilities.}
 }
 \value{
 Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
 }
 \description{
-This function is computing the flight phase of the cube method. (Chauvet and Tille 2006)
+This function computes the flight phase of the cube method. (Chauvet and Tille 2006)
 }
 \details{
 This function implements the method proposed by (Chauvet and Tille 2006). It recursively transform the vector of inclusion probabilities \code{pik} into a

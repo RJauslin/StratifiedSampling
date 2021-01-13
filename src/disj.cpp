@@ -1,7 +1,7 @@
 #include <RcppArmadillo.h>
 
 // [[Rcpp::depends(RcppArmadillo)]]
-//' @title Disjunctive Vector
+//' @title Disjunctive
 //'
 //' @description
 //' This function transform a categorical vector into a matrix of indicators.
@@ -29,6 +29,7 @@ arma::umat disj(arma::uvec strata) {
     strata_tmp.replace(cat[i],val[i]);
   }
 
+  
   arma::umat m(N,ncat,arma::fill::zeros);
   for(arma::uword i = 0;i < N;i++){
     m(i,strata_tmp(i)) = 1;
@@ -116,7 +117,7 @@ system.time(test <- ncat(Xcat))
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
-//' @title Disjunctive Matrix
+//' @title Disjunctive for matrix  
 //'
 //' @description
 //' This function transform a categorical matrix into a matrix of indicators variables.

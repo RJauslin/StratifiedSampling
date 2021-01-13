@@ -2,8 +2,8 @@
 #' 
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integer that represents the categories.
-#' @param pik vector of inclusion probabilities.
-#' @param y variable of interest.
+#' @param pik A vector of inclusion probabilities.
+#' @param y A variable of interest.
 #'
 #' @return a scalar, the value of the approximated variance.
 #' @export
@@ -86,9 +86,9 @@ varApp <- function(X,strata,pik,y){
 #' 
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integer that represents the categories.
-#' @param pik vector of inclusion probabilities.
+#' @param pik A vector of inclusion probabilities.
 #' @param s a sample (vector of 0 and 1, if rejected or selected).
-#' @param y variable of interest.
+#' @param y A variable of interest.
 #'
 #'
 #' @return a scalar, the value of the estimated variance.

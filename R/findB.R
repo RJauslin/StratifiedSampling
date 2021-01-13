@@ -1,10 +1,10 @@
 #' @title Find best sub-matrix B in stratifiedcube
 #'
 #' @description
-#' This function is computing a sub-matrix used in stratifiedcube.
+#' This function is computing a sub-matrix used in \code{\link{stratifiedcube}}.
 #' 
-#' @param X A matrix of auxiliary variables.
-#' @param strata A vector of categories.
+#' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param strata A vector of integer that specifies the stratification.
 #'
 #' @details
 #'

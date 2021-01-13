@@ -1,11 +1,18 @@
 #' @title Stratified Sampling
 #' 
 #' @description  
-#' sndgj
+#' 
+#' This function implements a method for selecting a stratified sample. It really improves the performance of the function \code{\link{fbs}} and \code{\link{balstrat}}.
 #'
-#' @param X matrix of auxiliary variables.
-#' @param strata matrix of categorical variables.
-#' @param pik vector of inclusion probabilities.
+#' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param strata A vector of integer that specifies the stratification..
+#' @param pik A vector of inclusion probabilities.
+#'
+#' @details 
+#' 
+#' The function is selecting a balanced sample very quickly even if the sum of inclusion probabilities within strata are non-integer. The function should be used in preference.
+#' 
+#' @seealso \code{\link{fbs}}, \code{\link{balstrat}}
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #' @export

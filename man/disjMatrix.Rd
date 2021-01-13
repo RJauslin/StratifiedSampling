@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{disjMatrix}
 \alias{disjMatrix}
-\title{Disjunctive Matrix}
+\title{Disjunctive for matrix}
 \usage{
 disjMatrix(strata)
 }

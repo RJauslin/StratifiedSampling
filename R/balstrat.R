@@ -4,13 +4,16 @@
 #' 
 #' Select a strafitifed balanced sample. The function is similar to \code{\link[sampling:balancedstratification]{balancedstratification}} unless it uses internal functions that are more stable.
 #' 
-#' @param X matrix of auxiliary variables.
-#' @param strata vector of integer that specifies the stratification.
-#' @param pik vector of inclusion probabilities.
+#' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param strata A vector of integer that specifies the stratification.
+#' @param pik A vector of inclusion probabilities.
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
 #' @importFrom sampling inclusionprobastrata
+#' @import Matrix
+#' @useDynLib StratifiedSampling, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
 #' @examples
 #' 
 #' N <- 100

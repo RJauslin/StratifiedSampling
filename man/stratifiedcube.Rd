@@ -7,17 +7,20 @@
 stratifiedcube(X, strata, pik)
 }
 \arguments{
-\item{X}{matrix of auxiliary variables.}
+\item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{matrix of categorical variables.}
+\item{strata}{A vector of integer that specifies the stratification..}
 
-\item{pik}{vector of inclusion probabilities.}
+\item{pik}{A vector of inclusion probabilities.}
 }
 \value{
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 }
 \description{
-sndgj
+This function implements a method for selecting a stratified sample. It really improves the performance of the function \code{\link{fbs}} and \code{\link{balstrat}}.
+}
+\details{
+The function is selecting a balanced sample very quickly even if the sum of inclusion probabilities within strata are non-integer. The function should be used in preference.
 }
 \examples{
 N <- 100
@@ -37,4 +40,7 @@ Xcat <- disj(strata)
 t(Xcat)\%*\%s
 t(Xcat)\%*\%pik
 
+}
+\seealso{
+\code{\link{fbs}}, \code{\link{balstrat}}
 }
