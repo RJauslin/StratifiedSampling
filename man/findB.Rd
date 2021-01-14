@@ -12,8 +12,8 @@ findB(X, strata)
 \item{strata}{A vector of integer that specifies the stratification.}
 }
 \value{
-A list of two components. The sub-matrix of X and the corresponding disjunctive matrix.
- If we \code{cbind} the two matrix, the resulting matrix have only one more row than the number of column.
+A list of two components. The sub-matrix of \code{X} and the corresponding disjunctive matrix.
+ If we use the function \code{cbind} to combine the two matrix, the resulting matrix have only one more row than the number of column.
 }
 \description{
 This function is computing a sub-matrix used in \code{\link{stratifiedcube}}.
@@ -30,4 +30,7 @@ p <- 3
 X <- matrix(rnorm(N*p),ncol = 3)
 findB(X,strata)
 
+}
+\author{
+Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }

@@ -10,14 +10,15 @@
 #' 
 #' @details
 #' 
-#' This function gives an approximation of the variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tille Y (2014). 
-#'
-#'  @seealso \code{\link{varEst}} 
-#'
+#' This function gives an approximation of the variance of the Horvitz-Thompson total estimator presented by Hasler and Tillé (2014). 
 #'
 #' @references 
-#' Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. Computational Statistics and Data Analysis, 74:81-94.
+#' Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. \emph{Computational Statistics and Data Analysis}, 74:81-94.
+#' 
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
+#' @seealso \code{\link{varEst}} 
+#' 
 #' @examples
 #' 
 #' rm(list = ls())
@@ -95,10 +96,10 @@ varApp <- function(X,strata,pik,y){
 #'
 #' @details
 #' 
-#' This function gives an estimator of the approximated variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tille Y (2014). 
+#' This function gives an estimator of the approximated variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tillé Y. (2014). 
 #' 
 #' @seealso \code{\link{varApp}}
-#' 
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' @references 
 #' Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. Computational Statistics and Data Analysis, 74:81-94.
 #'

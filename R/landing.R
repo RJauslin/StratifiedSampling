@@ -4,14 +4,14 @@
 #' @param pikstar vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}
 #'
 #' @description
-#' This function does the landing phase of the cube method using suppression of variables.
+#' This function does the landing phase of the cube method using suppression of variables proposed by Chauvet and Tillé (2006).
 #'
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' @seealso \code{\link{fbs}}, \code{\link{balstrat}}.
 #' 
 #' @references
-#' Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62
+#' Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{Computational Statistics}, 21/1:53-62
 #'
 #' @export
 #' @examples

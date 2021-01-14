@@ -10,13 +10,15 @@
 #'
 #' @details 
 #' 
-#' The function is selecting a balanced sample very quickly even if the sum of inclusion probabilities within strata are non-integer. The function should be used in preference.
+#' The function is selecting a balanced sample very quickly even if the sum of inclusion probabilities within strata are non-integer. The function should be used in preference. Firstly, a flight phase is computed on each strata. Secondly, the function \code{\link{findB}} is used to find a particular matrix to apply a flight phase by using the cube method proposed by Chauvet, G. and Tillé, Y. (2006). Finally, a landing phase is applied by suppression of variables.
 #' 
-#' @seealso \code{\link{fbs}}, \code{\link{balstrat}}
+#' @seealso \code{\link{fbs}}, \code{\link{balstrat}}, \code{\link{landingRM}}, \code{\link{ffphase}}
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #' @export
 #'
+#' @references 
+#' Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{Computational Statistics}, 21/1:53-62
 #'
 #' @importFrom sampling inclusionprobastrata
 #' @examples

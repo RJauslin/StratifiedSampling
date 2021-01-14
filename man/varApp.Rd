@@ -22,9 +22,7 @@ a scalar, the value of the approximated variance.
 Approximated variance for balanced sampling
 }
 \details{
-This function gives an approximation of the variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tille Y (2014). 
-
- @seealso \code{\link{varEst}}
+This function gives an approximation of the variance of the Horvitz-Thompson total estimator presented by Hasler and Tillé (2014).
 }
 \examples{
 
@@ -48,5 +46,11 @@ varEst(X,strata,pik,s,y)
 varApp(X,strata,pik,y)
 }
 \references{
-Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. Computational Statistics and Data Analysis, 74:81-94.
+Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. \emph{Computational Statistics and Data Analysis}, 74:81-94.
+}
+\seealso{
+\code{\link{varEst}}
+}
+\author{
+Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }

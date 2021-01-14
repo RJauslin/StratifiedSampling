@@ -12,7 +12,7 @@ landingRM(X, pikstar)
 \item{pikstar}{vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}}
 }
 \description{
-This function does the landing phase of the cube method using suppression of variables.
+This function does the landing phase of the cube method using suppression of variables proposed by Chauvet and Tillé (2006).
 }
 \examples{
 
@@ -29,7 +29,7 @@ t(X/pik)\%*\%pikstar
 t(X/pik)\%*\%s
 }
 \references{
-Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62
+Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{Computational Statistics}, 21/1:53-62
 }
 \seealso{
 \code{\link{fbs}}, \code{\link{balstrat}}.

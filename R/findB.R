@@ -11,11 +11,12 @@
 #' The function find the smallest matrix B such that is contains only one more row than the number of column.
 #' It consecutively add the right number of row depending of the number of categories that is added.
 #'
-#' @return A list of two components. The sub-matrix of X and the corresponding disjunctive matrix.
-#'  If we \code{cbind} the two matrix, the resulting matrix have only one more row than the number of column. 
+#' @return A list of two components. The sub-matrix of \code{X} and the corresponding disjunctive matrix.
+#'  If we use the function \code{cbind} to combine the two matrix, the resulting matrix have only one more row than the number of column. 
 #'
 #' @export
 #'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' @examples
 #' N <- 1000
 #' strata <-  sample(x = 1:6, size = N, replace = TRUE)

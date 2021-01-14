@@ -24,7 +24,7 @@ a scalar, the value of the estimated variance.
 Estimator of the approximated variance for balanced sampling
 }
 \details{
-This function gives an estimator of the approximated variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tille Y (2014).
+This function gives an estimator of the approximated variance of the Horvitz-Thompson total estimator presented by Hasler C. and Tillé Y. (2014).
 }
 \examples{
 
@@ -52,4 +52,7 @@ Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified p
 }
 \seealso{
 \code{\link{varApp}}
+}
+\author{
+Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }

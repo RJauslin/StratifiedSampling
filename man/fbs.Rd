@@ -2,7 +2,7 @@
 % Please edit documentation in R/fbs.R
 \name{fbs}
 \alias{fbs}
-\title{Fast balanced Sampling}
+\title{Fast Balanced Sampling}
 \usage{
 fbs(X, strata, pik)
 }
@@ -17,10 +17,10 @@ fbs(X, strata, pik)
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 }
 \description{
-This function implements the method proposed by Hasler and Tille (2014). It should be used for selecting a sample for highly stratified population.
+This function implements the method proposed by Hasler and Tillé (2014). It should be used for selecting a sample for highly stratified population.
 }
 \details{
-If the number of element selected in each strata is not equal to a integer, the function can be very time-consuming.
+Firstly a flight phase is computed on each strata. Secondly, several flight phase are applied by adding one by one the stratum. By doing this, some strata are managed on-the-fly. Finally, a landing phase is applied by suppression of the variables. If the number of element selected in each strata is not equal to an integer, the function can be very time-consuming.
 }
 \examples{
 
@@ -48,6 +48,8 @@ t(Xcat)\%*\%pik
 
 }
 \references{
-Hasler, C. and Tille Y. (2014). Fast balanced sampling for highly stratified population.
-\emph{Computational Statistics and Data Analysis}, 74, 81-94
+Hasler, C. and Tillé Y. (2014). Fast balanced sampling for highly stratified population. \emph{Computational Statistics and Data Analysis}, 74, 81-94
+}
+\author{
+Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }

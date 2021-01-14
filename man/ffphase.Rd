@@ -15,12 +15,12 @@ ffphase(X, pik)
 Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
 }
 \description{
-This function computes the flight phase of the cube method. (Chauvet and Tille 2006)
+This function computes the flight phase of the cube method proposed by Chauvet and Tillé (2006).
 }
 \details{
-This function implements the method proposed by (Chauvet and Tille 2006). It recursively transform the vector of inclusion probabilities \code{pik} into a
+This function implements the method proposed by (Chauvet and Tillé 2006). It recursively transform the vector of inclusion probabilities \code{pik} into a
 sample that respect the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
-For more information see (Chauvet and Tille 2006).
+For more information see (Chauvet and Tillé 2006).
 
 The function uses the function \code{\link[MASS:Null]{Null}} to find the null space of the sub-matrix \eqn{B}.
 }
@@ -41,7 +41,7 @@ pikstar
 
 }
 \references{
-Chauvet, G. and Tille, Y. (2006). A fast algorithm of balanced sampling. Computational Statistics, 21/1:53-62
+Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{Computational Statistics}, 21/1:53-62
 }
 \seealso{
 \code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:flightphase]{flightphase}}.

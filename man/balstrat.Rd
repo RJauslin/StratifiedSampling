@@ -17,7 +17,10 @@ balstrat(X, strata, pik)
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 }
 \description{
-Select a strafitifed balanced sample. The function is similar to \code{\link[sampling:balancedstratification]{balancedstratification}} unless it uses internal functions that are more stable.
+Select a stratified balanced sample. The function is similar to \code{\link[sampling:balancedstratification]{balancedstratification}} of the package sampling.
+}
+\details{
+The function implement the method proposed by Chauvet (2009). Firstly a flight phase is computed on each strata. Secondly, a flight phase is applied on the whole population by aggregating the strata. Finally, a landing phase is applied by suppression of the variables.
 }
 \examples{
 
@@ -37,4 +40,13 @@ Xcat <- disj(strata)
 
 t(Xcat)\%*\%s
 t(Xcat)\%*\%pik
+}
+\references{
+Chauvet, G. (2009). Stratified balanced sampling. \emph{Survey Methodology}, 35:115-119.
+}
+\seealso{
+\code{\link{ffphase}},\code{\link{landingRM}}
+}
+\author{
+Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }
