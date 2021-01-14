@@ -9,18 +9,18 @@ findB(X, strata)
 \arguments{
 \item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{A vector of integer that specifies the stratification.}
+\item{strata}{A vector of integers that specifies the stratification.}
 }
 \value{
 A list of two components. The sub-matrix of \code{X} and the corresponding disjunctive matrix.
- If we use the function \code{cbind} to combine the two matrix, the resulting matrix have only one more row than the number of column.
+ If we use the function \code{cbind} to combine the two matrices, the resulting matrix has only one more row than the number of columns.
 }
 \description{
 This function is computing a sub-matrix used in \code{\link{stratifiedcube}}.
 }
 \details{
-The function find the smallest matrix B such that is contains only one more row than the number of column.
-It consecutively add the right number of row depending of the number of categories that is added.
+The function finds the smallest matrix B such that it contains only one more row than the number of columns.
+It consecutively adds the right number of rows depending on the number of categories that is added.
 }
 \examples{
 N <- 1000

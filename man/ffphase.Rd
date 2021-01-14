@@ -18,8 +18,8 @@ Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or
 This function computes the flight phase of the cube method proposed by Chauvet and Tillé (2006).
 }
 \details{
-This function implements the method proposed by (Chauvet and Tillé 2006). It recursively transform the vector of inclusion probabilities \code{pik} into a
-sample that respect the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
+This function implements the method proposed by (Chauvet and Tillé 2006). It recursively transforms the vector of inclusion probabilities \code{pik} into a
+sample that respects the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
 For more information see (Chauvet and Tillé 2006).
 
 The function uses the function \code{\link[MASS:Null]{Null}} to find the null space of the sub-matrix \eqn{B}.

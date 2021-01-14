@@ -4,9 +4,9 @@
 //' @title Disjunctive
 //'
 //' @description
-//' This function transform a categorical vector into a matrix of indicators.
+//' This function transforms a categorical vector into a matrix of indicators.
 //'
-//' @param strata A vector of integer that represents the categories.
+//' @param strata A vector of integers that represents the categories.
 //'
 //' @return A matrix of indicators.
 //'
@@ -25,13 +25,13 @@ arma::umat disj(arma::uvec strata) {
 
   arma::uvec val = arma::regspace<arma::uvec>(0,1,ncat-1); // 0 to unique(strata)
   arma::uvec strata_tmp = strata;
-  for(arma::uword i = 0;i<ncat;i++){
+  for(int i = 0;i<ncat;i++){
     strata_tmp.replace(cat[i],val[i]);
   }
 
   
   arma::umat m(N,ncat,arma::fill::zeros);
-  for(arma::uword i = 0;i < N;i++){
+  for(int i = 0;i < N;i++){
     m(i,strata_tmp(i)) = 1;
   }
   return(m);
@@ -74,7 +74,7 @@ system.time(M <- sampling::disjunctive(strata))
 //' @description
 //' This function returns the number of factor in each column of a categorical matrix.
 //'
-//' @param Xcat A matrix of integer that contains categorical vector in each column.
+//' @param Xcat A matrix of integers that contains categorical vector in each column.
 //'
 //' @return A row vector that contains the number of categories in each column.
 //'
@@ -91,7 +91,7 @@ system.time(M <- sampling::disjunctive(strata))
 arma::rowvec ncat(arma::umat Xcat){
   int p = Xcat.n_cols;
   arma::rowvec out(p,arma::fill::zeros);
-  for(arma::uword i = 0; i < p; i++){
+  for(int i = 0; i < p; i++){
     arma::uvec cat = unique(Xcat.col(i));
     int tmp = cat.size();
     out(i) = tmp;
@@ -120,9 +120,9 @@ system.time(test <- ncat(Xcat))
 //' @title Disjunctive for matrix  
 //'
 //' @description
-//' This function transform a categorical matrix into a matrix of indicators variables.
+//' This function transforms a categorical matrix into a matrix of indicators variables.
 //'
-//' @param strata A matrix of integer that contains categorical vector in each column.
+//' @param strata A matrix of integers that contains categorical vector in each column.
 //'
 //' @return A matrix of indicators.
 //'
@@ -148,7 +148,7 @@ arma::umat disjMatrix(arma::umat strata) {
   arma::uvec ind = arma::conv_to<arma::uvec>::from(subind);
 
 
-  for(arma::uword i = 0;i < p;i++){
+  for(int i = 0;i < p;i++){
     arma::uvec tmp = strata.col(i);
     arma::umat tmp_mat(N,all_cat(i),arma::fill::zeros);
     tmp_mat = disj(tmp);

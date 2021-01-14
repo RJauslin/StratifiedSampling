@@ -9,7 +9,7 @@ varApp(X, strata, pik, y)
 \arguments{
 \item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{A vector of integer that represents the categories.}
+\item{strata}{A vector of integers that represents the categories.}
 
 \item{pik}{A vector of inclusion probabilities.}
 

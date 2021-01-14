@@ -9,7 +9,7 @@ stratifiedcube(X, strata, pik)
 \arguments{
 \item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{A vector of integer that specifies the stratification..}
+\item{strata}{A vector of integers that specifies the stratification..}
 
 \item{pik}{A vector of inclusion probabilities.}
 }
@@ -20,7 +20,7 @@ A vector with elements equal to 0 or 1. The value 1 indicates that the unit is s
 This function implements a method for selecting a stratified sample. It really improves the performance of the function \code{\link{fbs}} and \code{\link{balstrat}}.
 }
 \details{
-The function is selecting a balanced sample very quickly even if the sum of inclusion probabilities within strata are non-integer. The function should be used in preference. Firstly, a flight phase is computed on each strata. Secondly, the function \code{\link{findB}} is used to find a particular matrix to apply a flight phase by using the cube method proposed by Chauvet, G. and Tillé, Y. (2006). Finally, a landing phase is applied by suppression of variables.
+The function is selecting a balanced sample very quickly even if the sum of inclusion probabilities within strata are non-integer. The function should be used in preference. Firstly, a flight phase is performed on each strata. Secondly, the function \code{\link{findB}} is used to find a particular matrix to apply a flight phase by using the cube method proposed by Chauvet, G. and Tillé, Y. (2006). Finally, a landing phase is applied by suppression of variables.
 }
 \examples{
 N <- 100

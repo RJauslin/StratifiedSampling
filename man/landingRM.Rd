@@ -12,7 +12,7 @@ landingRM(X, pikstar)
 \item{pikstar}{vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}}
 }
 \description{
-This function does the landing phase of the cube method using suppression of variables proposed by Chauvet and Tillé (2006).
+This function performs the landing phase of the cube method using suppression of variables proposed by Chauvet and Tillé (2006).
 }
 \examples{
 

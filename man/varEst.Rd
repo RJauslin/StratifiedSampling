@@ -9,11 +9,11 @@ varEst(X, strata, pik, s, y)
 \arguments{
 \item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{A vector of integer that represents the categories.}
+\item{strata}{A vector of integers that represents the categories.}
 
 \item{pik}{A vector of inclusion probabilities.}
 
-\item{s}{a sample (vector of 0 and 1, if rejected or selected).}
+\item{s}{A sample (vector of 0 and 1, if rejected or selected).}
 
 \item{y}{A variable of interest.}
 }

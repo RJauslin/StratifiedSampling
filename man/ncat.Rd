@@ -7,7 +7,7 @@
 ncat(Xcat)
 }
 \arguments{
-\item{Xcat}{A matrix of integer that contains categorical vector in each column.}
+\item{Xcat}{A matrix of integers that contains categorical vector in each column.}
 }
 \value{
 A row vector that contains the number of categories in each column.

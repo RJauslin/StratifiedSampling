@@ -1,7 +1,7 @@
 #' @title Approximated variance for balanced sampling
 #' 
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
-#' @param strata A vector of integer that represents the categories.
+#' @param strata A vector of integers that represents the categories.
 #' @param pik A vector of inclusion probabilities.
 #' @param y A variable of interest.
 #'
@@ -86,9 +86,9 @@ varApp <- function(X,strata,pik,y){
 #' @title Estimator of the approximated variance for balanced sampling
 #' 
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
-#' @param strata A vector of integer that represents the categories.
+#' @param strata A vector of integers that represents the categories.
 #' @param pik A vector of inclusion probabilities.
-#' @param s a sample (vector of 0 and 1, if rejected or selected).
+#' @param s A sample (vector of 0 and 1, if rejected or selected).
 #' @param y A variable of interest.
 #'
 #'

@@ -7,13 +7,13 @@
 disjMatrix(strata)
 }
 \arguments{
-\item{strata}{A matrix of integer that contains categorical vector in each column.}
+\item{strata}{A matrix of integers that contains categorical vector in each column.}
 }
 \value{
 A matrix of indicators.
 }
 \description{
-This function transform a categorical matrix into a matrix of indicators variables.
+This function transforms a categorical matrix into a matrix of indicators variables.
 }
 \examples{
 Xcat <-  matrix(c(sample(x = 1:6, size = 100, replace = TRUE),

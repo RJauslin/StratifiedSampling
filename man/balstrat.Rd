@@ -9,7 +9,7 @@ balstrat(X, strata, pik)
 \arguments{
 \item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
 
-\item{strata}{A vector of integer that specifies the stratification.}
+\item{strata}{A vector of integers that specifies the stratification.}
 
 \item{pik}{A vector of inclusion probabilities.}
 }
@@ -20,7 +20,7 @@ A vector with elements equal to 0 or 1. The value 1 indicates that the unit is s
 Select a stratified balanced sample. The function is similar to \code{\link[sampling:balancedstratification]{balancedstratification}} of the package sampling.
 }
 \details{
-The function implement the method proposed by Chauvet (2009). Firstly a flight phase is computed on each strata. Secondly, a flight phase is applied on the whole population by aggregating the strata. Finally, a landing phase is applied by suppression of the variables.
+The function implements the method proposed by Chauvet (2009). Firstly, a flight phase is performed on each strata. Secondly, a flight phase is applied on the whole population by aggregating the strata. Finally, a landing phase is applied by suppression of variables.
 }
 \examples{
 

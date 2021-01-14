@@ -2,14 +2,14 @@
 #' 
 #' @description 
 #' 
-#' This function implements the method proposed by Hasler and Tillé (2014). It should be used for selecting a sample for highly stratified population.
+#' This function implements the method proposed by Hasler and Tillé (2014). It should be used for selecting a sample from highly stratified population.
 #'
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
-#' @param strata A vector of integer that specifies the stratification.
+#' @param strata A vector of integers that specifies the stratification.
 #' @param pik A vector of inclusion probabilities.
 #'
 #' @details 
-#' Firstly a flight phase is computed on each strata. Secondly, several flight phase are applied by adding one by one the stratum. By doing this, some strata are managed on-the-fly. Finally, a landing phase is applied by suppression of the variables. If the number of element selected in each strata is not equal to an integer, the function can be very time-consuming.
+#' Firstly a flight phase is performed on each strata. Secondly, several flight phases are applied by adding one by one the stratum. By doing this, some strata are managed on-the-fly. Finally, a landing phase is applied by suppression of the variables. If the number of element selected in each stratum is not equal to an integer, the function can be very time-consuming.
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'

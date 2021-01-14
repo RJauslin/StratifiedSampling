@@ -4,9 +4,9 @@
 #' @title Disjunctive
 #'
 #' @description
-#' This function transform a categorical vector into a matrix of indicators.
+#' This function transforms a categorical vector into a matrix of indicators.
 #'
-#' @param strata A vector of integer that represents the categories.
+#' @param strata A vector of integers that represents the categories.
 #'
 #' @return A matrix of indicators.
 #'
@@ -26,7 +26,7 @@ disj <- function(strata) {
 #' @description
 #' This function returns the number of factor in each column of a categorical matrix.
 #'
-#' @param Xcat A matrix of integer that contains categorical vector in each column.
+#' @param Xcat A matrix of integers that contains categorical vector in each column.
 #'
 #' @return A row vector that contains the number of categories in each column.
 #'
@@ -46,9 +46,9 @@ ncat <- function(Xcat) {
 #' @title Disjunctive for matrix  
 #'
 #' @description
-#' This function transform a categorical matrix into a matrix of indicators variables.
+#' This function transforms a categorical matrix into a matrix of indicators variables.
 #'
-#' @param strata A matrix of integer that contains categorical vector in each column.
+#' @param strata A matrix of integers that contains categorical vector in each column.
 #'
 #' @return A matrix of indicators.
 #'
