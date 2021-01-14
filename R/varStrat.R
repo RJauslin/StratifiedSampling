@@ -101,7 +101,7 @@ varApp <- function(X,strata,pik,y){
 #' @seealso \code{\link{varApp}}
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' @references 
-#' Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. Computational Statistics and Data Analysis, 74:81-94.
+#' Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified population. \emph{Computational Statistics and Data Analysis}, 74:81-94.
 #'
 #' @examples
 #' 
