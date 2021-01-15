@@ -1,6 +1,6 @@
 ## Test environments
 * Windows 10, R-devel (local),
-* Linux, Ubuntu 16.04 (on travis-ci) R-release, Debian, R-devel
+* Linux, Xenial (on travis-ci) R-release, Ubuntu, Debian, R-devel
 * OS X 9.4 (on travis-ci), R-release
 
 ## R CMD check results
