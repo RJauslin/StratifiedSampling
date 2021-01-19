@@ -20,7 +20,6 @@
 #' @references 
 #' Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{Computational Statistics}, 21/1:53-62
 #'
-#' @importFrom sampling inclusionprobastrata
 #' @examples
 #' N <- 100
 #' n <- 10

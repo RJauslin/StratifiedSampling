@@ -21,7 +21,6 @@
 #' 
 #' @examples
 #' 
-#' rm(list = ls())
 #' N <- 1000
 #' n <- 400
 #' x1 <- rgamma(N,4,25)

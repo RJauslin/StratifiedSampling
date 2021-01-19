@@ -13,7 +13,6 @@
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
-#' @importFrom sampling inclusionprobastrata
 #' @references 
 #' Hasler, C. and Tillé Y. (2014). Fast balanced sampling for highly stratified population. \emph{Computational Statistics and Data Analysis}, 74, 81-94
 #' 
@@ -26,10 +25,9 @@
 #' x1 <- rgamma(N,4,25)
 #' x2 <- rgamma(N,4,25)
 #'
-#' strata <- as.matrix(rep(1:n,each = N/n))
 #' strata <- rep(1:n,each = N/n)
 #'
-#' pik <- sampling::inclusionprobastrata(strata,rep(1,n))
+#' pik <- rep(n/N,N)
 #' X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
 #' 
 #' s <- fbs(X,strata,pik)

@@ -11,6 +11,9 @@ landingRM(X, pikstar)
 
 \item{pikstar}{vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}}
 }
+\value{
+A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+}
 \description{
 This function performs the landing phase of the cube method using suppression of variables proposed by Chauvet and Tillé (2006).
 }
@@ -19,7 +22,7 @@ This function performs the landing phase of the cube method using suppression of
 N <- 1000
 n <- 10
 p <- 4
-pik <- sampling::inclusionprobabilities(runif(N),n)
+pik <- rep(n/N,N)
 X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
 pikstar <- ffphase(X,pik) 
 s <- landingRM(X/pik,pikstar)

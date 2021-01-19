@@ -14,7 +14,6 @@
 #' 
 #' @references Chauvet, G. (2009). Stratified balanced sampling. \emph{Survey Methodology}, 35:115-119.
 #'
-#' @importFrom sampling inclusionprobastrata
 #' @import Matrix
 #' @useDynLib StratifiedSampling, .registration = TRUE
 #' @importFrom Rcpp sourceCpp

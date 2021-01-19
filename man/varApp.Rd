@@ -26,7 +26,6 @@ This function gives an approximation of the variance of the Horvitz-Thompson tot
 }
 \examples{
 
-rm(list = ls())
 N <- 1000
 n <- 400
 x1 <- rgamma(N,4,25)

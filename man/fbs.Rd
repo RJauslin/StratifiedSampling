@@ -29,10 +29,9 @@ n <- 10
 x1 <- rgamma(N,4,25)
 x2 <- rgamma(N,4,25)
 
-strata <- as.matrix(rep(1:n,each = N/n))
 strata <- rep(1:n,each = N/n)
 
-pik <- sampling::inclusionprobastrata(strata,rep(1,n))
+pik <- rep(n/N,N)
 X <- as.matrix(cbind(matrix(c(x1,x2),ncol = 2)))
 
 s <- fbs(X,strata,pik)
