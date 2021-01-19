@@ -3,6 +3,13 @@
 
 # Stratified Sampling
 
+Integrating a stratified structure in the population in a sampling
+design can considerably reduce the variance of the Horvitz-Thompson
+estimator. We propose in this package different methods to handle the
+selection of a balanced sample in stratified population. For more
+details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021)
+<https://arxiv.org/abs/arXiv:2101.05568>.
+
 ## Build
 
 [![Build
@@ -80,22 +87,22 @@ and have the right number of units selected in each stratum.
 
 ``` r
 head(s)
-#> [1] 0 0 0 0 1 0
+#> [1] 0 0 1 0 0 0
 
 sum(s)
 #> [1] 560
 t(X/pik)%*%s
 #>          [,1]
-#>  [1,] 4132310
-#>  [2,] 1275903
-#>  [3,] 3262342
-#>  [4,] 3376282
-#>  [5,] 6638623
-#>  [6,] 1568308
-#>  [7,] 1908588
-#>  [8,] 2161876
-#>  [9,]  999851
-#> [10,] 2776522
+#>  [1,] 3980724
+#>  [2,] 1274105
+#>  [3,] 3764443
+#>  [4,] 3967154
+#>  [5,] 7731597
+#>  [6,] 1708727
+#>  [7,] 2309690
+#>  [8,] 2498883
+#>  [9,] 1214297
+#> [10,] 3363023
 t(X/pik)%*%pik
 #>          [,1]
 #>  [1,] 3998831
