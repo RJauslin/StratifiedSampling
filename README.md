@@ -8,7 +8,7 @@ design can considerably reduce the variance of the Horvitz-Thompson
 estimator. We propose in this package different methods to handle the
 selection of a balanced sample in stratified population. For more
 details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021)
-<https://arxiv.org/abs/arXiv:2101.05568>.
+<https://arxiv.org/abs/2101.05568>.
 
 ## Build
 
@@ -87,22 +87,22 @@ and have the right number of units selected in each stratum.
 
 ``` r
 head(s)
-#> [1] 0 0 1 0 0 0
+#> [1] 0 0 0 0 0 0
 
 sum(s)
 #> [1] 560
 t(X/pik)%*%s
 #>          [,1]
-#>  [1,] 3980724
-#>  [2,] 1274105
-#>  [3,] 3764443
-#>  [4,] 3967154
-#>  [5,] 7731597
-#>  [6,] 1708727
-#>  [7,] 2309690
-#>  [8,] 2498883
-#>  [9,] 1214297
-#> [10,] 3363023
+#>  [1,] 4035984
+#>  [2,] 1256920
+#>  [3,] 3439487
+#>  [4,] 3575885
+#>  [5,] 7015372
+#>  [6,] 1615537
+#>  [7,] 2049134
+#>  [8,] 2281516
+#>  [9,] 1069184
+#> [10,] 2974870
 t(X/pik)%*%pik
 #>          [,1]
 #>  [1,] 3998831
