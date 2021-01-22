@@ -50,14 +50,13 @@ strata <- rep(c(1,2,3),each = 4)
 disj(strata)
 
 
-rm(list = ls())
+
 set.seed(1)
 strata <- sample(x = 1:6, size = 50, replace = TRUE)
 system.time(M <- disj(strata))
 system.time(M <- model.matrix(~as.factor(strata)-1))
 
 
-rm(list = ls())
 N <- 100000
 strata <- sample(x = 1:400, size = N, replace = TRUE)
 system.time(M <- disj(strata))
@@ -100,7 +99,7 @@ arma::rowvec ncat(arma::umat Xcat){
 }
 
 /***R
-rm(list = ls())
+
 Xcat <-  matrix(c(sample(x = 1:6, size = 100, replace = TRUE),
                 sample(x = 1:6, size = 100, replace = TRUE),
                 sample(x = 1:6, size = 100, replace = TRUE)),ncol = 3)
@@ -172,7 +171,6 @@ Xcat <-  matrix(c(sample(x = 1:6, size = 100, replace = TRUE),
              sample(x = 1:6, size = 100, replace = TRUE)),ncol = 3)
 disjMatrix(Xcat)
 
-rm(list = ls())
 
 N <- 1000
 Xcat <- sample(x = 1:40, size = N, replace = TRUE)
