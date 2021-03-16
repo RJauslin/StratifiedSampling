@@ -1,7 +1,7 @@
 Package: StratifiedSampling
 Type: Package
 Title: Different Methods for Stratified Sampling
-Version: 0.1.0
+Version: 0.1.9000
 Authors@R: c(
   person("Raphael", "Jauslin", email = "raphael.jauslin@unine.ch",role = c("aut", "cre"),comment = c(ORCID = "0000-0003-1088-3356")),
   person("Esther", "Eustache", email = "esther.eustache@unine.ch",role = c("aut")),

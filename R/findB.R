@@ -35,7 +35,10 @@ findB <- function(X,
   pInit <- ncol(X)
 
   if(pInit > nrow(strata)){
-    strata_tmp <- as.matrix(strata[1:(pInit+1),])
+    # print(pInit)
+    # print(nrow(strata))
+    # strata_tmp <- as.matrix(strata[1:(pInit+1),]) # error if the number of column is greater than the number of row we take all row.
+    strata_tmp <- as.matrix(strata[1:nrow(strata),])
   }else{
     strata_tmp <- as.matrix(strata[1:pInit,])
   }

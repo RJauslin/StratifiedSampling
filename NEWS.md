@@ -1,5 +1,10 @@
 # NEWS for Package "StratifiedSampling"
   
+## StratitfiedSampling 0.1.9000
+* add .9000 for dev version
+* fix a findB when the number of columns is greater than the number of rows. 
+  
+  
 ## StratifiedSampling 0.1.0
 
 ### CRAN resubmission
