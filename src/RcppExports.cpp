@@ -6,6 +6,22 @@
 
 using namespace Rcpp;
 
+// calibRaking
+Rcpp::NumericVector calibRaking(arma::mat Xs, arma::vec d, arma::vec total, arma::vec q, int max_iter, double tol);
+RcppExport SEXP _StratifiedSampling_calibRaking(SEXP XsSEXP, SEXP dSEXP, SEXP totalSEXP, SEXP qSEXP, SEXP max_iterSEXP, SEXP tolSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Xs(XsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type d(dSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type total(totalSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(calibRaking(Xs, d, total, q, max_iter, tol));
+    return rcpp_result_gen;
+END_RCPP
+}
 // disj
 arma::umat disj(arma::uvec strata);
 RcppExport SEXP _StratifiedSampling_disj(SEXP strataSEXP) {
@@ -41,6 +57,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_StratifiedSampling_calibRaking", (DL_FUNC) &_StratifiedSampling_calibRaking, 6},
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},

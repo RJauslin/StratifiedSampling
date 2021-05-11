@@ -12,16 +12,17 @@ License: GPL (>=2)
 Encoding: UTF-8
 LazyData: true
 LinkingTo: RcppArmadillo, Rcpp
-Imports: Rcpp
+Imports: Rcpp, transport, proxy, MASS, sampling
 Depends: Matrix,
     R (>= 3.5.0)
 Suggests: 
     knitr,
     rmarkdown,
     ggplot2,
-    sampling,
     BalancedSampling,
     MASS,
     stats,
-    testthat
+    testthat,
+    StatMatch,
+    laeken
 RoxygenNote: 7.1.1

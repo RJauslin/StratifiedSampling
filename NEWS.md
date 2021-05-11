@@ -3,7 +3,8 @@
 ## StratitfiedSampling 0.1.9000
 * add .9000 for dev version
 * fix a findB when the number of columns is greater than the number of rows. 
-  
+* add calibRaking, harmonize, otmatch and bsmatch (a proposed method to do statistical matching)
+* add vignettes to explain how to use matching.
   
 ## StratifiedSampling 0.1.0
 
