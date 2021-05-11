@@ -1,10 +1,18 @@
-#' Title
-#'
+#' @title Matching by using balanced sampling
+#' 
+#' @description 
+#' 
+#' We propose a method based on the output of the function \code{\link{otmatch}}. The method is choosing a unit of sample 2 to assign to a particular unit of sample 1.
+#' 
 #' @param object A data.frame, output from the function \code{\link{otmatch}}.
 #' @param Z2 A optional matrix, if we want to add some variables for the stratified balanced sampling step.
 #'
-#' @return A data.frame that contains the matching. The first two columns contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
+#' @details All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.
+#'
+#' @return A list of two object, A data.frame that contains the matching and the normalized weights q. The first two columns of the data.frame contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
 #' @export
+#' 
+#' @seealso \code{\link{otmatch}}, \code{\link{stratifiedcube}}
 #'
 #' @examples
 #' 

@@ -39,6 +39,9 @@ A data.frame that contains the matching. The first two columns contain the unit 
 \description{
 This function computes the statistical matching between two complex survey samples with weighting schemes. The function uses the function \code{\link[transport:transport]{transport}} of the package \code{transport}.
 }
+\details{
+All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.
+}
 \examples{
 
 #--- SET UP

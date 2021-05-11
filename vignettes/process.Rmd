@@ -30,7 +30,7 @@ In this vignette we will explain how the functions of the package are used in or
 ```{r contingency table}
 library(laeken)
 library(sampling)
-devtools::load_all("C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling")
+devtools::load_all("C:/Users/Raph/switchdrive/StratifiedSampling/StratifiedSampling")
 
 data("eusilc")
 eusilc <- na.omit(eusilc)
@@ -165,10 +165,10 @@ round(addmargins(YZ_ot),3)
 ```
 
 
-As you can see from the previous section, the optimal transport results generally do not have a one-to-one match, meaning that for every unit in sample 1, we have more than one unit with weights not equal to 0 in sample 2.  The `bsmatch` function creates a one-to-one match by selecting a balanced stratified sampling to obtain a data.frame where each unit in sample 1 has only one imputed unit from sample 2. 
 
 ## Balanced sampling
 
+As you can see from the previous section, the optimal transport results generally do not have a one-to-one match, meaning that for every unit in sample 1, we have more than one unit with weights not equal to 0 in sample 2.  The `bsmatch` function creates a one-to-one match by selecting a balanced stratified sampling to obtain a data.frame where each unit in sample 1 has only one imputed unit from sample 2. 
 
 
 ```{r BS}

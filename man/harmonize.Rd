@@ -2,60 +2,69 @@
 % Please edit documentation in R/harmonize.R
 \name{harmonize}
 \alias{harmonize}
-\title{Harmonisation by calibration}
+\title{Harmonization by calibration}
 \usage{
 harmonize(X1, d1, id1, X2, d2, id2, totals)
 }
 \arguments{
-\item{X1}{dataset 1}
+\item{X1}{A matrix, the matching variables of sample 1.}
 
-\item{d1}{weights 1}
+\item{d1}{A numeric vector that contains the initial weights of the sample 1.}
 
-\item{id1}{identifiers 1}
+\item{id1}{A character or numeric vector that contains the labels of the units in sample 1.}
 
-\item{X2}{dataset 2}
+\item{X2}{A matrix, the matching variables of sample 2.}
 
-\item{d2}{weigths 2}
+\item{d2}{A numeric vector that contains the initial weights of the sample 1.}
 
-\item{id2}{identifiers 2}
+\item{id2}{A character or numeric vector that contains the labels of the units in sample 2.}
 
-\item{totals}{}
+\item{totals}{An optional numeric vector that contains the totals of the matching variables.}
 }
 \value{
-
+A list of two vectors, the new weights of sample 1 (respectively new weights of sample 2).
 }
 \description{
-Harmonisation by calibration
+This function harmonize the two weight schemes such that the totals are equal.
+}
+\details{
+All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.
 }
 \examples{
 
-N <- 10000
-X <- data.frame(x1 = rnorm(N,0,1), x2 = rnorm(N,0,1))
+#--- SET UP
 
-n1=1000
-n2=3000
-s1=srswor(n1,N)
-s2=srswor(n2,N)
+N = 1000
+p = 5
+X = array(rnorm(N*p),c(N,p))
+
+n1=100
+n2=200
+
+s1 = sampling::srswor(n1,N)
+s2 = sampling::srswor(n2,N)
+
 id1=(1:N)[s1==1]
 id2=(1:N)[s2==1]
+
 d1=rep(N/n1,n1)
 d2=rep(N/n2,n2)
+
 X1 = X[s1==1,]
 X2 = X[s2==1,]
 
-W <- harmonize(X1,d1,id1,X2,d2,id2)
+re <- harmonize(X1,d1,id1,X2,d2,id2)
 
-colSums(W$w1*X1)
-colSums(W$w2*X2)
+colSums(re$w1*X1)
+colSums(re$w2*X2)
 
-
-############## if knowing the true totals
+#---  if the true totals is known
 
 totals <- c(N,colSums(X))
-W <- harmonize(X1,d1,id1,X2,d2,id2,totals)
+re <- harmonize(X1,d1,id1,X2,d2,id2,totals)
 
-colSums(W$w1*X1)
-colSums(W$w2*X2)
+colSums(re$w1*X1)
+colSums(re$w2*X2)
 colSums(X)
 
 }

@@ -21,5 +21,5 @@ calibR(Xs, d, total, q = rep(1, length(d)), max_iter = 500)
 Return the g-weights.
 }
 \description{
-Calibration by using raking ratio
+This function is inspired by the function \code{\link{}}
 }

@@ -1,14 +1,19 @@
-#' Harmonisation by calibration
+#' @title Harmonization by calibration
+#' 
+#' @description 
+#' This function harmonize the two weight schemes such that the totals are equal.
 #'
-#' @param X1 dataset 1 
-#' @param d1 weights 1
-#' @param id1 identifiers 1 
-#' @param X2 dataset 2
-#' @param d2 weigths 2
-#' @param id2 identifiers 2
-#' @param totals 
+#' @param X1 A matrix, the matching variables of sample 1.
+#' @param d1 A numeric vector that contains the initial weights of the sample 1.
+#' @param id1 A character or numeric vector that contains the labels of the units in sample 1.
+#' @param X2 A matrix, the matching variables of sample 2.
+#' @param d2 A numeric vector that contains the initial weights of the sample 1.
+#' @param id2 A character or numeric vector that contains the labels of the units in sample 2.
+#' @param totals An optional numeric vector that contains the totals of the matching variables.
 #'
-#' @return
+#' @details All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.
+#'
+#' @return A list of two vectors, the new weights of sample 1 (respectively new weights of sample 2).
 #' @export
 #' 
 #'
