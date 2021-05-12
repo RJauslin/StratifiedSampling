@@ -12,6 +12,9 @@
 #' @return A list of two object, A data.frame that contains the matching and the normalized weights q. The first two columns of the data.frame contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
 #' @export
 #' 
+#' 
+#' @importFrom sampling srswor
+#' 
 #' @seealso \code{\link{otmatch}}, \code{\link{stratifiedcube}}
 #'
 #' @examples
@@ -25,8 +28,8 @@
 #' n1=100
 #' n2=200
 #' 
-#' s1=srswor(n1,N)
-#' s2=srswor(n2,N)
+#' s1=sampling::srswor(n1,N)
+#' s2=sampling::srswor(n2,N)
 #' 
 #' 
 #' id1=(1:N)[s1==1]
@@ -53,12 +56,6 @@
 #' out <- bsmatch(object)
 #' 
 #' 
-#' 
-#' 
-#' round(colSums(object$conc$weight*object$conc),3)
-#' round(colSums(cbind(w1*X1,w2*X2)),3)
-#' round(colSums((out$conc$weight/out$q)*out$conc),3)
-#' 
 bsmatch <- function(object,
                     Z2){
   
@@ -75,11 +72,11 @@ bsmatch <- function(object,
     Z = object$weight*(object[,which(do.call(rbind,strsplit(colnames(object),"[.]"))[,1] == "X2")])  
   }else{
     Z = object$weight*(object[,which(do.call(rbind,strsplit(colnames(object),"[.]"))[,1] == "X2")])  
-    Z = cbind(object$weight*disjunctive(Z2[as.character(object$id2),]),Z)
+    Z = cbind(object$weight*sampling::disjunctive(Z2[as.character(object$id2),]),Z)
   }
   
   # strata <- cleanstrata(object$conc$id1[q < 1-EPS])
-  strata <- cleanstrata(object$id1)
+  strata <- sampling::cleanstrata(object$id1)
   # XXX <- Z[q<1-EPS,]
   XXX <- Z
   # qqq <- q[q<1-EPS]

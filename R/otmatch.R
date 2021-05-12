@@ -12,6 +12,7 @@
 #' @param w2 A numeric vector that contains the weights of the sample 2, harmonized by the function \code{\link{harmonize}}.
 #' @param dist_method A string that specified the  distance used by the function \code{\link[proxy:dist]{dist}} of the package \code{proxy}. Default \code{Euclidean}.
 #' @param transport_method A string that specified the  distance used by the function \code{\link[transport:transport]{transport}} of the package \code{transport}. Default \code{"shortsimplex"}.
+#' @param EPS an numeric scalar to determine if the value is rounded to 0.  
 #'
 #' @details All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.
 #'

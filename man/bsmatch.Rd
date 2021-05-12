@@ -31,8 +31,8 @@ EPS= 1e-9
 n1=100
 n2=200
 
-s1=srswor(n1,N)
-s2=srswor(n2,N)
+s1=sampling::srswor(n1,N)
+s2=sampling::srswor(n2,N)
 
 
 id1=(1:N)[s1==1]
@@ -58,12 +58,6 @@ object = otmatch(X1,id1,X2,id2,w1,w2)
 
 out <- bsmatch(object)
 
-
-
-
-round(colSums(object$conc$weight*object$conc),3)
-round(colSums(cbind(w1*X1,w2*X2)),3)
-round(colSums((out$conc$weight/out$q)*out$conc),3)
 
 }
 \seealso{

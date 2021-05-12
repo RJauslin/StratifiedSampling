@@ -20,9 +20,9 @@ Suggests:
     rmarkdown,
     ggplot2,
     BalancedSampling,
-    MASS,
     stats,
     testthat,
     StatMatch,
     laeken
 RoxygenNote: 7.1.1
+VignetteBuilder: knitr

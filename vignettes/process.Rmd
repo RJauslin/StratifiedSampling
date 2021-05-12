@@ -30,7 +30,7 @@ In this vignette we will explain how the functions of the package are used in or
 ```{r contingency table}
 library(laeken)
 library(sampling)
-devtools::load_all("C:/Users/Raph/switchdrive/StratifiedSampling/StratifiedSampling")
+devtools::load_all("C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling")
 
 data("eusilc")
 eusilc <- na.omit(eusilc)
@@ -201,6 +201,10 @@ round(addmargins(YZ_bs),3)
 
 
 ## Prediction  
+
+
+
+
 
 
 ```{r}

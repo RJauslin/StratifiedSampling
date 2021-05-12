@@ -32,6 +32,8 @@ otmatch(
 \item{dist_method}{A string that specified the  distance used by the function \code{\link[proxy:dist]{dist}} of the package \code{proxy}. Default \code{Euclidean}.}
 
 \item{transport_method}{A string that specified the  distance used by the function \code{\link[transport:transport]{transport}} of the package \code{transport}. Default \code{"shortsimplex"}.}
+
+\item{EPS}{an numeric scalar to determine if the value is rounded to 0.}
 }
 \value{
 A data.frame that contains the matching. The first two columns contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
