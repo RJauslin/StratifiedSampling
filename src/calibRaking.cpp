@@ -54,6 +54,7 @@ Rcpp::NumericVector calibRaking(arma::mat Xs,
   } while ( (crit > tol) & (iter < max_iter));
   
   // return(w1/d);
+  
   Rcpp::NumericVector out = Rcpp::wrap(w1/d);
   out.attr("dim") = R_NilValue;
   return(out);

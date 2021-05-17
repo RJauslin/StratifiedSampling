@@ -11,17 +11,7 @@ os:
   - linux
   - osx
 
-dist: xenial
-
 warnings_are_errors: false
-
-addons:
-  apt:
-    packages:
-    - libudunits2-dev
-    - gdal-bin
-    - libgdal1-dev
-    - libproj-dev
 
 jobs:
   exclude:
@@ -29,15 +19,18 @@ jobs:
     r: devel
 
 r_packages:
-  - BalancedSampling
+  - Rcpp
+  - transport
+  - proxy
+  - MASS
   - sampling
+  - BalancedSampling
   - stats
   - utils
   - knitr
   - rmarkdown
   - ggplot2
   - ggvoronoi
-  - MASS
   - lpSolve
   - sp
   - sf
