@@ -30,7 +30,7 @@ In this vignette we will explain how the functions of the package are used in or
 ```{r contingency table}
 library(laeken)
 library(sampling)
-devtools::load_all("C:/Users/Raph/switchdrive/StratifiedSampling/StratifiedSampling")
+library(StratifiedSampling)
 
 data("eusilc")
 eusilc <- na.omit(eusilc)
@@ -71,7 +71,7 @@ addmargins(YZ)
 
 ## Sampling schemes
 
-Here we set up the sampling designs and define all the quantities we will need for the rest of the vignette. The sample are selected with simple random sampling without remplacement and the weights are equal to the inverse of the inclusion probabilities.
+Here we set up the sampling designs and define all the quantities we will need for the rest of the vignette. The sample are selected with simple random sampling without replacement and the weights are equal to the inverse of the inclusion probabilities.
 
 ```{r sample_scheme}
 
@@ -143,7 +143,7 @@ colSums(w2*X2)
 
 ## Optimal transport matching
 
-The statistical mathching is done by using the `otmatch` function. The estimation of the contingency table is calculated by extracting the `id1` units (respectively `id2` units) and by using the function `tapply` with the correct weights.
+The statistical matching is done by using the `otmatch` function. The estimation of the contingency table is calculated by extracting the `id1` units (respectively `id2` units) and by using the function `tapply` with the correct weights.
 
 ```{r OT}
 

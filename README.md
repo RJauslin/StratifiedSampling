@@ -10,12 +10,15 @@ selection of a balanced sample in stratified population. For more
 details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021)
 <https://arxiv.org/abs/2101.05568>.
 
+The package propose also a method to do statistical matching using
+optimal transport and balanced sampling. For more details see Raphaël
+Jauslin and Yves Tillé (2021) <https://arxiv.org/abs/>.
+
 ## Installation
 
-<!-- ### CRAN version -->
-<!-- ``` -->
-<!-- install.packages("WaveSampling") -->
-<!-- ``` -->
+### CRAN version
+
+    install.packages("StratifiedSampling")
 
 ### Latest version
 
@@ -27,7 +30,14 @@ with the following command:
 devtools::install_github("Rjauslin/StratifiedSampling")
 ```
 
-## Simple example
+## Optimal transport matching
+
+A complete example on how to use the package to make an optimal
+statistical transport match can be found in the following vignette:
+
+    vignette("ot_matching", package = "StratifiedSampling")
+
+## Simple example on stratified population
 
 This basic example shows you how to set up a stratified sampling design.
 The example is done on the `swissmunicipalities` dataset from the
@@ -80,16 +90,16 @@ sum(s)
 #> [1] 560
 t(X/pik)%*%s
 #>          [,1]
-#>  [1,] 3996474
-#>  [2,] 1271271
-#>  [3,] 3462091
-#>  [4,] 3608361
-#>  [5,] 7070452
-#>  [6,] 1655388
-#>  [7,] 2074641
-#>  [8,] 2282646
-#>  [9,] 1057778
-#> [10,] 2988835
+#>  [1,] 4105520
+#>  [2,] 1286163
+#>  [3,] 3613893
+#>  [4,] 3782345
+#>  [5,] 7396238
+#>  [6,] 1702654
+#>  [7,] 2178786
+#>  [8,] 2387670
+#>  [9,] 1127128
+#> [10,] 3160401
 t(X/pik)%*%pik
 #>          [,1]
 #>  [1,] 3998831

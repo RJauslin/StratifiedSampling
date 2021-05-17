@@ -5,6 +5,7 @@
 * fix a findB when the number of columns is greater than the number of rows. 
 * add calibRaking, harmonize, otmatch and bsmatch (a proposed method to do statistical matching)
 * add vignettes to explain how to use matching.
+* change README to add information about statistical matching.
   
 ## StratifiedSampling 0.1.0
 

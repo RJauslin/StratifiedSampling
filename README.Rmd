@@ -16,15 +16,17 @@ knitr::opts_chunk$set(
 
 Integrating a stratified structure in the population in a sampling design can considerably reduce the variance of the Horvitz-Thompson estimator. We propose in this package different methods to handle the selection of a balanced sample in stratified population. For more details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021) <https://arxiv.org/abs/2101.05568>.
 
+The package propose also a method to do statistical matching using optimal transport and balanced sampling. For more details see Raphaël Jauslin and Yves Tillé (2021) <https://arxiv.org/abs/>.
+
 
 
 ## Installation
 
-<!-- ### CRAN version -->
+### CRAN version
 
-<!-- ``` -->
-<!-- install.packages("WaveSampling") -->
-<!-- ``` -->
+```
+install.packages("StratifiedSampling")
+```
 
 ### Latest version 
 
@@ -35,7 +37,15 @@ You can install the latest version of the package `StratifiedSampling` with the 
 devtools::install_github("Rjauslin/StratifiedSampling")
 ```
 
-## Simple example
+## Optimal transport matching
+
+A complete example on how to use the package to make an optimal statistical transport match can be found in the following vignette:
+
+```
+vignette("ot_matching", package = "StratifiedSampling")
+```
+
+## Simple example on stratified population
 
 This basic example shows you how to set up a stratified sampling design. The example is done on the `swissmunicipalities` dataset from the package `sampling`.
 
