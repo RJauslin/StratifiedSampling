@@ -10,19 +10,11 @@ selection of a balanced sample in stratified population. For more
 details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021)
 <https://arxiv.org/abs/2101.05568>.
 
-## Build
-
-[![Build
-Status](https://travis-ci.org/RJauslin/StratifiedSampling.svg?branch=master)](https://travis-ci.org/RJauslin/StratifiedSampling)
-
 ## Installation
 
 <!-- ### CRAN version -->
-
 <!-- ``` -->
-
 <!-- install.packages("WaveSampling") -->
-
 <!-- ``` -->
 
 ### Latest version
@@ -44,12 +36,7 @@ package `sampling`.
 ``` r
 library(sampling)
 library(StratifiedSampling)
-#> Loading required package: Matrix
-#> 
-#> Attaching package: 'StratifiedSampling'
-#> The following object is masked from 'package:base':
-#> 
-#>     choose
+#> Le chargement a nécessité le package : Matrix
 
 data(swissmunicipalities)
 swiss <- swissmunicipalities
@@ -87,22 +74,22 @@ and have the right number of units selected in each stratum.
 
 ``` r
 head(s)
-#> [1] 0 0 0 0 0 0
+#> [1] 0 1 0 0 0 0
 
 sum(s)
 #> [1] 560
 t(X/pik)%*%s
 #>          [,1]
-#>  [1,] 4035984
-#>  [2,] 1256920
-#>  [3,] 3439487
-#>  [4,] 3575885
-#>  [5,] 7015372
-#>  [6,] 1615537
-#>  [7,] 2049134
-#>  [8,] 2281516
-#>  [9,] 1069184
-#> [10,] 2974870
+#>  [1,] 3996474
+#>  [2,] 1271271
+#>  [3,] 3462091
+#>  [4,] 3608361
+#>  [5,] 7070452
+#>  [6,] 1655388
+#>  [7,] 2074641
+#>  [8,] 2282646
+#>  [9,] 1057778
+#> [10,] 2988835
 t(X/pik)%*%pik
 #>          [,1]
 #>  [1,] 3998831
