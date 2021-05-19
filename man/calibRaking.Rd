@@ -20,7 +20,7 @@ calibRaking(Xs, d, total, q, max_iter = 500L, tol = 1e-09)
 \item{tol}{A scalar that represents the tolerance value for the algorithm. Default = 1e-9.}
 }
 \value{
-A vector the value of the g-weights.
+A vector, the value of the g-weights.
 }
 \description{
 This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibration estimator.

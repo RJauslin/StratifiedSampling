@@ -15,7 +15,7 @@
 #' @details
 #' More details on the different calibration methods can be read in Tillé Y. (2020).
 #'
-#' @return A vector the value of the g-weights.
+#' @return A vector, the value of the g-weights.
 #'
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'

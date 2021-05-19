@@ -10,7 +10,7 @@
 #' @param id2 A character or numeric vector that contains the labels of the units in sample 1.
 #' @param w1 A numeric vector that contains the weights of the sample 1, harmonized by the function \code{\link{harmonize}}.
 #' @param w2 A numeric vector that contains the weights of the sample 2, harmonized by the function \code{\link{harmonize}}.
-#' @param dist_method A string that specified the  distance used by the function \code{\link[proxy:dist]{dist}} of the package \code{proxy}. Default \code{Euclidean}.
+#' @param dist_method A string that specified the  distance used by the function \code{\link[proxy:dist]{dist}} of the package \code{proxy}. Default \code{"Euclidean"}.
 #' @param transport_method A string that specified the  distance used by the function \code{\link[transport:transport]{transport}} of the package \code{transport}. Default \code{"shortsimplex"}.
 #' @param EPS an numeric scalar to determine if the value is rounded to 0.  
 #'

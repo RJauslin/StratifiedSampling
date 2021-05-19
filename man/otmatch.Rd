@@ -29,7 +29,7 @@ otmatch(
 
 \item{w2}{A numeric vector that contains the weights of the sample 2, harmonized by the function \code{\link{harmonize}}.}
 
-\item{dist_method}{A string that specified the  distance used by the function \code{\link[proxy:dist]{dist}} of the package \code{proxy}. Default \code{Euclidean}.}
+\item{dist_method}{A string that specified the  distance used by the function \code{\link[proxy:dist]{dist}} of the package \code{proxy}. Default \code{"Euclidean"}.}
 
 \item{transport_method}{A string that specified the  distance used by the function \code{\link[transport:transport]{transport}} of the package \code{transport}. Default \code{"shortsimplex"}.}
 
@@ -42,7 +42,7 @@ A data.frame that contains the matching. The first two columns contain the unit 
 This function computes the statistical matching between two complex survey samples with weighting schemes. The function uses the function \code{\link[transport:transport]{transport}} of the package \code{transport}.
 }
 \details{
-All details of the method can be seen in : Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.
+All details of the method can be seen in : Raphaël Jauslin and Yves Tillé (2021) <arXiv:2105.08379>.
 }
 \examples{
 

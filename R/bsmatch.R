@@ -2,14 +2,14 @@
 #' 
 #' @description 
 #' 
-#' We propose a method based on the output of the function \code{\link{otmatch}}. The method consists in choosing a unit from sample 2 to assign to a particular unit from sample 1.
+#' We propose a method based on the output of the function \code{\link{otmatch}}. The method consists of choosing a unit from sample 2 to assign to a particular unit from sample 1.
 #' 
 #' @param object A data.frame, output from the function \code{\link{otmatch}}.
 #' @param Z2 A optional matrix, if we want to add some variables for the stratified balanced sampling step.
 #'
 #' @details All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:2105.08379>.
 #'
-#' @return A list of two object, A data.frame that contains the matching and the normalized weights. The first two columns of the data.frame contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
+#' @return A list of two objects, A data.frame that contains the matching and the normalized weights. The first two columns of the data.frame contain the unit identities of the two samples. The third column are the final weights. All remaining columns are the matching variables.
 #' @export
 #' 
 #' 
@@ -51,7 +51,7 @@
 #' 
 #' object = otmatch(X1,id1,X2,id2,w1,w2)
 #' 
-#' #--- 
+#' #--- BALANCED SAMPLING
 #' 
 #' out <- bsmatch(object)
 #' 
