@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 Integrating a stratified structure in the population in a sampling design can considerably reduce the variance of the Horvitz-Thompson estimator. We propose in this package different methods to handle the selection of a balanced sample in stratified population. For more details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021) <https://arxiv.org/abs/2101.05568>.
 
-The package propose also a method to do statistical matching using optimal transport and balanced sampling. For more details see Raphaël Jauslin and Yves Tillé (2021) <https://arxiv.org/abs/>.
+The package propose also a method to do statistical matching using optimal transport and balanced sampling. For more details see Raphaël Jauslin and Yves Tillé (2021) <https://arxiv.org/abs/2105.08379>.
 
 
 

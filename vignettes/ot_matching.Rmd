@@ -1,5 +1,7 @@
 ---
 title: "Statistical Matching using Optimal Transport"
+author: "Raphaël Jauslin"
+date: "`r Sys.Date()`"
 output: 
   prettydoc::html_pretty:
     theme: architect
@@ -12,20 +14,22 @@ vignette: >
 
 ```{r, include = FALSE}
 library(knitr)
+library(prettydoc)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
 
 ```
 
 
 ## Introduction
 
-In this vignette we will explain how the functions of the package are used in order to estimate a contingency table. We will work on the `eusilc` dataset of the `laeken` package.
+In this vignette we will explain how some functions of the package are used in order to estimate a contingency table. We will work on the `eusilc` dataset of the `laeken` package. All the functions presented in the following are explained in the proposed manuscript by Raphaël Jauslin and Yves Tillé (2021) <arXiv:2105.08379>.
 
 ## Contingency table
- We will estimate the contingency table when the factor variable which represents the economic status `pl030` is crossed with a discretized version of the equivalized household income `eqIncome`. In order to discretize the equivalized income, we calculate percentiles (0.15,0.30,0.45,0.60,0.75,0.90) of the variable and define the category as intervals between the values.
+We will estimate the contingency table when the factor variable which represents the economic status `pl030` is crossed with a discretized version of the equivalized household income `eqIncome`. In order to discretize the equivalized income, we calculate percentiles (0.15,0.30,0.45,0.60,0.75,0.90) of the variable and define the category as intervals between the values.
  
 ```{r contingency table}
 library(laeken)
@@ -203,17 +207,12 @@ round(addmargins(YZ_bs),3)
 ## Prediction  
 
 
-
-
-
-
 ```{r}
 
 # split the weight by id1
 q_l <- split(object$weight,f = object$id1)
-# normlize in each id1
+# normalize in each id1
 q_l <- lapply(q_l, function(x){x/sum(x)})
-
 q <- as.numeric(do.call(c,q_l))
   
 Z_pred <- t(q*disjunctive(object$id1))%*%disjunctive(Z2[as.character(object$id2),])

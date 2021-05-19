@@ -1,15 +1,15 @@
-#' @title Matching by using balanced sampling
+#' @title Statistical matching using optimal transport and balanced sampling
 #' 
 #' @description 
 #' 
-#' We propose a method based on the output of the function \code{\link{otmatch}}. The method is choosing a unit of sample 2 to assign to a particular unit of sample 1.
+#' We propose a method based on the output of the function \code{\link{otmatch}}. The method consists in choosing a unit from sample 2 to assign to a particular unit from sample 1.
 #' 
 #' @param object A data.frame, output from the function \code{\link{otmatch}}.
 #' @param Z2 A optional matrix, if we want to add some variables for the stratified balanced sampling step.
 #'
-#' @details All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.
+#' @details All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:2105.08379>.
 #'
-#' @return A list of two object, A data.frame that contains the matching and the normalized weights q. The first two columns of the data.frame contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
+#' @return A list of two object, A data.frame that contains the matching and the normalized weights. The first two columns of the data.frame contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
 #' @export
 #' 
 #' 
@@ -60,14 +60,11 @@ bsmatch <- function(object,
                     Z2){
   
   
-  # q <- rep(0,nrow(object))
-  # n1 <- nlevels(factor(object$id1))
-  # l1 <- levels(factor(object$id1))
-  
+  # split weight in order to 
   q_l <- split(object$weight,f = object$id1)
   q <- as.numeric(do.call(c,lapply(q_l, function(x){x/sum(x)})))
   
-  
+  # if Z data are added to balanced smapling
   if(missing(Z2)){
     Z = object$weight*(object[,which(do.call(rbind,strsplit(colnames(object),"[.]"))[,1] == "X2")])  
   }else{
@@ -75,35 +72,22 @@ bsmatch <- function(object,
     Z = cbind(object$weight*sampling::disjunctive(Z2[as.character(object$id2),]),Z)
   }
   
-  # strata <- cleanstrata(object$conc$id1[q < 1-EPS])
+  # cleaning strata and define data for balanced sampling
   strata <- sampling::cleanstrata(object$id1)
-  # XXX <- Z[q<1-EPS,]
   XXX <- Z
-  # qqq <- q[q<1-EPS]
   qqq <- q
   
-  
-  # strata=res[,1][q<1-EPS]
-  # XXX=Z[q<1-EPS,]
-  # qqq=q[q<1-EPS]
-  s <- StratifiedSampling::stratifiedcube(X=XXX,strata=strata,pik=qqq)
+
+  s <- stratifiedcube(X = XXX,
+                      strata=strata,
+                      pik=qqq)
   s <- round(s,4)
-  
-  # t <- tapply(s,strata,sum) 
-  
-  # ss <- rep(1,nrow(object$conc))
-  # ss[q<1-EPS] <- s
   ss <- s
   
   out <- object
-  # out$res <- out$res[ss == 1,]
-  # out <- out[ss == 1,]
-  # out$q <- q[ss == 1]
   out <- list(object = object[ss == 1,],q = q[ss == 1])
   
-  
   return(out)
-  
 }
 
 

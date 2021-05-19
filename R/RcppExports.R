@@ -3,7 +3,7 @@
 
 #' @title Calibration using raking ratio  
 #'
-#' @description This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibation estimator.
+#' @description This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibration estimator.
 #' 
 #' @param Xs A matrix of calibration variables.
 #' @param d A vector, the initial weights.

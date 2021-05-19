@@ -2,7 +2,7 @@
 % Please edit documentation in R/bsmatch.R
 \name{bsmatch}
 \alias{bsmatch}
-\title{Matching by using balanced sampling}
+\title{Statistical matching using optimal transport and balanced sampling}
 \usage{
 bsmatch(object, Z2)
 }
@@ -12,10 +12,10 @@ bsmatch(object, Z2)
 \item{Z2}{A optional matrix, if we want to add some variables for the stratified balanced sampling step.}
 }
 \value{
-A list of two object, A data.frame that contains the matching and the normalized weights q. The first two columns of the data.frame contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
+A list of two object, A data.frame that contains the matching and the normalized weights. The first two columns of the data.frame contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
 }
 \description{
-We propose a method based on the output of the function \code{\link{otmatch}}. The method is choosing a unit of sample 2 to assign to a particular unit of sample 1.
+We propose a method based on the output of the function \code{\link{otmatch}}. The method consists in choosing a unit from sample 2 to assign to a particular unit from sample 1.
 }
 \details{
 All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.

@@ -23,7 +23,7 @@ calibRaking(Xs, d, total, q, max_iter = 500L, tol = 1e-09)
 A vector the value of the g-weights.
 }
 \description{
-This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibation estimator.
+This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibration estimator.
 }
 \details{
 More details on the different calibration methods can be read in Tillé Y. (2020).

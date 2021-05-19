@@ -14,9 +14,9 @@
 #' @param transport_method A string that specified the  distance used by the function \code{\link[transport:transport]{transport}} of the package \code{transport}. Default \code{"shortsimplex"}.
 #' @param EPS an numeric scalar to determine if the value is rounded to 0.  
 #'
-#' @details All details of the method can be seen in the manuscript: Raphaël Jauslin and Yves Tillé (2021) <arXiv:>.
+#' @details All details of the method can be seen in : Raphaël Jauslin and Yves Tillé (2021) <arXiv:2105.08379>.
 #'
-#' @return A data.frame that contains the matching. The first two columns contain the unit identities of the two samples. The third column is the final weight. All remaining columns are the matching variables.
+#' @return A data.frame that contains the matching. The first two columns contain the unit identities of the two samples. The third column is the final weights. All remaining columns are the matching variables.
 #' @export
 #'
 #' @importFrom transport transport

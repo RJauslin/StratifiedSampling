@@ -12,7 +12,7 @@ details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021)
 
 The package propose also a method to do statistical matching using
 optimal transport and balanced sampling. For more details see Raphaël
-Jauslin and Yves Tillé (2021) <https://arxiv.org/abs/>.
+Jauslin and Yves Tillé (2021) <https://arxiv.org/abs/2105.08379>.
 
 ## Installation
 
@@ -84,22 +84,22 @@ and have the right number of units selected in each stratum.
 
 ``` r
 head(s)
-#> [1] 0 1 0 0 0 0
+#> [1] 0 0 0 0 0 0
 
 sum(s)
 #> [1] 560
 t(X/pik)%*%s
 #>          [,1]
-#>  [1,] 4105520
-#>  [2,] 1286163
-#>  [3,] 3613893
-#>  [4,] 3782345
-#>  [5,] 7396238
-#>  [6,] 1702654
-#>  [7,] 2178786
-#>  [8,] 2387670
-#>  [9,] 1127128
-#> [10,] 3160401
+#>  [1,] 4040364
+#>  [2,] 1269546
+#>  [3,] 3458061
+#>  [4,] 3585636
+#>  [5,] 7043697
+#>  [6,] 1617897
+#>  [7,] 2057214
+#>  [8,] 2292260
+#>  [9,] 1076326
+#> [10,] 2990794
 t(X/pik)%*%pik
 #>          [,1]
 #>  [1,] 3998831
