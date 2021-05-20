@@ -64,7 +64,6 @@ Rcpp::NumericVector calibRaking(arma::mat Xs,
 
 /*** R
 
-rm(list = ls())
 library(MASS)
 N <- 10000
 X <- data.frame(x1 = rnorm(N,0,1), x2 = rnorm(N,0,1))
@@ -77,10 +76,6 @@ X <- as.data.frame(X)
 
 Y <- data.frame(y1 = 3*X$x1^2 + 4*X$x2^2 + rnorm(N,0,1),y2 = exp(X$x1) + rnorm(N,0,0.1))
 Z <- data.frame(z1 = 8*X$x1^2 - 3*X$x2^2 + rnorm(N,0,1),z2 = sqrt(abs(X$x2)) + rnorm(N,0,0.1))
-
-# Y <- data.frame(y1 = 3*X$x1 + 4*X$x2 + rnorm(N,0,1),y2 = X$x1 + rnorm(N,0,0.1))
-# Z <- data.frame(z1 = 8*X$x1 - 3*X$x2 + rnorm(N,0,1),z2 = abs(X$x2) + rnorm(N,0,0.1))
-
 
 
 n1=1000

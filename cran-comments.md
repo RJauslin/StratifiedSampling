@@ -1,29 +1,20 @@
 ## Test environments
-* Windows 10, R-devel (local),
-* Linux, Xenial (on travis-ci) R-release, Ubuntu, Debian, R-devel
-* OS X 9.4 (on travis-ci), R-release
+* Windows 10, R-devel (local)
 
-## R CMD check results
+## R CMD check results and check_win_devel
 
-- R-devel : There were no ERRORs, WARNINGs or NOTEs
-
+- There were no ERRORs, WARNINGs or NOTEs
 
 ## rhub
 
-- Debian Linux, R-devel, GCC ASAN/UBSAN
+- Fedora Linux, R-devel, clang, gfortran
  
  * There were no ERRORs, WARNINGs or NOTEs
 
-- Fedora Linux, R-devel,, clang, gfortran
-- Ubuntu Linux 16.04 LTS, R-release, GCC
 - Windows Server 2008 R2 SP1, R-devel, 32/64 bit
-
-  * checking CRAN incoming feasibility ... NOTE
+- Ubuntu Linux 20.04.1 LTS, R-release, GCC 
+- Debian Linux, R-devel, GCC ASAN/UBSAN
  
-  Possibly mis-spelled words in DESCRIPTION:
-    Eustache (10:321)
-    Horvitz (10:132)
-    Jauslin (10:305)
-    Raphaël (10:297)
-    Tillé (10:339)
-
+ * run a PREPERROR, this seems related to rhub issue.
+ 
+ 
