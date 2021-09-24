@@ -92,7 +92,6 @@ stratifiedcube <- function(X,strata,pik){
       A_tmp <- as.matrix(X[uCat,]/pik[uCat])
       B <- findB(A_tmp,as.matrix(strata[uCat,]))
       B <- cbind(B$X,B$Xcat)
-      
       ##------ onestep and check if null
       tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
       if(is.null(tmp)){

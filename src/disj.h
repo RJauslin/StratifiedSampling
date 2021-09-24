@@ -3,6 +3,8 @@
 
 #include <RcppArmadillo.h>
 
+
+
 arma::umat disj(arma::uvec strata);
 arma::rowvec ncat(arma::umat Xcat);
 arma::umat disjMatrix(arma::umat strata);

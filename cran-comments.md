@@ -16,5 +16,3 @@
 - Debian Linux, R-devel, GCC ASAN/UBSAN
  
  * run a PREPERROR, this seems related to rhub issue.
- 
- 

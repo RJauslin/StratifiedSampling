@@ -1,5 +1,8 @@
 # NEWS for Package "StratifiedSampling"
 
+## StratifiedSampling 0.3.0
+* add One step One decision sampling method (osod, c_bound, inclprob)
+* remove test_that
 
 ## StratitfiedSampling 0.2.0
 * fix a findB when the number of columns is greater than the number of rows. 

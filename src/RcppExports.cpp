@@ -6,6 +6,22 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
+// c_bound
+int c_bound(arma::vec pik);
+RcppExport SEXP _StratifiedSampling_c_bound(SEXP pikSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type pik(pikSEXP);
+    rcpp_result_gen = Rcpp::wrap(c_bound(pik));
+    return rcpp_result_gen;
+END_RCPP
+}
 // calibRaking
 Rcpp::NumericVector calibRaking(arma::mat Xs, arma::vec d, arma::vec total, arma::vec q, int max_iter, double tol);
 RcppExport SEXP _StratifiedSampling_calibRaking(SEXP XsSEXP, SEXP dSEXP, SEXP totalSEXP, SEXP qSEXP, SEXP max_iterSEXP, SEXP tolSEXP) {
@@ -55,12 +71,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// inclprob
+arma::vec inclprob(arma::vec& x, const double& n);
+RcppExport SEXP _StratifiedSampling_inclprob(SEXP xSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const double& >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(inclprob(x, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// osod
+IntegerVector osod(NumericVector pikr);
+RcppExport SEXP _StratifiedSampling_osod(SEXP pikrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pikr(pikrSEXP);
+    rcpp_result_gen = Rcpp::wrap(osod(pikr));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_StratifiedSampling_c_bound", (DL_FUNC) &_StratifiedSampling_c_bound, 1},
     {"_StratifiedSampling_calibRaking", (DL_FUNC) &_StratifiedSampling_calibRaking, 6},
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},
+    {"_StratifiedSampling_inclprob", (DL_FUNC) &_StratifiedSampling_inclprob, 2},
+    {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 1},
     {NULL, NULL, 0}
 };
 
