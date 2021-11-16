@@ -118,6 +118,59 @@ disjMatrix <- function(strata) {
     .Call(`_StratifiedSampling_disjMatrix`, strata)
 }
 
+#' @title Squared Euclidean distances of the unit k.
+#'
+#'
+#' @description
+#' Calculate the squared Euclidean distance from unit \eqn{k} to the other units.
+#' 
+#'
+#' @param X matrix representing the spatial coordinates. 
+#' @param k the unit index to be used.
+#' @param tore an optional logical value, if we are considering the distance on a tore. See Details.
+#' @param toreBound an optional numeric value that specify the length of the tore.
+#'
+#'
+#' @details
+#' 
+#' Let \eqn{\mathbf{x}_k,\mathbf{x}_l} be the spatial coordinates of the unit \eqn{k,l \in U}. The classical euclidean distance is given by
+#' 
+#' \deqn{d^2(k,l) = (\mathbf{x}_k - \mathbf{x}_l)^\top (\mathbf{x}_k - \mathbf{x}_l). }
+#' 
+#' When the points are distributed on a \eqn{N_1 \times N_2} regular grid of \eqn{R^2}.
+#' It is possible to consider the units like they were placed on a tore. It can be illustrated by Pac-Man passing through the wall to get away from ghosts. Specifically,
+#' we could consider two units on the same column (resp. row) that are on the opposite have a small distance,
+#' 
+#' \deqn{ d^2_T(k,l) = min( (x_{k_1} - x_{l_1})^2,
+#'                       (x_{k_1} + N_1 - x_{l_1})^2,
+#'                       (x_{k_1} - N_1 - x_{l_1})^2) +}
+#' \deqn{ min( (x_{k_2} - x_{l_2})^2,
+#'                       (x_{k_2} + N_2 - x_{l_2})^2,
+#'                       (x_{k_2} - N_2 - x_{l_2})^2).}
+#'
+#' The option \code{toreBound} specify the length of the tore in the case of \eqn{N_1 = N_2 = N}. 
+#' It is omitted if the \code{tore} option is equal to \code{FALSE}.
+#'
+#' @return a vector of length \eqn{N} that contains the distances from the unit \eqn{k} to all other units.
+#'
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' 
+#' @seealso
+#' \code{\link[stats]{dist}}.
+#'
+#' @examples
+#'   N <- 5
+#'   x <- seq(1,N,1)
+#'   X <- as.matrix(expand.grid(x,x))
+#'   distUnitk(X,k = 2,tore = TRUE,toreBound = 5)
+#'   distUnitk(X,k = 2,tore = FALSE,toreBound = -1)
+#' @export
+distUnitk <- function(X, k, tore, toreBound) {
+    .Call(`_StratifiedSampling_distUnitk`, X, k, tore, toreBound)
+}
+
 #' @title Inclusion Probabilities
 #'
 #' @description Computes first-order inclusion probabilities from a vector of positive numbers.
@@ -143,6 +196,54 @@ disjMatrix <- function(strata) {
 #' @export
 inclprob <- function(x, n) {
     .Call(`_StratifiedSampling_inclprob`, x, n)
+}
+
+#' @title Maximum entropy sampling
+#'
+#' @description Maximum entropy sampling with fixed sample size. It can handle unequal inclusion probabilities.
+#' 
+#' @param pikr A vector of inclusion probabilities.
+#' 
+#' @details
+#' The sampling design maximizes the entropy design:
+#' \deqn{I(p) = - \sum s p(s) log[p(s)].}
+#' 
+#' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}}.
+#' More details could be find in Tille (2006).
+#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @references 
+#' Tille, Y. (2006), Sampling Algorithms, springer
+#' 
+#' @export
+maxent <- function(pikr) {
+    .Call(`_StratifiedSampling_maxent`, pikr)
+}
+
+#' @title Joint inclusion probabilities of maximum entropy.
+#'
+#' @description This function computes the matrix of the joint inclusion of the maximum entropy sampling with fixed sample size. It can handle unequal inclusion probabilities.
+#' 
+#' @param pikr A vector of inclusion probabilities.
+#' 
+#' @details
+#' The sampling design maximizes the entropy design:
+#' \deqn{I(p) = - \sum s p(s) log[p(s)].}
+#' 
+#' This function is a C++ implementation of \code{\link[sampling:UPMEpik2frompikw]{UPMEpik2frompikw}}.
+#' More details could be find in Tille (2006).
+#' @return A matrix, the joint inclusion probabilities.
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @references 
+#' Tille, Y. (2006), Sampling Algorithms, springer
+#' 
+#' @export
+maxentpi2 <- function(pikr) {
+    .Call(`_StratifiedSampling_maxentpi2`, pikr)
 }
 
 #' @title One-step One Decision sampling method

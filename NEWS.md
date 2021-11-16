@@ -1,5 +1,11 @@
 # NEWS for Package "StratifiedSampling"
 
+## StratifiedSampling 0.4.0
+* add maxent C++ implementation of the UPmaxentropy function from sampling package.
+* add balseq stream sampling
+  - add distunitk in src folder.
+  - add Rglpk as depends in DESCRIPTION
+
 ## StratifiedSampling 0.3.0
 * add One step One decision sampling method (osod, c_bound, inclprob)
 * remove test_that

@@ -71,6 +71,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// distUnitk
+arma::vec distUnitk(arma::mat& X, int& k, bool tore, double toreBound);
+RcppExport SEXP _StratifiedSampling_distUnitk(SEXP XSEXP, SEXP kSEXP, SEXP toreSEXP, SEXP toreBoundSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int& >::type k(kSEXP);
+    Rcpp::traits::input_parameter< bool >::type tore(toreSEXP);
+    Rcpp::traits::input_parameter< double >::type toreBound(toreBoundSEXP);
+    rcpp_result_gen = Rcpp::wrap(distUnitk(X, k, tore, toreBound));
+    return rcpp_result_gen;
+END_RCPP
+}
 // inclprob
 arma::vec inclprob(arma::vec& x, const double& n);
 RcppExport SEXP _StratifiedSampling_inclprob(SEXP xSEXP, SEXP nSEXP) {
@@ -80,6 +94,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const double& >::type n(nSEXP);
     rcpp_result_gen = Rcpp::wrap(inclprob(x, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// maxent
+IntegerVector maxent(NumericVector& pikr);
+RcppExport SEXP _StratifiedSampling_maxent(SEXP pikrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type pikr(pikrSEXP);
+    rcpp_result_gen = Rcpp::wrap(maxent(pikr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// maxentpi2
+NumericMatrix maxentpi2(NumericVector pikr);
+RcppExport SEXP _StratifiedSampling_maxentpi2(SEXP pikrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pikr(pikrSEXP);
+    rcpp_result_gen = Rcpp::wrap(maxentpi2(pikr));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -101,7 +137,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},
+    {"_StratifiedSampling_distUnitk", (DL_FUNC) &_StratifiedSampling_distUnitk, 4},
     {"_StratifiedSampling_inclprob", (DL_FUNC) &_StratifiedSampling_inclprob, 2},
+    {"_StratifiedSampling_maxent", (DL_FUNC) &_StratifiedSampling_maxent, 1},
+    {"_StratifiedSampling_maxentpi2", (DL_FUNC) &_StratifiedSampling_maxentpi2, 1},
     {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 1},
     {NULL, NULL, 0}
 };
