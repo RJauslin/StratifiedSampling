@@ -1,7 +1,6 @@
-
 #' @noRd
 #' @importFrom Rglpk Rglpk_solve_LP
-balseq_onestep <- function(Xaux,pik,pikInit,index,p){
+balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
    
   
   n <- ncol(Xaux)- 1
@@ -27,10 +26,11 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,p){
     
     # X = matrix(Xaux[index[1:n],],ncol = ncol(Xaux))
     # X <- Xaux[index[1:n],]
+    
     X <- matrix(Xaux[index[1:n],],ncol = ncol(Xaux))
     X <- X*(pik1/pikInit[index[1:n]])
     
-    V <- Rglpk::Rglpk_solve_LP(obj = ((n-1):1)^p,
+    V <- Rglpk::Rglpk_solve_LP(obj = ((n-1):1)^deg,
                         mat = rbind(t(X[-1,]/pik2),diag(rep(1,n-1))),
                         dir = c(rep("==",p+1),rep("<=",n-1)),
                         rhs = c(X[1,] + c(t(X[-1,]/pik2)%*%pmin(pik2,(1-pik2)*pik1[1]/(1-pik1[1]))),
@@ -56,12 +56,11 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,p){
 #' @param pik A vector of inclusion probabilities.
 #' @param Xspread A matrix of spatial coordinates.
 #' @param Xaux A matrix of auxiliary variables. The matrix must contains the \code{pik} vector to have fixed sample size.
-#' @param p A scalar that gives the power of the penalization in the linear program. See details. Default \code{p = 1}
 #'
 #' @details 
 #' 
 #' The function selects a sample using a sequential algorithm. At the same time, it respects the balancing equations (\code{Xaux}) and select a well-spread sample (\code{Xspread}). Algorithm uses a 
-#' linear program to satisfy the constraints. The parameter \code{p} could be used to control the level of penalization.
+#' linear program to satisfy the constraints.
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #' 
@@ -73,7 +72,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,p){
 #' n <- 10
 #' p=10
 #' # pik=runif(N)
-#' pik=rep(n/N,N)
+#' pik=inclprob(runif(N),n)
 #' Xaux=array(rnorm(N*p,3,1),c(N,p))
 #' 
 #' Xspread <- cbind(runif(N),runif(N)) 
@@ -81,8 +80,9 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,p){
 #' Xaux <- cbind(pik)
 #' 
 #' s <- balseq(pik,Xspread,Xaux)
-balseq <- function(pik,Xspread,Xaux,p = 1){
+balseq <- function(pik,Xspread,Xaux){
   
+  deg = 1
   # initializing
   N <- length(pik)
   eps <- 1e-6
@@ -93,18 +93,23 @@ balseq <- function(pik,Xspread,Xaux,p = 1){
   n <- 0
   counter <- 1
   
+  #----------- MAIN LOOP
   while(length(index) > 0){
     # cat("Step :",counter,"\n")
     # print(length(index))
     # print(n)
     
+    i <- which.max(pik[index])
     
     #take distance of the considered unit 
-    d <- distUnitk(Xspread,index[1],F,F)
+    d <- distUnitk(Xspread,index[i],F,F)
+    
+    
     # modify index respect to distance
     index <- index[order(d[index])]
     
-    l <- balseq_onestep(Xaux,pik,pikInit,index,p)
+    
+    l <- balseq_onestep(Xaux,pik,pikInit,index,deg)
     status <- l$status
     v = l$v
     n <- l$n
@@ -112,6 +117,11 @@ balseq <- function(pik,Xspread,Xaux,p = 1){
     unit0 <- which(pik < eps)
     unit1 <- which(pik > 1- eps)
     
+     # plot(Xspread)
+    # lines(Xspread[index[1:n],1],Xspread[index[1:n],2],type ="p",pch = 16,col = "cyan")
+    # lines(Xspread[index[1],1],Xspread[index[1],2],type ="p",pch = 16,col = "red")
+    # lines(Xspread[unit0,1],Xspread[unit0,2],type ="p",pch = 16)
+    # lines(Xspread[unit1,1],Xspread[unit1,2],type ="p",pch = 16,col = "orange")
    
     # if we can no longer find solution and index is at the end of the vector then exit and return pikstar
     if(status == 1 & is.na(index[n])){
@@ -120,7 +130,7 @@ balseq <- function(pik,Xspread,Xaux,p = 1){
     }else{
       
       v <-  v - pmin(pik[index[2:n]],(1-pik[index[2:n]])*pik[index[1]]/(1-pik[index[1]]))
-      
+
       if(stats::runif(1) < pik[index[1]]){
         pik[index[2:n]] <- pik[index[2:n]] - v*(1-pik[index[1]])/pik[index[1]]
         pik[index[1]] <- 1
@@ -133,25 +143,23 @@ balseq <- function(pik,Xspread,Xaux,p = 1){
       
     }
     counter <- counter + 1
-    # print(sum(pik))
   }
   # cat("Number of units already taked", length(which(pik > (1-eps))) ,"\n\n")
   # cat("Number of units that remains not integer",length(index),"\n\n")
   
   
-  # end with localcube
+  #----------- LANDING PHASE
   if(length(index) != 0){
-    s <- BalancedSampling::lcube(pik,Xspread,Xaux*(pik/pikInit))  
+    s <- BalancedSampling::lcube(pik,Xspread,Xaux*(pik/pikInit))
   }else{
     pik <- round(pik,10)
     s <- which(pik > (1-eps))
   }
   
-
+  # s <- pik 
   # print(sum(pik))
   
   
   return(s)
-  
   
 }

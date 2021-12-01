@@ -4,7 +4,7 @@
 \alias{balseq}
 \title{Sequential balanced sampling}
 \usage{
-balseq(pik, Xspread, Xaux, p = 1)
+balseq(pik, Xspread, Xaux)
 }
 \arguments{
 \item{pik}{A vector of inclusion probabilities.}
@@ -12,8 +12,6 @@ balseq(pik, Xspread, Xaux, p = 1)
 \item{Xspread}{A matrix of spatial coordinates.}
 
 \item{Xaux}{A matrix of auxiliary variables. The matrix must contains the \code{pik} vector to have fixed sample size.}
-
-\item{p}{A scalar that gives the power of the penalization in the linear program. See details. Default \code{p = 1}}
 }
 \value{
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
@@ -23,14 +21,14 @@ Selects at the same time a well-spread and a balanced sample using a sequential 
 }
 \details{
 The function selects a sample using a sequential algorithm. At the same time, it respects the balancing equations (\code{Xaux}) and select a well-spread sample (\code{Xspread}). Algorithm uses a 
-linear program to satisfy the constraints. The parameter \code{p} could be used to control the level of penalization.
+linear program to satisfy the constraints.
 }
 \examples{
 N=100
 n <- 10
 p=10
 # pik=runif(N)
-pik=rep(n/N,N)
+pik=inclprob(runif(N),n)
 Xaux=array(rnorm(N*p,3,1),c(N,p))
 
 Xspread <- cbind(runif(N),runif(N)) 
