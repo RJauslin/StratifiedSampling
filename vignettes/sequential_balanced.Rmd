@@ -1,0 +1,27 @@
+---
+title: "Sequential balanced sampling"
+author: "Raphaël Jauslin"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: ref.bib
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+# library(StratifiedSampling)
+
+```
+
+
+## Introduction
+
+
+
+
