@@ -3,7 +3,8 @@ using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
-
+//' @export
+// [[Rcpp::export]]
 NumericMatrix qfromw(NumericVector& wr,const int& n){
 
   arma::vec w(wr.begin(),wr.size(),false);
@@ -21,6 +22,7 @@ NumericMatrix qfromw(NumericVector& wr,const int& n){
       expa(i,z) = w[i]*expa(i+1,z-1) + expa(i+1,z);
     }
   }
+  
   NumericMatrix q(N,n);
   for(int i = 0;i < N;i++){
     q(i,0) = w[i]/expa(i,0);
@@ -36,7 +38,8 @@ NumericMatrix qfromw(NumericVector& wr,const int& n){
   return(q);
 }
 
-
+//' @export
+// [[Rcpp::export]]
 IntegerVector sfromq(const NumericMatrix& q){
   int N = q.nrow();
   int n = q.ncol();
@@ -53,7 +56,8 @@ IntegerVector sfromq(const NumericMatrix& q){
   return(s);
 }
 
-
+//' @export
+// [[Rcpp::export]]
 NumericVector pikfromq(NumericMatrix& qr){
   int N = qr.nrow();
   int n = qr.ncol();
@@ -79,7 +83,8 @@ NumericVector pikfromq(NumericMatrix& qr){
   return(out2);
 }
 
-
+//' @export
+// [[Rcpp::export]]
 NumericVector piktfrompik(NumericVector& pik){
 
   
@@ -94,7 +99,7 @@ NumericVector piktfrompik(NumericVector& pik){
  NumericVector pikt1(N);
 
  while(arr > eps){
-  w = pikt/(1.0-pikt);
+  w = pikt/(1.0 - pikt);
   q = qfromw(w,n);
   pikt1 = pikt + pik - pikfromq(q);
   arr = sum(abs(pikt - pikt1));
@@ -161,7 +166,8 @@ IntegerVector maxent(NumericVector& pikr){
   return(s);
 }
 
-
+//' @export
+// [[Rcpp::export]]
 NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
   
   
@@ -219,6 +225,119 @@ NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
 }
 
 /*** R
+rm(list = ls())
+library(sampling)
+data("swissmunicipalities")
+eps <- 1e-7 # epsilon tolerance
+n <- 200 # sample size
+pik <- inclusionprobabilities(swissmunicipalities$POPTOT,n)
+mask <- (pik < (1 - eps)) & (pik > eps)
+pik <-  pik[mask]
+pik <- pik[sample(1:length(pik))]
+# UPmaxentropy(pik)
+
+v <- function(M){
+  require(Matrix)
+  image(as(M,"sparseMatrix"))
+}
+
+
+w <- pik/(1-pik)
+
+
+# pik <- c(0.07,0.17,0.41,0.61,0.83,0.91)
+# UPMEpiktildefrompik(pik)
+# pikt <- c(0.1021,0.2238,0.4417,0.5796,0.7794,0.8734)
+# pik/(1-pik)
+# pikt/(1-pikt)
+# w <- c(0.116,0.295,0.810,1.411,3.614,7.059)
+# n <
+# Uqf <- function (w, n) 
+# {
+  N = length(w)
+  expa = array(0, c(N, n))
+  # fill first column
+  for (i in 1:N){
+    expa[i, 1] = sum(w[i:N])
+  } 
+  min(expa[,1]) # all filled
+  
+  # fill diagonal bottom left to right up
+  for (i in (N - n + 1):N){
+    cat(i,N-i + 1,"\n\n")
+    expa[i, N - i + 1] = exp(sum(log(w[i:N])))
+    print(expa[i, N - i + 1])
+  }
+  v(expa)
+  
+  for (i in (N - 2):1){
+    for (z in 2:min(N - i, n)) {
+      Sys.sleep(1)
+      # cat(i,z," use ",i+1,z-1,"and ",i+1,z,"\n\n")
+      expa[i, z] = (w[i]*expa[i + 1, z - 1]) + expa[i + 1, z]
+      print(expa[i,z])
+      # if(expa[i,z] < 1e-20){
+        # print(expa[i,z])  
+      # }
+      
+    }
+  } 
+  v(expa)
+  
+  q = array(0, c(N, n))
+  for (i in N:1) q[i, 1] = w[i]/expa[i, 1]
+  for (i in N:(N - n + 1)) q[i, N - i + 1] = 1
+  v(q)
+  
+  for (i in (N - 2):1){
+    for (z in 2:min(N - i, n)){
+      q[i, z] = w[i] * expa[i + 1, z - 1]/expa[i, z]
+    } 
+  } 
+  
+  print(any(is.na(q)))
+  q
+}
+
+
+test2 <- Uqf(w,sum(pik))
+any(which(is.na(test2)))
+
+
+test <- qfromw(pik/(1-pik),sum(pik))
+
+
+piktfrompik(pik)[length(pik)]
+maxent(pik)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 pik=c(0.07,0.17,0.41,0.61,0.83,0.91)
 

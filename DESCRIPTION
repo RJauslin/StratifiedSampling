@@ -20,12 +20,16 @@ Depends: Matrix,
 Suggests: 
     knitr,
     rmarkdown,
-    ggplot2,
     BalancedSampling,
     stats,
     testthat,
     StatMatch,
     laeken,
-    prettydoc
+    prettydoc,
+    ggplot2,
+    viridis,
+    rgeos,
+    sf,
+    rmapshaper
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr

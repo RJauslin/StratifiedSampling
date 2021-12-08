@@ -97,6 +97,51 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// qfromw
+NumericMatrix qfromw(NumericVector& wr, const int& n);
+RcppExport SEXP _StratifiedSampling_qfromw(SEXP wrSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type wr(wrSEXP);
+    Rcpp::traits::input_parameter< const int& >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(qfromw(wr, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sfromq
+IntegerVector sfromq(const NumericMatrix& q);
+RcppExport SEXP _StratifiedSampling_sfromq(SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(sfromq(q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pikfromq
+NumericVector pikfromq(NumericMatrix& qr);
+RcppExport SEXP _StratifiedSampling_pikfromq(SEXP qrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix& >::type qr(qrSEXP);
+    rcpp_result_gen = Rcpp::wrap(pikfromq(qr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// piktfrompik
+NumericVector piktfrompik(NumericVector& pik);
+RcppExport SEXP _StratifiedSampling_piktfrompik(SEXP pikSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type pik(pikSEXP);
+    rcpp_result_gen = Rcpp::wrap(piktfrompik(pik));
+    return rcpp_result_gen;
+END_RCPP
+}
 // maxent
 IntegerVector maxent(NumericVector& pikr);
 RcppExport SEXP _StratifiedSampling_maxent(SEXP pikrSEXP) {
@@ -108,6 +153,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pik2frompik
+NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr);
+RcppExport SEXP _StratifiedSampling_pik2frompik(SEXP pikrSEXP, SEXP wrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pikr(pikrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type wr(wrSEXP);
+    rcpp_result_gen = Rcpp::wrap(pik2frompik(pikr, wr));
+    return rcpp_result_gen;
+END_RCPP
+}
 // maxentpi2
 NumericMatrix maxentpi2(NumericVector pikr);
 RcppExport SEXP _StratifiedSampling_maxentpi2(SEXP pikrSEXP) {
@@ -116,6 +173,31 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type pikr(pikrSEXP);
     rcpp_result_gen = Rcpp::wrap(maxentpi2(pikr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// phi
+NumericVector phi(int n, NumericVector& w);
+RcppExport SEXP _StratifiedSampling_phi(SEXP nSEXP, SEXP wSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type w(wSEXP);
+    rcpp_result_gen = Rcpp::wrap(phi(n, w));
+    return rcpp_result_gen;
+END_RCPP
+}
+// piktilde
+NumericVector piktilde(NumericVector& pik, double tol, int max_iter);
+RcppExport SEXP _StratifiedSampling_piktilde(SEXP pikSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type pik(pikSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(piktilde(pik, tol, max_iter));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -139,8 +221,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},
     {"_StratifiedSampling_distUnitk", (DL_FUNC) &_StratifiedSampling_distUnitk, 4},
     {"_StratifiedSampling_inclprob", (DL_FUNC) &_StratifiedSampling_inclprob, 2},
+    {"_StratifiedSampling_qfromw", (DL_FUNC) &_StratifiedSampling_qfromw, 2},
+    {"_StratifiedSampling_sfromq", (DL_FUNC) &_StratifiedSampling_sfromq, 1},
+    {"_StratifiedSampling_pikfromq", (DL_FUNC) &_StratifiedSampling_pikfromq, 1},
+    {"_StratifiedSampling_piktfrompik", (DL_FUNC) &_StratifiedSampling_piktfrompik, 1},
     {"_StratifiedSampling_maxent", (DL_FUNC) &_StratifiedSampling_maxent, 1},
+    {"_StratifiedSampling_pik2frompik", (DL_FUNC) &_StratifiedSampling_pik2frompik, 2},
     {"_StratifiedSampling_maxentpi2", (DL_FUNC) &_StratifiedSampling_maxentpi2, 1},
+    {"_StratifiedSampling_phi", (DL_FUNC) &_StratifiedSampling_phi, 2},
+    {"_StratifiedSampling_piktilde", (DL_FUNC) &_StratifiedSampling_piktilde, 3},
     {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 1},
     {NULL, NULL, 0}
 };

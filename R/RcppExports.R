@@ -198,6 +198,26 @@ inclprob <- function(x, n) {
     .Call(`_StratifiedSampling_inclprob`, x, n)
 }
 
+#' @export
+qfromw <- function(wr, n) {
+    .Call(`_StratifiedSampling_qfromw`, wr, n)
+}
+
+#' @export
+sfromq <- function(q) {
+    .Call(`_StratifiedSampling_sfromq`, q)
+}
+
+#' @export
+pikfromq <- function(qr) {
+    .Call(`_StratifiedSampling_pikfromq`, qr)
+}
+
+#' @export
+piktfrompik <- function(pik) {
+    .Call(`_StratifiedSampling_piktfrompik`, pik)
+}
+
 #' @title Maximum entropy sampling
 #'
 #' @description Maximum entropy sampling with fixed sample size. It can handle unequal inclusion probabilities.
@@ -222,6 +242,11 @@ maxent <- function(pikr) {
     .Call(`_StratifiedSampling_maxent`, pikr)
 }
 
+#' @export
+pik2frompik <- function(pikr, wr) {
+    .Call(`_StratifiedSampling_pik2frompik`, pikr, wr)
+}
+
 #' @title Joint inclusion probabilities of maximum entropy.
 #'
 #' @description This function computes the matrix of the joint inclusion of the maximum entropy sampling with fixed sample size. It can handle unequal inclusion probabilities.
@@ -244,6 +269,14 @@ maxent <- function(pikr) {
 #' @export
 maxentpi2 <- function(pikr) {
     .Call(`_StratifiedSampling_maxentpi2`, pikr)
+}
+
+phi <- function(n, w) {
+    .Call(`_StratifiedSampling_phi`, n, w)
+}
+
+piktilde <- function(pik, tol = 1e-6, max_iter = 500L) {
+    .Call(`_StratifiedSampling_piktilde`, pik, tol, max_iter)
 }
 
 #' @title One-step One Decision sampling method

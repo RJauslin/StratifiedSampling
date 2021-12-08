@@ -4,14 +4,14 @@
 \alias{balseq}
 \title{Sequential balanced sampling}
 \usage{
-balseq(pik, Xspread, Xaux)
+balseq(pik, Xaux, Xspread = NULL)
 }
 \arguments{
 \item{pik}{A vector of inclusion probabilities.}
 
-\item{Xspread}{A matrix of spatial coordinates.}
-
 \item{Xaux}{A matrix of auxiliary variables. The matrix must contains the \code{pik} vector to have fixed sample size.}
+
+\item{Xspread}{An optional matrix of spatial coordinates.}
 }
 \value{
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
@@ -29,11 +29,21 @@ n <- 10
 p=10
 # pik=runif(N)
 pik=inclprob(runif(N),n)
-Xaux=array(rnorm(N*p,3,1),c(N,p))
+Xaux <- array(rnorm(N*p,3,1),c(N,p))
 
 Xspread <- cbind(runif(N),runif(N)) 
-Xaux=cbind(pik,Xaux)
-Xaux <- cbind(pik)
+Xaux <- cbind(pik,Xaux)
 
-s <- balseq(pik,Xspread,Xaux)
+s <- balseq(pik,Xaux)
+colSums(Xaux[s,]/as.vector(pik[s,]))
+colSums(Xaux)
+
+
+s <- balseq(pik,Xaux,Xspread)
+colSums(Xaux[s,]/as.vector(pik[s,]))
+colSums(Xaux)
+
+}
+\seealso{
+\code{\link[BalancedSampling:lcube]{lcube}}, \code{\link[sampling:samplecube]{samplecube}}.
 }

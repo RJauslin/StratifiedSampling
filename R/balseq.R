@@ -34,8 +34,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
                         dir = c(rep("==",p+1),rep("<=",n-1)),
                         rhs = c(X[1,] + c(t(X[-1,]/pik2)%*%pmin(pik2,(1-pik2)*pik1[1]/(1-pik1[1]))),
                                 bmax-bmin),
-                        max = TRUE
-    )
+                        max = TRUE)
     sol <- V$solution
     
     status <- V$status
@@ -46,6 +45,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
               v = sol,
               n = n))
 }
+
 
 
 #' @title Sequential balanced sampling
@@ -79,7 +79,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #' Xspread <- cbind(runif(N),runif(N)) 
 #' Xaux <- cbind(pik,Xaux)
 #' 
-#' s <- balseq2(pik,Xaux)
+#' s <- balseq(pik,Xaux)
 #' colSums(Xaux[s,]/as.vector(pik[s,]))
 #' colSums(Xaux)
 #' 
@@ -114,10 +114,13 @@ balseq <- function(pik,Xaux,Xspread = NULL){
       # modify index respect to distance
       index <- index[order(d[index])]
     }else{
+      
+      # tmp <- index[1]
+      # index[1] <- index[i]
+      # index[i] <- tmp
+      
       index <- index[order(pik[index],decreasing = TRUE)]
     }
-    
-    
     
     l <- balseq_onestep(Xaux,pik,pikInit,index,deg)
     status <- l$status

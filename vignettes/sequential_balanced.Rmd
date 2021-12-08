@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: ref.bib
 vignette: >
-  %\VignetteIndexEntry{Introduction}
+  %\VignetteIndexEntry{Sequential balanced sampling}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,5 +23,123 @@ knitr::opts_chunk$set(
 ## Introduction
 
 
+In this vignette we are going to explain how to use the function `balseq` to select a balanced sample. 
 
+## Load data
+We will use the dataset `belgianmunicipalties` from the package `sampling`. The dataset does not contains any spatial coordinates. Luckily, a `GEOjson` is directly available from the \url{"https://hub.arcgis.com/datasets/esribeluxdata::belgium-municipalities-1/about"}. We can then transform it into a `sf` object and calculate the centroid of the municipalities. We will use these centroid as spatial coordinates to spread the sample over the space.
+
+```{r}
+# to load data
+library(sampling)
+library(geojsonio)
+
+# plot library
+library(ggplot2) 
+library(viridis)
+
+# to transform geojson into sf and get centroid
+library(rgeos) 
+library(sf)
+library(rmapshaper)
+
+
+
+data("belgianmunicipalities")
+
+# load geojson directly from the url
+belg  <- geojson_read("https://opendata.arcgis.com/datasets/9589d9e5e5904f1ea8d245b54f51b4fd_0.geojson",what = "sp")
+
+# simplify the variable and transform it into a sf object
+belg <- rmapshaper::ms_simplify(input = belg,keep = 0.01) %>%
+  st_as_sf()
+
+coord <- gCentroid(as(belg, "Spatial"), byid = TRUE)
+
+# concatenated file
+Belgium <- cbind(belg,belgianmunicipalities,coord)
+head(Belgium)
+
+```
+
+A `sf` object can be directly plotted using the function `geom_sf` from the package `ggplot2`.
+
+```{r, fig.width= 10,fig.height=10,out.width = '100%'}
+p <- ggplot()+
+  geom_sf(data = Belgium,aes(fill = averageincome),size = 0.1)+
+  scale_fill_viridis_c(option = "G")
+p
+```
+
+## Inclusion probabilites
+
+Firstly, we define the variable of interest, the auxiliary variables and the inclusion probabilities. We set up here the inclusion probabilities equal with sum equal to 50. i.e. the sample will contain 50 units.
+
+
+```{r}
+
+N <- nrow(Belgium) # population total
+n <- 50 # sample size
+
+# variable of interest
+y <- belgianmunicipalities$averageincome
+
+# auxiliary variables
+Xaux <- cbind(belgianmunicipalities$Tot04,
+              belgianmunicipalities$Women04,
+              belgianmunicipalities$TaxableIncome,
+              belgianmunicipalities$Diffmen,
+              belgianmunicipalities$Diffwom)
+
+
+# inclusion probabilities
+pik <- rep(n/N,N)
+
+Xaux <- cbind(pik,Xaux) # add pik to fixed sample size
+Xspread <- coord
+
+```
+
+
+## Balanced sampling
+
+We can now load the package `StratifiedSampling` and use the function `balseq` on the variables that we just defined. We can check that our method is selecting effectively a balanced sample by observing if the auxiliary totals are respected compared to a maximal entropy design (also know as conditional Poisson sampling). 
+
+```{r}
+
+library(StratifiedSampling)
+
+s <- balseq(pik,Xaux)
+s_cube <- samplecube(Xaux,pik,comment = FALSE)
+s_srs <- srswor(n,N)
+
+
+TOT <- colSums(Xaux)
+EST1 <- colSums(Xaux[s,]/pik[s])
+EST2 <- colSums(Xaux[s_cube == 1,]/pik[s_cube == 1])
+EST3 <- colSums(Xaux[s_srs == 1,]/pik[s_srs == 1])
+
+
+100* (EST1 - TOT)/TOT
+100* (EST2 - TOT)/TOT
+100* (EST3 - TOT)/TOT
+
+```
+
+
+## Spread sampling
+
+To add the spatial component, we can simply add the spatial coordinates as a matrix to the argument `Xspread` of the function. Here `coord` is an output of the function `gCentroid` which is by construction an `S4` object. To get the `data.frame` that are encapsulated inside, we simply use the `@coords` operator.
+
+```{r,fig.width=10,fig.height=10,out.width='100%'}
+
+s <-  balseq(pik,
+             Xaux,
+             Xspread = as.matrix(Xspread@coords))
+p <- p + 
+  geom_point(data = Belgium,aes(x = x,y = y),shape = 1,alpha = 0.9)+
+  geom_point(data = Belgium[s,],aes(x = x,y = y),colour = "red")+
+  scale_fill_viridis_c(option = "G")
+p
+
+```
 
