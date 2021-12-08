@@ -176,15 +176,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// phi
-NumericVector phi(int n, NumericVector& w);
-RcppExport SEXP _StratifiedSampling_phi(SEXP nSEXP, SEXP wSEXP) {
+// psi
+NumericVector psi(int n, NumericVector& w);
+RcppExport SEXP _StratifiedSampling_psi(SEXP nSEXP, SEXP wSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< NumericVector& >::type w(wSEXP);
-    rcpp_result_gen = Rcpp::wrap(phi(n, w));
+    rcpp_result_gen = Rcpp::wrap(psi(n, w));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -198,6 +198,29 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
     rcpp_result_gen = Rcpp::wrap(piktilde(pik, tol, max_iter));
+    return rcpp_result_gen;
+END_RCPP
+}
+// lambda
+NumericVector lambda(NumericVector piktilde);
+RcppExport SEXP _StratifiedSampling_lambda(SEXP piktildeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type piktilde(piktildeSEXP);
+    rcpp_result_gen = Rcpp::wrap(lambda(piktilde));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sample_int
+Rcpp::IntegerVector sample_int(int n, int N);
+RcppExport SEXP _StratifiedSampling_sample_int(SEXP nSEXP, SEXP NSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    rcpp_result_gen = Rcpp::wrap(sample_int(n, N));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -228,8 +251,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_maxent", (DL_FUNC) &_StratifiedSampling_maxent, 1},
     {"_StratifiedSampling_pik2frompik", (DL_FUNC) &_StratifiedSampling_pik2frompik, 2},
     {"_StratifiedSampling_maxentpi2", (DL_FUNC) &_StratifiedSampling_maxentpi2, 1},
-    {"_StratifiedSampling_phi", (DL_FUNC) &_StratifiedSampling_phi, 2},
+    {"_StratifiedSampling_psi", (DL_FUNC) &_StratifiedSampling_psi, 2},
     {"_StratifiedSampling_piktilde", (DL_FUNC) &_StratifiedSampling_piktilde, 3},
+    {"_StratifiedSampling_lambda", (DL_FUNC) &_StratifiedSampling_lambda, 1},
+    {"_StratifiedSampling_sample_int", (DL_FUNC) &_StratifiedSampling_sample_int, 2},
     {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 1},
     {NULL, NULL, 0}
 };

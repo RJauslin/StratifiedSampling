@@ -236,6 +236,10 @@ pik <-  pik[mask]
 pik <- pik[sample(1:length(pik))]
 # UPmaxentropy(pik)
 
+pikt <- piktilde(pik)
+w <- pikt/(1.0 - pikt)
+qfromw(w,sum(pik))
+
 v <- function(M){
   require(Matrix)
   image(as(M,"sparseMatrix"))

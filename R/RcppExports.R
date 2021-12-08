@@ -271,12 +271,20 @@ maxentpi2 <- function(pikr) {
     .Call(`_StratifiedSampling_maxentpi2`, pikr)
 }
 
-phi <- function(n, w) {
-    .Call(`_StratifiedSampling_phi`, n, w)
+psi <- function(n, w) {
+    .Call(`_StratifiedSampling_psi`, n, w)
 }
 
 piktilde <- function(pik, tol = 1e-6, max_iter = 500L) {
     .Call(`_StratifiedSampling_piktilde`, pik, tol, max_iter)
+}
+
+lambda <- function(piktilde) {
+    .Call(`_StratifiedSampling_lambda`, piktilde)
+}
+
+sample_int <- function(n, N) {
+    .Call(`_StratifiedSampling_sample_int`, n, N)
 }
 
 #' @title One-step One Decision sampling method
