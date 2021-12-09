@@ -188,6 +188,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// psipik
+NumericVector psipik(int n, NumericVector& pik);
+RcppExport SEXP _StratifiedSampling_psipik(SEXP nSEXP, SEXP pikSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pik(pikSEXP);
+    rcpp_result_gen = Rcpp::wrap(psipik(n, pik));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logit
+NumericVector logit(NumericVector x);
+RcppExport SEXP _StratifiedSampling_logit(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(logit(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// w
+NumericVector w(NumericVector& pik, double tol, int max_iter);
+RcppExport SEXP _StratifiedSampling_w(SEXP pikSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type pik(pikSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(w(pik, tol, max_iter));
+    return rcpp_result_gen;
+END_RCPP
+}
 // piktilde
 NumericVector piktilde(NumericVector& pik, double tol, int max_iter);
 RcppExport SEXP _StratifiedSampling_piktilde(SEXP pikSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
@@ -252,6 +288,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_pik2frompik", (DL_FUNC) &_StratifiedSampling_pik2frompik, 2},
     {"_StratifiedSampling_maxentpi2", (DL_FUNC) &_StratifiedSampling_maxentpi2, 1},
     {"_StratifiedSampling_psi", (DL_FUNC) &_StratifiedSampling_psi, 2},
+    {"_StratifiedSampling_psipik", (DL_FUNC) &_StratifiedSampling_psipik, 2},
+    {"_StratifiedSampling_logit", (DL_FUNC) &_StratifiedSampling_logit, 1},
+    {"_StratifiedSampling_w", (DL_FUNC) &_StratifiedSampling_w, 3},
     {"_StratifiedSampling_piktilde", (DL_FUNC) &_StratifiedSampling_piktilde, 3},
     {"_StratifiedSampling_lambda", (DL_FUNC) &_StratifiedSampling_lambda, 1},
     {"_StratifiedSampling_sample_int", (DL_FUNC) &_StratifiedSampling_sample_int, 2},

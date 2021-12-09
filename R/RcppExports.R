@@ -275,6 +275,18 @@ psi <- function(n, w) {
     .Call(`_StratifiedSampling_psi`, n, w)
 }
 
+psipik <- function(n, pik) {
+    .Call(`_StratifiedSampling_psipik`, n, pik)
+}
+
+logit <- function(x) {
+    .Call(`_StratifiedSampling_logit`, x)
+}
+
+w <- function(pik, tol = 1e-6, max_iter = 500L) {
+    .Call(`_StratifiedSampling_w`, pik, tol, max_iter)
+}
+
 piktilde <- function(pik, tol = 1e-6, max_iter = 500L) {
     .Call(`_StratifiedSampling_piktilde`, pik, tol, max_iter)
 }
