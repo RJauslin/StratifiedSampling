@@ -26,9 +26,31 @@ plot(sort(rgamma(100,1,5)))
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 rm(list = ls())
 eps <- 1e-7 # epsilon tolerance
 set.seed(1)
+
+pik <- inclusion
+
+
+
 pik <- inclusionprobabilities(rgamma(1000,0.2,10),100)
 mask <- (pik < (1 - eps)) & (pik > eps)
 pik <-  pik[mask]
