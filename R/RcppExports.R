@@ -54,6 +54,18 @@ calibRaking <- function(Xs, d, total, q, max_iter = 500L, tol = 1e-9) {
     .Call(`_StratifiedSampling_calibRaking`, Xs, d, total, q, max_iter, tol)
 }
 
+T <- function(w, i, j) {
+    .Call(`_StratifiedSampling_T`, w, i, j)
+}
+
+RR <- function(w, k, j) {
+    .Call(`_StratifiedSampling_RR`, w, k, j)
+}
+
+w_ <- function(pik, n, N) {
+    .Call(`_StratifiedSampling_w_`, pik, n, N)
+}
+
 #' @title Disjunctive
 #'
 #' @description

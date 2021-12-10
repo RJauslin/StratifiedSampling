@@ -45,15 +45,15 @@ plot(sort(rgamma(100,1,5)))
 
 rm(list = ls())
 eps <- 1e-7 # epsilon tolerance
-set.seed(1)
+# set.seed(1)
 
-pik <- inclusion
+pik <- inclusionprobabilities(seq(100,1,by = -1),10)
 
 
 
-pik <- inclusionprobabilities(rgamma(1000,0.2,10),100)
-mask <- (pik < (1 - eps)) & (pik > eps)
-pik <-  pik[mask]
+# pik <- inclusionprobabilities(rgamma(1000,0.2,10),100)
+# mask <- (pik < (1 - eps)) & (pik > eps)
+# pik <-  pik[mask]
 
 
 
@@ -66,10 +66,10 @@ psipik2 <- function(n,pik){
     if(any( (1.0 - out) > 1 - 1e-16 ) && i > 1 ){ # not 1-out that goes out of the scope
       break;
     }
-    if(any( (i * tmp/sum(tmp)) > 1 - 1e-16 ) && i > 1 ){ # not 1-out that goes out of the scope
-      print("FALSE")
-      break;
-    }
+    # if(any( (i * tmp/sum(tmp)) > 1 - 1e-16 ) && i > 1 ){ # not 1-out that goes out of the scope
+    #   print("FALSE")
+    #   break;
+    # }
     out = i * tmp/sum(tmp)
     
   }
@@ -79,7 +79,7 @@ psipik2 <- function(n,pik){
 
 
 
-test <- psipik2(30,pik)
+test <- psipik2(100,pik)
 max(test)
 
 
