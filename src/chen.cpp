@@ -37,12 +37,23 @@ NumericVector w_(NumericVector pik,int n, int N){
   NumericVector w = clone(pik);
   double num(0.0);
   double den(0.0);
+  
+  double cond(20000.00);
+  // double tmp = 0.0;
+  
+  
   for(int t = 1; t <= 10; t++){
     for(int i = 1;i <= N; i++){
       num = RR(w,n-1,N);
       den = RR(w,n-1,i);
+      // tmp = w[i-1];
       w[i-1] = pik[i-1]*(num/den);
+      // if(w[i-1]/tmp))
+      
+      
     }
+    
+    
   }
   return(w);
 }
@@ -84,7 +95,6 @@ pik <- inclusionprobabilities(seq(1,100,by = 1),10)
 
 ############ TEST
 
-
 rm(list = ls())
 pik <- inclusionprobabilities(seq(1,100,by = 1),10)
 pik <- inclusionprobabilities(runif(100),10)
@@ -111,7 +121,21 @@ pik
 
 s[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]/SIM
 pik[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]
-sum(s)
+
+s/SIM
+pik
+
+
+####################################################33
+
+rm(list = ls())
+library(sampling)
+N <- 1000
+n <- 50
+pik <- inclusionprobabilities(runif(N),n)
+any(pik > (1-1e-7))
+system.time(w <- w_(pik,n,N))
+
 
 
 
