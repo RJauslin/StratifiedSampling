@@ -22,12 +22,14 @@ R <- function(w,k,j){
   for(i in 1:k){
     for(l in 1:i){
       beta <-  (1/i)*(-1)^(l+1)*fT(w,l,j)
+      
       if((i-l) == 0){
+        
         R_tmp[i] <- R_tmp[i] + beta
       }else{
+        
         R_tmp[i] <- R_tmp[i] + beta * R_tmp[i-l]      
       }
-      
     }
   }
   return(R_tmp)

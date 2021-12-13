@@ -25,7 +25,7 @@ double RR(NumericVector w,int k,int j){
       if((i-l)==0){
         R_tmp[i-1] = R_tmp[i-1] + beta;
       }else{
-       R_tmp[i-1] = R_tmp[i-1] + beta*R_tmp[i-l];  
+        R_tmp[i-1] = R_tmp[i-1] + beta * R_tmp[i-l-1];  
       }
     }
   }
@@ -41,7 +41,7 @@ NumericVector w_(NumericVector pik,int n, int N){
     for(int i = 1;i <= N; i++){
       num = RR(w,n-1,N);
       den = RR(w,n-1,i);
-      w[i-1] = pik[i-1]*(num/den); 
+      w[i-1] = pik[i-1]*(num/den);
     }
   }
   return(w);
@@ -56,14 +56,14 @@ pik <- inclusionprobabilities(seq(1,100,by = 1),10)
 N <- length(pik)
 n <- sum(pik)
 
-w <- w_(pik,n,N)
+ w <- w_(pik,n,N)
 
 # verification
 RR(w,3,N-1)
-T(w,1,N-1)
+T(w,3,N-1)
 
 R(w,3,N-1)
-fT(w,1,N-1)
+fT(w,3,N-1)
  
 
 
@@ -78,6 +78,44 @@ updatew(pik,n,N)
 
 
 pik <- inclusionprobabilities(seq(1,100,by = 1),10)
+
+
+
+
+############ TEST
+
+
+rm(list = ls())
+pik <- inclusionprobabilities(seq(1,100,by = 1),10)
+pik <- inclusionprobabilities(runif(100),10)
+N <- length(pik)
+n <- sum(pik)
+#w <- updatew(pik,n,N)
+w <- w_(pik,n,N)
+# w <- w - mean(w)
+eps <- 1e-8
+q <- qfromw(w,n)
+s <- rep(0,length(pik))
+SIM <- 200000
+for(i in 1 :SIM){
+  tmp <- sfromq(q)  
+  if(any(abs(sum(tmp) - sum(pik)) > eps)){
+    cat("error")
+    break;
+  }
+  s <- s + tmp
+}
+
+p <- s/SIM
+pik 
+
+s[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]/SIM
+pik[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]
+sum(s)
+
+
+
+
 
 
 
