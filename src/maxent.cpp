@@ -87,10 +87,35 @@ NumericVector pikfromq(NumericMatrix& qr){
 // [[Rcpp::export]]
 NumericVector piktfrompik(NumericVector& pik){
 
-  
  int N = pik.size();
  int n = round(sum(pik));
  NumericVector pikt(Rcpp::clone(pik));
+ 
+ NumericVector p(N);
+ IntegerVector index(N);
+ for(int k=0; k < N;k++){
+   index[k]=k;p[k] = pik[k];
+ }
+ 
+ // randomize order of index list
+ int done = 0;
+ int tempInt = 0;
+ int j = 0;
+ NumericVector rnd = runif(N);
+ for(int k = 0;k < N;k++){
+   j = k + floor(rnd[k] * (N-k));
+   tempInt = index[k];
+   index[k] = index[j];
+   index[j] = tempInt;
+ }
+ 
+ // randomize order
+ pikt = pikt[index];
+ p = p[index];
+ 
+ // Rcout << pikt << std::endl;
+ 
+ 
  double arr = 1.0;
  double eps = 1e-8;
 
@@ -101,11 +126,20 @@ NumericVector piktfrompik(NumericVector& pik){
  while(arr > eps){
   w = pikt/(1.0 - pikt);
   q = qfromw(w,n);
-  pikt1 = pikt + pik - pikfromq(q);
+  pikt1 = pikt + p - pikfromq(q);
   arr = sum(abs(pikt - pikt1));
   pikt = pikt1;
  }
- return(pikt);
+ 
+ //
+ NumericVector out(N);
+ for(int j = 0; j < N;j++){
+   out[index[j]] = pikt[j];
+ }
+ 
+ return(out);
+ 
+ // return(pikt[index]);
 
 }
 
@@ -137,6 +171,7 @@ IntegerVector maxent(NumericVector& pikr){
   int N = pikr.size();
   arma::vec pik_tmp(pikr.begin(),pikr.size(),false);
   
+  
   // find not equl to 0 value
   arma::uvec i = arma::find(pik_tmp < 1-eps);
   
@@ -147,6 +182,8 @@ IntegerVector maxent(NumericVector& pikr){
   for(int j = 0;j< N_tmp;j++){
     pik[j] = pik_tmp2[j];
   }
+  
+  
 
   // all step computation
   int n = round(sum(pik));
@@ -156,12 +193,14 @@ IntegerVector maxent(NumericVector& pikr){
   IntegerVector s2 = sfromq(q);
   
   
+  
   //put right 0-1 value at the right place
   IntegerVector s(N);
   s.fill(1);
   for(int j = 0; j < N_tmp;j++){
     s[i[j]] = s2[j];
   }
+  
   
   return(s);
 }
@@ -233,8 +272,44 @@ n <- 200 # sample size
 pik <- inclusionprobabilities(swissmunicipalities$POPTOT,n)
 mask <- (pik < (1 - eps)) & (pik > eps)
 pik <-  pik[mask]
+
+piktfrompik(pik)
+pik
+
+s <- rep(0,length(pik))
+SIM <- 1000
+for(i in 1 :SIM){
+  print(i)
+  tmp <- maxent(pik)
+  if(any(abs(sum(tmp) - sum(pik)) > eps)){
+    cat("error")
+    break;
+  }
+  s <- s + tmp
+}
+
+
+p <- s/SIM
+pik 
+
+1 -length(s[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]/SIM)/length(pik)
+
+
+pik[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]
+
+s/SIM
+pik
+
+  
+
+
+
+
+
 pik <- pik[sample(1:length(pik))]
 # UPmaxentropy(pik)
+
+sum(maxent(pik))
 
 pikt <- piktilde(pik)
 w <- pikt/(1.0 - pikt)

@@ -39,12 +39,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // T
-double T(NumericVector w, int i, int j);
+double T(NumericVector& w, int i, int j);
 RcppExport SEXP _StratifiedSampling_T(SEXP wSEXP, SEXP iSEXP, SEXP jSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type w(wSEXP);
     Rcpp::traits::input_parameter< int >::type i(iSEXP);
     Rcpp::traits::input_parameter< int >::type j(jSEXP);
     rcpp_result_gen = Rcpp::wrap(T(w, i, j));
@@ -52,12 +52,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // RR
-double RR(NumericVector w, int k, int j);
+double RR(NumericVector& w, int k, int j);
 RcppExport SEXP _StratifiedSampling_RR(SEXP wSEXP, SEXP kSEXP, SEXP jSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type w(wSEXP);
     Rcpp::traits::input_parameter< int >::type k(kSEXP);
     Rcpp::traits::input_parameter< int >::type j(jSEXP);
     rcpp_result_gen = Rcpp::wrap(RR(w, k, j));
@@ -65,15 +65,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // w_
-NumericVector w_(NumericVector pik, int n, int N);
-RcppExport SEXP _StratifiedSampling_w_(SEXP pikSEXP, SEXP nSEXP, SEXP NSEXP) {
+NumericVector w_(NumericVector& pik, int n, int J, int max_iter, double eps);
+RcppExport SEXP _StratifiedSampling_w_(SEXP pikSEXP, SEXP nSEXP, SEXP JSEXP, SEXP max_iterSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type pik(pikSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type pik(pikSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    rcpp_result_gen = Rcpp::wrap(w_(pik, n, N));
+    Rcpp::traits::input_parameter< int >::type J(JSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(w_(pik, n, J, max_iter, eps));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -316,7 +318,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_calibRaking", (DL_FUNC) &_StratifiedSampling_calibRaking, 6},
     {"_StratifiedSampling_T", (DL_FUNC) &_StratifiedSampling_T, 3},
     {"_StratifiedSampling_RR", (DL_FUNC) &_StratifiedSampling_RR, 3},
-    {"_StratifiedSampling_w_", (DL_FUNC) &_StratifiedSampling_w_, 3},
+    {"_StratifiedSampling_w_", (DL_FUNC) &_StratifiedSampling_w_, 5},
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},

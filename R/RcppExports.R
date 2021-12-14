@@ -62,8 +62,8 @@ RR <- function(w, k, j) {
     .Call(`_StratifiedSampling_RR`, w, k, j)
 }
 
-w_ <- function(pik, n, N) {
-    .Call(`_StratifiedSampling_w_`, pik, n, N)
+w_ <- function(pik, n, J, max_iter = 50L, eps = 1e-6) {
+    .Call(`_StratifiedSampling_w_`, pik, n, J, max_iter, eps)
 }
 
 #' @title Disjunctive

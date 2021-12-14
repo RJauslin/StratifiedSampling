@@ -117,6 +117,8 @@ for(nn in 1:n){
   }
 }
 
+w <- w_(pik,sum(pik),length(pik))
+
 
 
 # x <- seq(0,1,0.001)
