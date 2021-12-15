@@ -276,7 +276,7 @@ pikfromq <- function(q) {
 #' 
 #' @details
 #' 
-#' The management of probabilities equal to 0 or 1 is done in the maxent function.
+#' The management of probabilities equal to 0 or 1 is done in the cps function.
 #' 
 #' \code{pikt} is the vector of inclusion probabilities of a Poisson sampling with the right parameter. The vector is found by Newtwon-Raphson algorithm.
 #' 
@@ -302,10 +302,11 @@ piktfrompik <- function(pik, max_iter = 500L, tol = 1e-8) {
 #' @param eps A scalar that specify the tolerance to transform a small value to the value 0.
 #' 
 #' @details
-#' The sampling design maximizes the entropy design:
+#' Conditional Poisson sampling, the sampling design maximizes the entropy:
 #' \deqn{I(p) = - \sum s p(s) log[p(s)].}
+#' where s is of fixed sample size. Indeed, Poisson sampling is known for maximizing the entropy but has no fixed sample size. The function selects a sample of fixed sample that maximizes entropy.
 #' 
-#' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}}. More details could be find in Tille (2006).
+#' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}} of the package \code{sampling}. More details could be find in Tille (2006).
 #' 
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
@@ -317,7 +318,10 @@ piktfrompik <- function(pik, max_iter = 500L, tol = 1e-8) {
 #' @examples
 #' 
 #' pik <- inclprob(seq(100,1,length.out = 100),10)
-#' s <-  maxent(pik)
+#' s <-  cps(pik)
+#' 
+#' 
+#' 
 #' # simulation with piktfrompik MUCH MORE FASTER
 #' s <- rep(0,length(pik))
 #' SIM <- 100
@@ -329,11 +333,11 @@ piktfrompik <- function(pik, max_iter = 500L, tol = 1e-8) {
 #' }
 #' p <- s/SIM # estimated inclusion probabilities
 #' t <- (p-pik)/sqrt(pik*(1-pik)/SIM)
-#' 1 - length(s[t > 1.6449]/SIM)/length(pik) # should be approximately equal to 0.95 
+#' 1 - sum(t > 1.6449)/length(pik) # should be approximately equal to 0.95 
 #' 
 #' @export
-maxent <- function(pik, eps = 1e-6) {
-    .Call(`_StratifiedSampling_maxent`, pik, eps)
+cps <- function(pik, eps = 1e-6) {
+    .Call(`_StratifiedSampling_cps`, pik, eps)
 }
 
 #' @title Joint inclusion probabilities of maximum entropy.

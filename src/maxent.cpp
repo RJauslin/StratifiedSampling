@@ -205,7 +205,7 @@ NumericVector pikfromq(NumericMatrix& q){
 //' 
 //' @details
 //' 
-//' The management of probabilities equal to 0 or 1 is done in the maxent function.
+//' The management of probabilities equal to 0 or 1 is done in the cps function.
 //' 
 //' \code{pikt} is the vector of inclusion probabilities of a Poisson sampling with the right parameter. The vector is found by Newtwon-Raphson algorithm.
 //' 
@@ -299,10 +299,11 @@ NumericVector piktfrompik(NumericVector& pik, int max_iter = 500,double tol = 1e
 //' @param eps A scalar that specify the tolerance to transform a small value to the value 0.
 //' 
 //' @details
-//' The sampling design maximizes the entropy design:
+//' Conditional Poisson sampling, the sampling design maximizes the entropy:
 //' \deqn{I(p) = - \sum s p(s) log[p(s)].}
+//' where s is of fixed sample size. Indeed, Poisson sampling is known for maximizing the entropy but has no fixed sample size. The function selects a sample of fixed sample that maximizes entropy.
 //' 
-//' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}}. More details could be find in Tille (2006).
+//' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}} of the package \code{sampling}. More details could be find in Tille (2006).
 //' 
 //' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 //'
@@ -314,7 +315,10 @@ NumericVector piktfrompik(NumericVector& pik, int max_iter = 500,double tol = 1e
 //' @examples
 //' 
 //' pik <- inclprob(seq(100,1,length.out = 100),10)
-//' s <-  maxent(pik)
+//' s <-  cps(pik)
+//' 
+//' 
+//' 
 //' # simulation with piktfrompik MUCH MORE FASTER
 //' s <- rep(0,length(pik))
 //' SIM <- 100
@@ -326,11 +330,11 @@ NumericVector piktfrompik(NumericVector& pik, int max_iter = 500,double tol = 1e
 //' }
 //' p <- s/SIM # estimated inclusion probabilities
 //' t <- (p-pik)/sqrt(pik*(1-pik)/SIM)
-//' 1 - length(s[t > 1.6449]/SIM)/length(pik) # should be approximately equal to 0.95 
+//' 1 - sum(t > 1.6449)/length(pik) # should be approximately equal to 0.95 
 //' 
 //' @export
 // [[Rcpp::export]]
-IntegerVector maxent(NumericVector& pik,
+IntegerVector cps(NumericVector& pik,
                      double eps = 1e-6){
 
   int N = pik.size(); // full size
@@ -371,6 +375,22 @@ IntegerVector maxent(NumericVector& pik,
 ## EXAMPLE
 
 pik <- inclprob(seq(100,1,length.out = 100),10)
+s <-  cps(pik)
+# simulation with piktfrompik MUCH MORE FASTER
+s <- rep(0,length(pik))
+SIM <- 100
+pikt <- piktfrompik(pik)
+w <- pikt/(1-pikt)
+q <- qfromw(w,sum(pik))
+for(i in 1 :SIM){
+  s <- s + sfromq(q)
+}
+p <- s/SIM # estimated inclusion probabilities
+t <- (p-pik)/sqrt(pik*(1-pik)/SIM)
+1 - sum(t > 1.664)/length(pik) # should be approximately equal to 0.95 
+
+
+pik <- inclprob(seq(100,1,length.out = 100),10)
 s <-  maxent(pik)
 
 
@@ -388,7 +408,7 @@ t <- (p-pik)/sqrt(pik*(1-pik)/SIM)
 1 - length(s[t > 1.644]/SIM)/length(pik) # should be approximatively equal to 0.95 
 
 # system.time(UPmaxentropy(pik))
-# system.time(maxent(pik))
+# system.time(cps(pik))
 
 ## swissmunicipalitites were not working
 
@@ -409,7 +429,7 @@ s <- rep(0,length(pik))
 SIM <- 1000
 for(i in 1 :SIM){
   print(i)
-  tmp <- maxent(pik)
+  tmp <- cps(pik)
   if(any(abs(sum(tmp) - sum(pik)) > eps)){
     cat("error")
     break;

@@ -20,7 +20,7 @@ An updated vector of inclusion probability.
 This function finds the \code{pikt} from an initial \code{pik}.
 }
 \details{
-The management of probabilities equal to 0 or 1 is done in the maxent function.
+The management of probabilities equal to 0 or 1 is done in the cps function.
 
 \code{pikt} is the vector of inclusion probabilities of a Poisson sampling with the right parameter. The vector is found by Newtwon-Raphson algorithm.
 

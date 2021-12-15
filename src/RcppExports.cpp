@@ -144,15 +144,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// maxent
-IntegerVector maxent(NumericVector& pik, double eps);
-RcppExport SEXP _StratifiedSampling_maxent(SEXP pikSEXP, SEXP epsSEXP) {
+// cps
+IntegerVector cps(NumericVector& pik, double eps);
+RcppExport SEXP _StratifiedSampling_cps(SEXP pikSEXP, SEXP epsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector& >::type pik(pikSEXP);
     Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
-    rcpp_result_gen = Rcpp::wrap(maxent(pik, eps));
+    rcpp_result_gen = Rcpp::wrap(cps(pik, eps));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -191,7 +191,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_sfromq", (DL_FUNC) &_StratifiedSampling_sfromq, 1},
     {"_StratifiedSampling_pikfromq", (DL_FUNC) &_StratifiedSampling_pikfromq, 1},
     {"_StratifiedSampling_piktfrompik", (DL_FUNC) &_StratifiedSampling_piktfrompik, 3},
-    {"_StratifiedSampling_maxent", (DL_FUNC) &_StratifiedSampling_maxent, 2},
+    {"_StratifiedSampling_cps", (DL_FUNC) &_StratifiedSampling_cps, 2},
     {"_StratifiedSampling_maxentpi2", (DL_FUNC) &_StratifiedSampling_maxentpi2, 1},
     {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 1},
     {NULL, NULL, 0}
