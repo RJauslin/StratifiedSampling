@@ -54,18 +54,6 @@ calibRaking <- function(Xs, d, total, q, max_iter = 500L, tol = 1e-9) {
     .Call(`_StratifiedSampling_calibRaking`, Xs, d, total, q, max_iter, tol)
 }
 
-T <- function(w, i, j) {
-    .Call(`_StratifiedSampling_T`, w, i, j)
-}
-
-RR <- function(w, k, j) {
-    .Call(`_StratifiedSampling_RR`, w, k, j)
-}
-
-w_ <- function(pik, n, J, max_iter = 50L, eps = 1e-6) {
-    .Call(`_StratifiedSampling_w_`, pik, n, J, max_iter, eps)
-}
-
 #' @title Disjunctive
 #'
 #' @description
@@ -210,38 +198,40 @@ inclprob <- function(x, n) {
     .Call(`_StratifiedSampling_inclprob`, x, n)
 }
 
-#' @export
-qfromw <- function(wr, n) {
-    .Call(`_StratifiedSampling_qfromw`, wr, n)
-}
-
-#' @export
-sfromq <- function(q) {
-    .Call(`_StratifiedSampling_sfromq`, q)
-}
-
-#' @export
-pikfromq <- function(qr) {
-    .Call(`_StratifiedSampling_pikfromq`, qr)
-}
-
-#' @export
-piktfrompik <- function(pik) {
-    .Call(`_StratifiedSampling_piktfrompik`, pik)
-}
-
-#' @title Maximum entropy sampling
+#' @title q from w
 #'
-#' @description Maximum entropy sampling with fixed sample size. It can handle unequal inclusion probabilities.
-#' 
-#' @param pikr A vector of inclusion probabilities.
+#' @description This function finds the matrix \code{q} form a particular \code{w}.
+#'  
+#' @param w A vector of weights.
+#' @param n An integer that is equal to the sum of the inclusion probabilities.
 #' 
 #' @details
-#' The sampling design maximizes the entropy design:
-#' \deqn{I(p) = - \sum s p(s) log[p(s)].}
 #' 
-#' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}}.
+#' \code{w} is generally computed by the formula \code{pik/(1-pik)}, where \code{n} is equal to the sum of the vector \code{pik}.
 #' More details could be find in Tille (2006).
+#' 
+#' @return A matrix of size \code{N} x \code{n}, where \code{N} is equal to the length of the vector \code{w}.
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @references 
+#' Tille, Y. (2006), Sampling Algorithms, springer
+#' 
+#' @export
+qfromw <- function(w, n) {
+    .Call(`_StratifiedSampling_qfromw`, w, n)
+}
+
+#' @title s from q
+#'
+#' @description This function finds sample \code{s} form the matrix \code{q}.
+#'  
+#' @param q A matrix that is computed from the function \code{\link{qfromw}}. 
+#' 
+#' @details
+#' 
+#' More details could be find in Tille (2006).
+#' 
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
@@ -250,13 +240,100 @@ piktfrompik <- function(pik) {
 #' Tille, Y. (2006), Sampling Algorithms, springer
 #' 
 #' @export
-maxent <- function(pikr) {
-    .Call(`_StratifiedSampling_maxent`, pikr)
+sfromq <- function(q) {
+    .Call(`_StratifiedSampling_sfromq`, q)
 }
 
+#' @title pik from q
+#'
+#' @description This function finds the \code{pik} from an initial \code{q}.
+#'  
+#' @param q A matrix that is computed from the function \code{\link{qfromw}}. 
+#' 
+#' @details
+#' 
+#' More details could be find in Tille (2006).
+#' 
+#' @return A vector of inclusion probability computed from the matrix \code{q}.
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @references 
+#' Tille, Y. (2006), Sampling Algorithms, springer
+#' 
 #' @export
-pik2frompik <- function(pikr, wr) {
-    .Call(`_StratifiedSampling_pik2frompik`, pikr, wr)
+pikfromq <- function(q) {
+    .Call(`_StratifiedSampling_pikfromq`, q)
+}
+
+#' @title pikt from pik
+#'
+#' @description This function finds the \code{pikt} from an initial \code{pik}.
+#'  
+#' @param pik A vector of inclusion probabilities. The vector must contains only value that are not integer.
+#' @param max_iter An integer that specify the maximum iteration in the Newton-Raphson algorithm. Default \code{500}.
+#' @param tol A scalar that specify the tolerance convergence for the Newton-Raphson algorithm. Default \code{1e-8}.
+#' 
+#' @details
+#' 
+#' The management of probabilities equal to 0 or 1 is done in the maxent function.
+#' 
+#' \code{pikt} is the vector of inclusion probabilities of a Poisson sampling with the right parameter. The vector is found by Newtwon-Raphson algorithm.
+#' 
+#' More details could be find in Tille (2006).
+#' 
+#' @return An updated vector of inclusion probability.
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @references 
+#' Tille, Y. (2006), Sampling Algorithms, springer
+#' 
+#' @export
+piktfrompik <- function(pik, max_iter = 500L, tol = 1e-8) {
+    .Call(`_StratifiedSampling_piktfrompik`, pik, max_iter, tol)
+}
+
+#' @title Conditional Poisson sampling design
+#'
+#' @description Maximum entropy sampling with fixed sample size. It select a sample with fixed sample size with unequal inclusion probabilities.
+#'  
+#' @param pik A vector of inclusion probabilities. 
+#' @param eps A scalar that specify the tolerance to transform a small value to the value 0.
+#' 
+#' @details
+#' The sampling design maximizes the entropy design:
+#' \deqn{I(p) = - \sum s p(s) log[p(s)].}
+#' 
+#' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}}. More details could be find in Tille (2006).
+#' 
+#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @references 
+#' Tille, Y. (2006), Sampling Algorithms, springer
+#' 
+#' @examples
+#' 
+#' pik <- inclprob(seq(100,1,length.out = 100),10)
+#' s <-  maxent(pik)
+#' # simulation with piktfrompik MUCH MORE FASTER
+#' s <- rep(0,length(pik))
+#' SIM <- 100
+#' pikt <- piktfrompik(pik)
+#' w <- pikt/(1-pikt)
+#' q <- qfromw(w,sum(pik))
+#' for(i in 1 :SIM){
+#'   s <- s + sfromq(q)
+#' }
+#' p <- s/SIM # estimated inclusion probabilities
+#' t <- (p-pik)/sqrt(pik*(1-pik)/SIM)
+#' 1 - length(s[t > 1.6449]/SIM)/length(pik) # should be approximately equal to 0.95 
+#' 
+#' @export
+maxent <- function(pik, eps = 1e-6) {
+    .Call(`_StratifiedSampling_maxent`, pik, eps)
 }
 
 #' @title Joint inclusion probabilities of maximum entropy.
@@ -281,34 +358,6 @@ pik2frompik <- function(pikr, wr) {
 #' @export
 maxentpi2 <- function(pikr) {
     .Call(`_StratifiedSampling_maxentpi2`, pikr)
-}
-
-psi <- function(n, w) {
-    .Call(`_StratifiedSampling_psi`, n, w)
-}
-
-psipik <- function(n, pik) {
-    .Call(`_StratifiedSampling_psipik`, n, pik)
-}
-
-logit <- function(x) {
-    .Call(`_StratifiedSampling_logit`, x)
-}
-
-w <- function(pik, tol = 1e-6, max_iter = 500L) {
-    .Call(`_StratifiedSampling_w`, pik, tol, max_iter)
-}
-
-piktilde <- function(pik, tol = 1e-6, max_iter = 500L) {
-    .Call(`_StratifiedSampling_piktilde`, pik, tol, max_iter)
-}
-
-lambda <- function(piktilde) {
-    .Call(`_StratifiedSampling_lambda`, piktilde)
-}
-
-sample_int <- function(n, N) {
-    .Call(`_StratifiedSampling_sample_int`, n, N)
 }
 
 #' @title One-step One Decision sampling method

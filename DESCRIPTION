@@ -29,6 +29,7 @@ Suggests:
     ggplot2,
     viridis,
     rgeos,
+    geojsonio,
     sf,
     rmapshaper
 RoxygenNote: 7.1.2

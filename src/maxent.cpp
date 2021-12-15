@@ -3,41 +3,125 @@ using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
+
+
+//' @title q from w
+//'
+//' @description This function finds the matrix \code{q} form a particular \code{w}.
+//'  
+//' @param w A vector of weights.
+//' @param n An integer that is equal to the sum of the inclusion probabilities.
+//' 
+//' @details
+//' 
+//' \code{w} is generally computed by the formula \code{pik/(1-pik)}, where \code{n} is equal to the sum of the vector \code{pik}.
+//' More details could be find in Tille (2006).
+//' 
+//' @return A matrix of size \code{N} x \code{n}, where \code{N} is equal to the length of the vector \code{w}.
+//'
+//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+//' 
+//' @references 
+//' Tille, Y. (2006), Sampling Algorithms, springer
+//' 
 //' @export
 // [[Rcpp::export]]
-NumericMatrix qfromw(NumericVector& wr,const int& n){
+NumericMatrix qfromw(NumericVector& w,const int& n){
 
-  arma::vec w(wr.begin(),wr.size(),false);
   
-  int N = w.size();
+  // transform to arma for subvec 
+  arma::vec wr(w.begin(),w.size(),false); // same memory
+  
+  int N = wr.size();
   arma::mat expa(N,n,arma::fill::zeros);
   for(int i = 0;i < N;i++){
-    expa(i,0) = arma::sum(w.subvec(i,N-1));
+    expa(i,0) = arma::sum(wr.subvec(i,N-1));
   }
   for(int i = 1;i < n; i++){
-    expa(N-i-1,i) = exp(arma::sum(log(w.subvec(N-i-1,N-1))));
+    expa(N-i-1,i) = exp(arma::sum(log(wr.subvec(N-i-1,N-1))));
   }
   for(int i = N-3; i >= 0; i--){
     for(int z = 1; z < std::min(N-i,n); z++){
-      expa(i,z) = w[i]*expa(i+1,z-1) + expa(i+1,z);
+      expa(i,z) = wr[i]*expa(i+1,z-1) + expa(i+1,z);
     }
   }
   
   NumericMatrix q(N,n);
+  double num(0.0);
+  double den(0.0);
+  double ratio(0.0);
   for(int i = 0;i < N;i++){
-    q(i,0) = w[i]/expa(i,0);
+    q(i,0) = wr[i]/expa(i,0);
   }
   for(int i = 1;i < n; i++){
     q(N-i-1,i) = 1;
   }
   for(int i = N-3; i >= 0; i--){
     for(int z = 1; z < std::min(N-i,n); z++){
-      q(i,z) = w[i]*expa(i+1,z-1)/expa(i,z);
+      /*
+       * Here we might have a stability problem
+       * num/den might be value very very close to 0
+       * which ends with NaN value,
+       * 
+       * We round the ratio of the den and num are bother almost 0
+       */
+      num = expa(i+1,z-1);
+      den = expa(i,z);
+      if((num < 1e-16) && (den < 1e-16)){
+        ratio = 1;
+      }else{
+        ratio = num/den;
+      }
+      // Rcout << ratio << std::endl;
+      q(i,z) = wr[i]*ratio;
+      // Rcout << expa(i+1,z-1) << std::endl;
+      // Rcout << expa(i,z) << std::endl; 
+      // q(i,z) = w[i]*expa(i+1,z-1)/expa(i,z);
     }
   }
   return(q);
 }
 
+/*** R
+
+
+set.seed(9)
+
+pik <-inclprob(runif(8000),500)
+
+w <- pik/(1-pik)
+q <- qfromw(w,sum(pik))
+any(is.na(q))
+
+pik - pikfromq(q)
+
+pikt <- piktfrompik(pik)
+sum(pikt)
+*/
+
+
+
+
+
+
+
+//' @title s from q
+//'
+//' @description This function finds sample \code{s} form the matrix \code{q}.
+//'  
+//' @param q A matrix that is computed from the function \code{\link{qfromw}}. 
+//' 
+//' @details
+//' 
+//' More details could be find in Tille (2006).
+//' 
+//' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+//'
+//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+//' 
+//' @references 
+//' Tille, Y. (2006), Sampling Algorithms, springer
+//' 
 //' @export
 // [[Rcpp::export]]
 IntegerVector sfromq(const NumericMatrix& q){
@@ -56,107 +140,23 @@ IntegerVector sfromq(const NumericMatrix& q){
   return(s);
 }
 
-//' @export
-// [[Rcpp::export]]
-NumericVector pikfromq(NumericMatrix& qr){
-  int N = qr.nrow();
-  int n = qr.ncol();
-  
-  arma::mat q(qr.begin(),N,n,false);
-  arma::mat pro(N,n,arma::fill::zeros);
-  
-  pro(0,n-1) = 1.0;
-  for(int i = 1;i< N;i++){
-    for(int j = 1;j< n;j++){
-      pro(i,j) += pro(i-1,j)*(1-q(i-1,j));
-      pro(i,j-1) +=  pro(i-1,j)*(q(i-1,j));
-    }
-  }
-  for(int i = 1;i < N; i++){
-    pro(i,0) += pro(i-1,0)*(1-q(i-1,0));
-  }
-  arma::vec out = arma::sum(pro%q,1);
-  NumericVector out2(N);
-  for(int i = 0; i < N;i++){
-    out2[i] = out[i];
-  }
-  return(out2);
-}
-
-//' @export
-// [[Rcpp::export]]
-NumericVector piktfrompik(NumericVector& pik){
-
- int N = pik.size();
- int n = round(sum(pik));
- NumericVector pikt(Rcpp::clone(pik));
- 
- NumericVector p(N);
- IntegerVector index(N);
- for(int k=0; k < N;k++){
-   index[k]=k;p[k] = pik[k];
- }
- 
- // randomize order of index list
- int done = 0;
- int tempInt = 0;
- int j = 0;
- NumericVector rnd = runif(N);
- for(int k = 0;k < N;k++){
-   j = k + floor(rnd[k] * (N-k));
-   tempInt = index[k];
-   index[k] = index[j];
-   index[j] = tempInt;
- }
- 
- // randomize order
- pikt = pikt[index];
- p = p[index];
- 
- // Rcout << pikt << std::endl;
- 
- 
- double arr = 1.0;
- double eps = 1e-8;
-
- NumericVector w(N);
- NumericMatrix q(N,n);
- NumericVector pikt1(N);
-
- while(arr > eps){
-  w = pikt/(1.0 - pikt);
-  q = qfromw(w,n);
-  pikt1 = pikt + p - pikfromq(q);
-  arr = sum(abs(pikt - pikt1));
-  pikt = pikt1;
- }
- 
- //
- NumericVector out(N);
- for(int j = 0; j < N;j++){
-   out[index[j]] = pikt[j];
- }
- 
- return(out);
- 
- // return(pikt[index]);
-
-}
 
 
-//' @title Maximum entropy sampling
+
+
+
+
+//' @title pik from q
 //'
-//' @description Maximum entropy sampling with fixed sample size. It can handle unequal inclusion probabilities.
-//' 
-//' @param pikr A vector of inclusion probabilities.
+//' @description This function finds the \code{pik} from an initial \code{q}.
+//'  
+//' @param q A matrix that is computed from the function \code{\link{qfromw}}. 
 //' 
 //' @details
-//' The sampling design maximizes the entropy design:
-//' \deqn{I(p) = - \sum s p(s) log[p(s)].}
 //' 
-//' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}}.
 //' More details could be find in Tille (2006).
-//' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+//' 
+//' @return A vector of inclusion probability computed from the matrix \code{q}.
 //'
 //' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
@@ -165,33 +165,194 @@ NumericVector piktfrompik(NumericVector& pik){
 //' 
 //' @export
 // [[Rcpp::export]]
-IntegerVector maxent(NumericVector& pikr){
+NumericVector pikfromq(NumericMatrix& q){
+  int N = q.nrow();
+  int n = q.ncol();
   
-  double eps = 1e-6;
-  int N = pikr.size();
-  arma::vec pik_tmp(pikr.begin(),pikr.size(),false);
+  arma::mat qr(q.begin(),N,n,false); // same memory 
+  arma::mat pro(N,n,arma::fill::zeros);
   
-  
-  // find not equl to 0 value
-  arma::uvec i = arma::find(pik_tmp < 1-eps);
-  
-  // arma to Numeric vector 
-  arma::vec pik_tmp2 = pik_tmp.elem(i);
-  int N_tmp = pik_tmp2.size();
-  NumericVector pik(N_tmp);
-  for(int j = 0;j< N_tmp;j++){
-    pik[j] = pik_tmp2[j];
+  pro(0,n-1) = 1.0;
+  for(int i = 1;i< N;i++){
+    for(int j = 1;j< n;j++){
+      pro(i,j) += pro(i-1,j)*(1-qr(i-1,j));
+      pro(i,j-1) +=  pro(i-1,j)*(qr(i-1,j));
+    }
   }
+  for(int i = 1;i < N; i++){
+    pro(i,0) += pro(i-1,0)*(1-qr(i-1,0));
+  }
+  arma::vec out = arma::sum(pro%qr,1);
   
+  // out of NumericVector and not arma
+  NumericVector out2(N);
+  for(int i = 0; i < N;i++){
+    out2[i] = out[i];
+  }
+  return(out2);
+}
+
+
+
+
+//' @title pikt from pik
+//'
+//' @description This function finds the \code{pikt} from an initial \code{pik}.
+//'  
+//' @param pik A vector of inclusion probabilities. The vector must contains only value that are not integer.
+//' @param max_iter An integer that specify the maximum iteration in the Newton-Raphson algorithm. Default \code{500}.
+//' @param tol A scalar that specify the tolerance convergence for the Newton-Raphson algorithm. Default \code{1e-8}.
+//' 
+//' @details
+//' 
+//' The management of probabilities equal to 0 or 1 is done in the maxent function.
+//' 
+//' \code{pikt} is the vector of inclusion probabilities of a Poisson sampling with the right parameter. The vector is found by Newtwon-Raphson algorithm.
+//' 
+//' More details could be find in Tille (2006).
+//' 
+//' @return An updated vector of inclusion probability.
+//'
+//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+//' 
+//' @references 
+//' Tille, Y. (2006), Sampling Algorithms, springer
+//' 
+//' @export
+// [[Rcpp::export]]
+NumericVector piktfrompik(NumericVector& pik, int max_iter = 500,double tol = 1e-8){
+
+ int N = pik.size();
+ int n = round(sum(pik));
+ NumericVector pikt(Rcpp::clone(pik)); // get pik that will be update into piktilde
+ NumericVector p(Rcpp::clone(pik)); // get wo modif 
+ 
+ /*
+  * RANDOMIZATION NOT ANYMORE NEEDED AS WE FIX qfromw
+  */
+ 
+ // IntegerVector index(N); // index 
+ // for(int k=0; k < N;k++){
+ //   index[k]=k;
+ // }
+ // 
+ // // randomize order of index list
+ // int tempInt = 0;
+ // int j = 0;
+ // NumericVector rnd = runif(N);
+ // for(int k = 0;k < N;k++){
+ //   j = k + floor(rnd[k] * (N-k));
+ //   tempInt = index[k];
+ //   index[k] = index[j];
+ //   index[j] = tempInt;
+ // }
+ // 
+ // // apply the random order on pik and p
+ // pikt = pikt[index];
+ // p = p[index];
+ 
+
+
+ // temporary vector and matrix
+ NumericVector w(N);
+ NumericMatrix q(N,n);
+ NumericVector pikt1(N);
+
+ /*
+  * Main loop, we compute q for a particular pik,
+  * then we recalculate pik from q
+  * and we use Newton raphson to pikt.
+  * 
+  * We use qfromw because it is more stable than try to estimate directly the 
+  * pikt or the w by using the recursive formula.
+  * 
+  */
+ int count = 1;
+ double arr = 1.0;
+ while((arr > tol) && (count < max_iter)){
+  w = pikt/(1.0 - pikt);
+  q = qfromw(w,n);
+  pikt1 = pikt + p - pikfromq(q);
+  arr = sum(abs(pikt - pikt1));
+  pikt = pikt1;
+  count++;
+ }
+ 
+ 
+ 
+ NumericVector out(N);
+ for(int j = 0; j < N;j++){
+   // out[index[j]] = pikt[j]; // RANDOMIZATION
+   out[j] = pikt[j];
+ }
+ 
+ return(out);
+
+}
+
+
+//' @title Conditional Poisson sampling design
+//'
+//' @description Maximum entropy sampling with fixed sample size. It select a sample with fixed sample size with unequal inclusion probabilities.
+//'  
+//' @param pik A vector of inclusion probabilities. 
+//' @param eps A scalar that specify the tolerance to transform a small value to the value 0.
+//' 
+//' @details
+//' The sampling design maximizes the entropy design:
+//' \deqn{I(p) = - \sum s p(s) log[p(s)].}
+//' 
+//' This function is a C++ implementation of \code{\link[sampling:UPmaxentropy]{UPmaxentropy}}. More details could be find in Tille (2006).
+//' 
+//' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+//'
+//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+//' 
+//' @references 
+//' Tille, Y. (2006), Sampling Algorithms, springer
+//' 
+//' @examples
+//' 
+//' pik <- inclprob(seq(100,1,length.out = 100),10)
+//' s <-  maxent(pik)
+//' # simulation with piktfrompik MUCH MORE FASTER
+//' s <- rep(0,length(pik))
+//' SIM <- 100
+//' pikt <- piktfrompik(pik)
+//' w <- pikt/(1-pikt)
+//' q <- qfromw(w,sum(pik))
+//' for(i in 1 :SIM){
+//'   s <- s + sfromq(q)
+//' }
+//' p <- s/SIM # estimated inclusion probabilities
+//' t <- (p-pik)/sqrt(pik*(1-pik)/SIM)
+//' 1 - length(s[t > 1.6449]/SIM)/length(pik) # should be approximately equal to 0.95 
+//' 
+//' @export
+// [[Rcpp::export]]
+IntegerVector maxent(NumericVector& pik,
+                     double eps = 1e-6){
+
+  int N = pik.size(); // full size
+  arma::vec pik_tmp(pik.begin(),pik.size(),false); // transform to arma to use find (same memory allocation)
+  arma::uvec i = arma::find(pik_tmp < 1-eps && pik_tmp > eps);// find not equal to 0 or 1 value
+  int N_tmp = i.size(); // new size
+  IntegerVector index(i.begin(),i.end()); // transform to IntegerVector
+  NumericVector pikout = pik[index]; // get pik in NumericVector
   
 
-  // all step computation
-  int n = round(sum(pik));
-  NumericVector pikt = piktfrompik(pik);
+  /*
+   * All step computation
+   * 1. find pikt with Newtown-Raphson (randomization to avoid problem with consecutive small inclusion probabilities) see piktfrompik
+   * 2. calculate w
+   * 3. calculate q
+   * 4. find s from q
+   */
+  int n = round(sum(pikout));
+  NumericVector pikt = piktfrompik(pikout); 
   NumericVector w = pikt/(1-pikt);
   NumericMatrix q = qfromw(w,n);
   IntegerVector s2 = sfromq(q);
-  
   
   
   //put right 0-1 value at the right place
@@ -201,12 +362,133 @@ IntegerVector maxent(NumericVector& pikr){
     s[i[j]] = s2[j];
   }
   
-  
   return(s);
 }
 
-//' @export
-// [[Rcpp::export]]
+
+/*** R
+
+## EXAMPLE
+
+pik <- inclprob(seq(100,1,length.out = 100),10)
+s <-  maxent(pik)
+
+
+# simulation with piktfrompik MUCH MORE FASTER
+s <- rep(0,length(pik))
+SIM <- 1000
+pikt <- piktfrompik(pik)
+w <- pikt/(1-pikt)
+q <- qfromw(w,sum(pik))
+for(i in 1 :SIM){
+  s <- s + sfromq(q)
+}
+p <- s/SIM # estimated inclusion probabilities
+t <- (p-pik)/sqrt(pik*(1-pik)/SIM)
+1 - length(s[t > 1.644]/SIM)/length(pik) # should be approximatively equal to 0.95 
+
+# system.time(UPmaxentropy(pik))
+# system.time(maxent(pik))
+
+## swissmunicipalitites were not working
+
+library(sampling)
+data("swissmunicipalities")
+eps <- 1e-7 # epsilon tolerance
+n <- 200 # sample size
+pik <- inclusionprobabilities(swissmunicipalities$POPTOT,n)
+maxent(pik)
+mask <- (pik < (1 - eps)) & (pik > eps)
+pik <-  pik[mask]
+
+pikt <- piktfrompik(pik) # that were not working
+pik
+
+# simuation with maxent 
+s <- rep(0,length(pik))
+SIM <- 1000
+for(i in 1 :SIM){
+  print(i)
+  tmp <- maxent(pik)
+  if(any(abs(sum(tmp) - sum(pik)) > eps)){
+    cat("error")
+    break;
+  }
+  s <- s + tmp
+}
+
+# simulation with piktfrompik SO FASTER
+s <- rep(0,length(pik))
+SIM <- 1000
+pikt <- piktfrompik(pik)
+w <- pikt/(1-pikt)
+q <- qfromw(w,sum(pik))
+for(i in 1 :SIM){
+  print(i)
+  tmp <- sfromq(q)
+  if(any(abs(sum(tmp) - sum(pik)) > eps)){
+    cat("error")
+    break;
+  }
+  s <- s + tmp
+}
+
+
+p <- s/SIM
+pik 
+
+1 -length(s[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]/SIM)/length(pik)
+
+
+pik[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]
+
+s/SIM
+pik
+
+
+###### GENERAL example bigger
+
+pik <- sampling::inclusionprobabilities(runif(8000),500)
+
+s <- rep(0,length(pik))
+SIM <- 1000
+pikt <- piktfrompik(pik)
+w <- pikt/(1-pikt)
+q <- qfromw(w,sum(pik))
+for(i in 1 :SIM){
+  print(i)
+  tmp <- sfromq(q)
+  s <- s + tmp
+}
+
+p <- s/SIM
+pik 
+
+1 -length(s[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 1.64)]/SIM)/length(pik)
+
+
+
+
+*/
+
+
+
+/*
+ * 
+ * 
+ * 
+ * 
+ * 
+ * INLCUSION PROBABILITIES OF SECOND ORDER
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+
 NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
   
   
@@ -263,175 +545,6 @@ NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
   
 }
 
-/*** R
-rm(list = ls())
-library(sampling)
-data("swissmunicipalities")
-eps <- 1e-7 # epsilon tolerance
-n <- 200 # sample size
-pik <- inclusionprobabilities(swissmunicipalities$POPTOT,n)
-mask <- (pik < (1 - eps)) & (pik > eps)
-pik <-  pik[mask]
-
-piktfrompik(pik)
-pik
-
-s <- rep(0,length(pik))
-SIM <- 1000
-for(i in 1 :SIM){
-  print(i)
-  tmp <- maxent(pik)
-  if(any(abs(sum(tmp) - sum(pik)) > eps)){
-    cat("error")
-    break;
-  }
-  s <- s + tmp
-}
-
-
-p <- s/SIM
-pik 
-
-1 -length(s[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]/SIM)/length(pik)
-
-
-pik[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 2)]
-
-s/SIM
-pik
-
-  
-
-
-
-
-
-pik <- pik[sample(1:length(pik))]
-# UPmaxentropy(pik)
-
-sum(maxent(pik))
-
-pikt <- piktilde(pik)
-w <- pikt/(1.0 - pikt)
-qfromw(w,sum(pik))
-
-v <- function(M){
-  require(Matrix)
-  image(as(M,"sparseMatrix"))
-}
-
-
-w <- pik/(1-pik)
-
-
-# pik <- c(0.07,0.17,0.41,0.61,0.83,0.91)
-# UPMEpiktildefrompik(pik)
-# pikt <- c(0.1021,0.2238,0.4417,0.5796,0.7794,0.8734)
-# pik/(1-pik)
-# pikt/(1-pikt)
-# w <- c(0.116,0.295,0.810,1.411,3.614,7.059)
-# n <
-# Uqf <- function (w, n) 
-# {
-  N = length(w)
-  expa = array(0, c(N, n))
-  # fill first column
-  for (i in 1:N){
-    expa[i, 1] = sum(w[i:N])
-  } 
-  min(expa[,1]) # all filled
-  
-  # fill diagonal bottom left to right up
-  for (i in (N - n + 1):N){
-    cat(i,N-i + 1,"\n\n")
-    expa[i, N - i + 1] = exp(sum(log(w[i:N])))
-    print(expa[i, N - i + 1])
-  }
-  v(expa)
-  
-  for (i in (N - 2):1){
-    for (z in 2:min(N - i, n)) {
-      Sys.sleep(1)
-      # cat(i,z," use ",i+1,z-1,"and ",i+1,z,"\n\n")
-      expa[i, z] = (w[i]*expa[i + 1, z - 1]) + expa[i + 1, z]
-      print(expa[i,z])
-      # if(expa[i,z] < 1e-20){
-        # print(expa[i,z])  
-      # }
-      
-    }
-  } 
-  v(expa)
-  
-  q = array(0, c(N, n))
-  for (i in N:1) q[i, 1] = w[i]/expa[i, 1]
-  for (i in N:(N - n + 1)) q[i, N - i + 1] = 1
-  v(q)
-  
-  for (i in (N - 2):1){
-    for (z in 2:min(N - i, n)){
-      q[i, z] = w[i] * expa[i + 1, z - 1]/expa[i, z]
-    } 
-  } 
-  
-  print(any(is.na(q)))
-  q
-}
-
-
-test2 <- Uqf(w,sum(pik))
-any(which(is.na(test2)))
-
-
-test <- qfromw(pik/(1-pik),sum(pik))
-
-
-piktfrompik(pik)[length(pik)]
-maxent(pik)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-pik=c(0.07,0.17,0.41,0.61,0.83,0.91)
-
-n=sum(pik)
-pikt=UPMEpiktildefrompik(pik)
-pikt=piktfrompik(pik)
-w=pikt/(1-pikt)
-q=UPMEqfromw(w,n)
-UPMEsfromq(q)
-
-pik2frompik(pik,w)
-UPMEpik2frompikw(pik,w)
-
-*/
-
 
 
 
@@ -475,7 +588,6 @@ NumericMatrix maxentpi2(NumericVector pikr){
     pik[j] = pik_tmp2[j];
   }
   
-  
   NumericMatrix M2(N_tmp,N_tmp);
   NumericVector pikt = piktfrompik(pik);
   NumericVector w =  pikt/(1 - pikt);
@@ -485,14 +597,16 @@ NumericMatrix maxentpi2(NumericVector pikr){
   //put right value at the right place
   NumericMatrix M(N,N);
   
+  int ni = i.size();
+  int ni1 = i1.size();
   
-  for(int j = 0; j < i.size();j++){
-    for(int ii = 0;ii < i.size();ii++){
+  for(int j = 0; j < ni;j++){
+    for(int ii = 0;ii < ni;ii++){
       M(i(ii),i(j)) = M2(ii,j);
     }
     // M(_,i(j)) = M2(_,j);
   }
-  for(int j = 0; j < i1.size(); j++){
+  for(int j = 0; j < ni1; j++){
     M(_,i1(j)) = pikr;
     M(i1(j),_) = pikr;
   }
@@ -543,8 +657,27 @@ library(sampling)
 # pik=c(0.07,0.17,0.41,0.61,0.83,0.91)
 # 
 # k = 1
-# set.seed(9)
-pik <- sampling::inclusionprobabilities(runif(2000),500)
+rm(list = ls())
+
+pik <- sampling::inclusionprobabilities(runif(8000),500)
+
+s <- rep(0,length(pik))
+SIM <- 1000
+pikt <- piktfrompik(pik)
+w <- pikt/(1-pikt)
+q <- qfromw(w,sum(pik))
+for(i in 1 :SIM){
+  print(i)
+  tmp <- sfromq(q)
+  s <- s + tmp
+}
+
+p <- s/SIM
+pik 
+
+1 -length(s[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 1.64)]/SIM)/length(pik)
+
+
 # w = (pik)/(1 - pik)
 # qfromw(w,sum(pik))
 # maxent::UPMEqfromw(w,sum(pik))
@@ -566,9 +699,27 @@ pik <- sampling::inclusionprobabilities(runif(2000),500)
 # sum(piktfrompik(pik2))
 # sum(maxent::UPMEpiktildefrompik(pik2))
 
+index <- c()
+piktmp <- pik
+while(length(index) != length(pik)){
+  piktmp[index] <- 1e100
+  m <- which.min(piktmp)
+  piktmp[index] <- 1e-100
+  M <- which.max(piktmp)
+  index <- c(index,m,M)
+  piktmp <- pik
+}
+
 
 system.time(s2 <- sampling::UPmaxentropy(pik))
+
+
 system.time(s <- maxent(pik))
+piktfrompik(pik)
+
+w <- pik/(1-pik)
+any(is.na(qfromw(w,sum(pik))))
+
 
 sum(s)
 sum(s2)
