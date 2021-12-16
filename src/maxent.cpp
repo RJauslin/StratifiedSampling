@@ -47,9 +47,9 @@ NumericMatrix qfromw(NumericVector& w,const int& n){
   }
   
   NumericMatrix q(N,n);
-  double num(0.0);
-  double den(0.0);
-  double ratio(0.0);
+  long double num(0.0);
+  long double den(0.0);
+  long double ratio(0.0);
   for(int i = 0;i < N;i++){
     q(i,0) = wr[i]/expa(i,0);
   }
@@ -57,7 +57,7 @@ NumericMatrix qfromw(NumericVector& w,const int& n){
     q(N-i-1,i) = 1;
   }
   for(int i = N-3; i >= 0; i--){
-    for(int z = 1; z < std::min(N-i,n); z++){
+    for(int z = 1; z < std::min(N-i-1,n); z++){
       /*
        * Here we might have a stability problem
        * num/den might be value very very close to 0
@@ -67,12 +67,20 @@ NumericMatrix qfromw(NumericVector& w,const int& n){
        */
       num = expa(i+1,z-1);
       den = expa(i,z);
-      if((num < 1e-16) && (den < 1e-16)){
+      ratio = num/den;
+      if(std::isnan(ratio)){
         ratio = 1;
-      }else{
-        ratio = num/den;
       }
-      // Rcout << ratio << std::endl;
+      // if((num < 1e-16) && (den < 1e-16)){
+      //   ratio = 1;
+      // }else{
+      //   ratio = num/den;
+      // }
+      Rcout << wr[i] << std::endl;
+      Rcout << num << std::endl;
+      Rcout << den << std::endl;
+      Rcout << wr[i]*ratio << std::endl<< std::endl;
+      
       q(i,z) = wr[i]*ratio;
       // Rcout << expa(i+1,z-1) << std::endl;
       // Rcout << expa(i,z) << std::endl; 
@@ -84,14 +92,17 @@ NumericMatrix qfromw(NumericVector& w,const int& n){
 
 /*** R
 
-
+rm(list = ls())
 set.seed(9)
 
 pik <-inclprob(runif(8000),500)
 
 w <- pik/(1-pik)
-q <- qfromw(w,sum(pik))
+
+
+q <- qfromw(w,6)
 any(is.na(q))
+any(is.na(pikfromq(q))) # NA true
 
 pik - pikfromq(q)
 
@@ -270,7 +281,10 @@ NumericVector piktfrompik(NumericVector& pik, int max_iter = 500,double tol = 1e
  int count = 1;
  double arr = 1.0;
  while((arr > tol) && (count < max_iter)){
-  w = pikt/(1.0 - pikt);
+   w = pikt/(1.0 - pikt);
+  // w = log(pikt/(1.0 - pikt));
+  // w = w - mean(w);
+  // w = exp(w);
   q = qfromw(w,n);
   pikt1 = pikt + p - pikfromq(q);
   arr = sum(abs(pikt - pikt1));
@@ -371,6 +385,37 @@ IntegerVector cps(NumericVector& pik,
 
 
 /*** R
+
+
+
+
+
+
+rm(list = ls())
+
+pik <- sampling::inclusionprobabilities(runif(8000),500)
+
+s <- rep(0,length(pik))
+SIM <- 1000
+pikt <- piktfrompik(pik)
+w <- pikt/(1-pikt)
+q <- qfromw(w,sum(pik))
+for(i in 1 :SIM){
+  print(i)
+  tmp <- sfromq(q)
+  s <- s + tmp
+}
+
+p <- s/SIM
+pik 
+
+1 -length(s[which(abs((p-pik)/sqrt(pik*(1-pik)/SIM)) > 1.96)]/SIM)/length(pik)
+
+
+
+
+
+
 
 ## EXAMPLE
 
@@ -677,25 +722,6 @@ library(sampling)
 # pik=c(0.07,0.17,0.41,0.61,0.83,0.91)
 # 
 # k = 1
-rm(list = ls())
-
-pik <- sampling::inclusionprobabilities(runif(8000),500)
-
-s <- rep(0,length(pik))
-SIM <- 1000
-pikt <- piktfrompik(pik)
-w <- pikt/(1-pikt)
-q <- qfromw(w,sum(pik))
-for(i in 1 :SIM){
-  print(i)
-  tmp <- sfromq(q)
-  s <- s + tmp
-}
-
-p <- s/SIM
-pik 
-
-1 -length(s[which((p-pik)/sqrt(pik*(1-pik)/SIM) > 1.64)]/SIM)/length(pik)
 
 
 # w = (pik)/(1 - pik)

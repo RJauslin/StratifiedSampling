@@ -364,6 +364,34 @@ maxentpi2 <- function(pikr) {
     .Call(`_StratifiedSampling_maxentpi2`, pikr)
 }
 
+psi <- function(n, w) {
+    .Call(`_StratifiedSampling_psi`, n, w)
+}
+
+psipik <- function(n, pik) {
+    .Call(`_StratifiedSampling_psipik`, n, pik)
+}
+
+logit <- function(x) {
+    .Call(`_StratifiedSampling_logit`, x)
+}
+
+w <- function(pik, tol = 1e-6, max_iter = 500L) {
+    .Call(`_StratifiedSampling_w`, pik, tol, max_iter)
+}
+
+piktilde <- function(pik, tol = 1e-6, max_iter = 500L) {
+    .Call(`_StratifiedSampling_piktilde`, pik, tol, max_iter)
+}
+
+lambda <- function(piktilde) {
+    .Call(`_StratifiedSampling_lambda`, piktilde)
+}
+
+sample_int <- function(n, N) {
+    .Call(`_StratifiedSampling_sample_int`, n, N)
+}
+
 #' @title One-step One Decision sampling method
 #'
 #' @description This function implements the One-step One Decision method. It can be used using equal or unequal inclusion probabilities. The method is particularly useful for selecting a sample from a stream. 
