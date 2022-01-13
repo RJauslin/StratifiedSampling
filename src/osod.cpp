@@ -89,10 +89,14 @@ IntegerVector osod(NumericVector pikr,
       
       pik_s = pik.elem(index);
       n_tmp = arma::sum(pik_s) + w;
+
+      
       pik[i] = 0.0;// put unit i equal to 0
       pik_s = inclprob(pik_s,n_tmp); // update inclusion prob
+  
       
       if(runif(1)[0] < w){
+      
         pik.elem(index) = (pik.elem(index) - pik_s*(1.0-w))/w;
         pik[i] = 1.0;
       }else{
@@ -132,5 +136,41 @@ N <- 1000
 n <- 100
 pik <- inclprob(runif(N),n)
 s <- osod(pik,full = FALSE)
+
+
+
+pik<-c(.4,.2,.4,.3,.3,.4)
+osod(pik, full = TRUE)
+
+
+sum(pik)
+
+N<-length(pik)
+pikh=rep(0,N)
+PI=array(0,c(N,N))
+SIM<-10000
+for(i in 1:SIM)
+{
+  a1=osod(pik,full = TRUE)
+  pikh=pikh+a1
+  PI=PI+a1%*%t(a1)
+}
+pikh=pikh/SIM
+PI=PI/SIM
+t=(pikh-pik)/sqrt(pik*(1-pik)/SIM)
+print(PI)
+print(sum(abs(t)<1.96)/N)
+
+
+
+pik<-c(.4,.2,.4,.3,.3,.4)
+
+pik[2:6] - inclprob(pik[2:6],2)*(1-pik[1])
+pik[3:6] - inclprob(pik[3:6],2)*(1-pik[2])
+pik[4:6] - inclprob(pik[4:6],2)*(1-pik[3])
+
+
+
+
 
 */
