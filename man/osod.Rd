@@ -4,10 +4,12 @@
 \alias{osod}
 \title{One-step One Decision sampling method}
 \usage{
-osod(pikr)
+osod(pikr, full = FALSE)
 }
 \arguments{
 \item{pikr}{A vector of inclusion probabilities.}
+
+\item{full}{An optional boolean value, to specify whether the full population (the entire vector) is used to update inclusion probabilities. Default: FALSE}
 }
 \value{
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.

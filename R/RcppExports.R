@@ -397,6 +397,7 @@ sample_int <- function(n, N) {
 #' @description This function implements the One-step One Decision method. It can be used using equal or unequal inclusion probabilities. The method is particularly useful for selecting a sample from a stream. 
 #' 
 #' @param pikr A vector of inclusion probabilities.
+#' @param full An optional boolean value, to specify whether the full population (the entire vector) is used to update inclusion probabilities. Default: FALSE 
 #' 
 #' @details
 #' 
@@ -419,7 +420,7 @@ sample_int <- function(n, N) {
 #' s <- osod(pik)
 #' 
 #' @export
-osod <- function(pikr) {
-    .Call(`_StratifiedSampling_osod`, pikr)
+osod <- function(pikr, full = FALSE) {
+    .Call(`_StratifiedSampling_osod`, pikr, full)
 }
 

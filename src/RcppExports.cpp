@@ -252,13 +252,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // osod
-IntegerVector osod(NumericVector pikr);
-RcppExport SEXP _StratifiedSampling_osod(SEXP pikrSEXP) {
+IntegerVector osod(NumericVector pikr, bool full);
+RcppExport SEXP _StratifiedSampling_osod(SEXP pikrSEXP, SEXP fullSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type pikr(pikrSEXP);
-    rcpp_result_gen = Rcpp::wrap(osod(pikr));
+    Rcpp::traits::input_parameter< bool >::type full(fullSEXP);
+    rcpp_result_gen = Rcpp::wrap(osod(pikr, full));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -284,7 +285,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_piktilde", (DL_FUNC) &_StratifiedSampling_piktilde, 3},
     {"_StratifiedSampling_lambda", (DL_FUNC) &_StratifiedSampling_lambda, 1},
     {"_StratifiedSampling_sample_int", (DL_FUNC) &_StratifiedSampling_sample_int, 2},
-    {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 1},
+    {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 2},
     {NULL, NULL, 0}
 };
 

@@ -11,6 +11,7 @@ using namespace Rcpp;
 //' @description This function implements the One-step One Decision method. It can be used using equal or unequal inclusion probabilities. The method is particularly useful for selecting a sample from a stream. 
 //' 
 //' @param pikr A vector of inclusion probabilities.
+//' @param full An optional boolean value, to specify whether the full population (the entire vector) is used to update inclusion probabilities. Default: FALSE 
 //' 
 //' @details
 //' 
@@ -34,7 +35,8 @@ using namespace Rcpp;
 //' 
 //' @export
 // [[Rcpp::export]]
-IntegerVector osod(NumericVector pikr){ 
+IntegerVector osod(NumericVector pikr,
+                   bool full = false){ 
   
   
   // transfer memory for arma vector
@@ -76,9 +78,14 @@ IntegerVector osod(NumericVector pikr){
     // no need to do a step if equal to 0 or 1
     if(w > eps && w < (1.0-eps)){
       
-      bound = c_bound(pik.subvec(i,N-1));
-      index = arma::regspace<arma::uvec>(i+1,i + bound);
       
+      if(full == true){
+        bound = N-1-i;
+      }else{
+        bound = c_bound(pik.subvec(i,N-1));  
+      }
+      
+      index = arma::regspace<arma::uvec>(i+1,i + bound);
       
       pik_s = pik.elem(index);
       n_tmp = arma::sum(pik_s) + w;
@@ -124,6 +131,6 @@ IntegerVector osod(NumericVector pikr){
 N <- 1000
 n <- 100
 pik <- inclprob(runif(N),n)
-s <- osod(pik)
+s <- osod(pik,full = FALSE)
 
 */
