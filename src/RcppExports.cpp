@@ -263,6 +263,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// wosicpp
+IntegerVector wosicpp(NumericVector pikr, int H);
+RcppExport SEXP _StratifiedSampling_wosicpp(SEXP pikrSEXP, SEXP HSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pikr(pikrSEXP);
+    Rcpp::traits::input_parameter< int >::type H(HSEXP);
+    rcpp_result_gen = Rcpp::wrap(wosicpp(pikr, H));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_c_bound", (DL_FUNC) &_StratifiedSampling_c_bound, 1},
@@ -286,6 +298,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_lambda", (DL_FUNC) &_StratifiedSampling_lambda, 1},
     {"_StratifiedSampling_sample_int", (DL_FUNC) &_StratifiedSampling_sample_int, 2},
     {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 2},
+    {"_StratifiedSampling_wosicpp", (DL_FUNC) &_StratifiedSampling_wosicpp, 2},
     {NULL, NULL, 0}
 };
 

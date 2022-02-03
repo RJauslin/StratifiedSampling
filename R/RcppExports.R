@@ -424,3 +424,29 @@ osod <- function(pikr, full = FALSE) {
     .Call(`_StratifiedSampling_osod`, pikr, full)
 }
 
+#' @title wosi
+#'
+#' @description sakdhfa
+#' 
+#' @param pikr A vector of inclusion probabilities.
+#' 
+#' @details
+#' 
+#' 
+#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+#'
+#' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
+#'
+#' 
+#' @examples
+#' 
+#' N <- 1000
+#' n <- 100
+#' pik <- inclprob(runif(N),n)
+#' s <- osod(pik)
+#' 
+#' @export
+wosicpp <- function(pikr, H) {
+    .Call(`_StratifiedSampling_wosicpp`, pikr, H)
+}
+
