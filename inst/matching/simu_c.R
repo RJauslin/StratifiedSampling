@@ -23,14 +23,21 @@ simu_c <- function(Xm,Y,Z,id,n1,n2,totals = FALSE){
   pik1 <- rep(n1/N,N)
   pik2 <- rep(n2/N,N)
   
-  Xm1 <- cbind(pik1,Xm)
-  Xm2 <- cbind(pik2,Xm)
+  # Xm1 <- cbind(pik1,Xm)
+  # Xm2 <- cbind(pik2,Xm)
   
-  s1 <- rep(0,N)
+  # s1 <- rep(0,N)
+  # s2 <- rep(0,N)
+  # 
+  # s1[cube(pik1,as.matrix(Xm1))] <- 1
+  # s2[cube(pik2,as.matrix(Xm2))] <- 1
+  # s1 <- srswor(n1,N)
+  # s2 <- srswor(n2,N)
+  
+  s1 <- srswor(n1,N)
+  comple <- which(s1 == 0)
   s2 <- rep(0,N)
-  
-  s1[cube(pik1,as.matrix(Xm1))] <- 1
-  s2[cube(pik2,as.matrix(Xm2))] <- 1
+  s2[comple[sample.int(length(comple),n2)]] <- 1
   
   
   X1 <- Xm[s1 == 1,]
@@ -98,7 +105,8 @@ simu_c <- function(Xm,Y,Z,id,n1,n2,totals = FALSE){
   
   
   #------------------- OPTIMAL
-  object = otmatch(X1,id1,X2,id2,w1,w2)
+  object = otmatch(X1,id1,X2,id2,w1,w2,transport_method = "revsimplex")
+  
   
   w_opt <- object[,3]
   
@@ -107,9 +115,10 @@ simu_c <- function(Xm,Y,Z,id,n1,n2,totals = FALSE){
   
   m1_opt <- colSums(w_opt*y1_opt)/sum(w_opt)
   m2_opt <- colSums(w_opt*z2_opt)/sum(w_opt)
+  # m1_opt <- colMeans(y1_opt)
+  # m2_opt <- colMeans(z2_opt)
   
   c_opt <- t(w_opt*(y1_opt - m1_opt))%*%(z2_opt - m2_opt)/sum(w_opt)
-  
   
   cat("Optimal done \n\n")  
   #------------------- RANDOM
