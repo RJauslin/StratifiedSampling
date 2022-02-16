@@ -79,7 +79,7 @@ n2 <- 3000
 
 
 
-SIM <- 1000
+SIM <- 10000
 
 ##------------- simu
 # res_ren <- res_opt <- res_ran <- list()
@@ -141,9 +141,9 @@ l_sim <- parLapply(cl = cl,
                    id = id,
                    n1 = n1,
                    n2 = n2)
-Sys.time () - start
+print(Sys.time () - start)
 
-saveRDS(l_sim, file = "C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling/inst/matching/l_sim.rds")
+saveRDS(l_sim, file = "C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling/inst/matching/l_simeusilc.rds")
 
 stopCluster(cl)
 
@@ -289,23 +289,25 @@ phi_ren <- mean(do.call(rbind,lapply(res_ren,FUN = phi)),na.rm = TRUE)
 phi_ran <- mean(do.call(rbind,lapply(res_ran,FUN = phi)),na.rm = TRUE)
 
 
-MSE_phi_opt <- (1/SIM)*sum((do.call(rbind,lapply(res_opt,FUN = phi)) - phi_true)^2)
-MSE_phi_ren <-  (1/SIM)*sum((do.call(rbind,lapply(res_ren,FUN = phi)) - phi_true)^2)
-MSE_phi_ran <- (1/SIM)*sum((do.call(rbind,lapply(res_ran,FUN = phi)) - phi_true)^2)
+MSE_phi_opt <- mean((do.call(rbind,lapply(res_opt,FUN = phi)) - phi_true)^2,na.rm = TRUE)
 
-b_phi_opt <- (1/SIM)*sum((do.call(rbind,lapply(res_opt,FUN = phi)) - phi_true))
-b_phi_ren <- (1/SIM)*sum((do.call(rbind,lapply(res_ren,FUN = phi)) - phi_true))
-b_phi_ran <- (1/SIM)*sum((do.call(rbind,lapply(res_ran,FUN = phi)) - phi_true))
+MSE_phi_ren <-  mean((do.call(rbind,lapply(res_ren,FUN = phi)) - phi_true)^2,na.rm = TRUE)
+
+MSE_phi_ran <- mean((do.call(rbind,lapply(res_ran,FUN = phi)) - phi_true)^2,na.rm = TRUE)
+
+b_phi_opt <- mean((do.call(rbind,lapply(res_opt,FUN = phi)) - phi_true),na.rm = TRUE)
+b_phi_ren <- mean((do.call(rbind,lapply(res_ren,FUN = phi)) - phi_true),na.rm = TRUE)
+b_phi_ran <- mean((do.call(rbind,lapply(res_ran,FUN = phi)) - phi_true),na.rm = TRUE)
 
 
-var_phi_opt <- (1/SIM)*sum((do.call(rbind,lapply(res_opt,FUN = phi)) - phi_opt)^2)
-var_phi_ren <- (1/SIM)*sum((do.call(rbind,lapply(res_ren,FUN = phi)) - phi_ren)^2)
-var_phi_ran <- (1/SIM)*sum((do.call(rbind,lapply(res_ran,FUN = phi)) - phi_ran)^2)
+var_phi_opt <- mean((do.call(rbind,lapply(res_opt,FUN = phi)) - phi_opt)^2,na.rm = TRUE)
+var_phi_ren <- mean((do.call(rbind,lapply(res_ren,FUN = phi)) - phi_ren)^2,na.rm = TRUE)
+var_phi_ran <- mean((do.call(rbind,lapply(res_ran,FUN = phi)) - phi_ran)^2,na.rm = TRUE)
 
 
 phi_tab <- data.frame(phi = c(phi_true,phi_ren,phi_opt,phi_ran),
                       mse = c(NA,MSE_phi_ren,MSE_phi_opt,MSE_phi_ran),
-                      b = c(NA,b_phi_ren,b_phi_opt,b_phi_ran),
+                      b = c(NA,b_phi_ren,b_phi_opt,b_phi_ran) ,
                       v = c(NA,var_phi_ren,var_phi_opt,var_phi_ran))
 
 

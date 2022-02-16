@@ -31,13 +31,15 @@ simu_c <- function(Xm,Y,Z,id,n1,n2,totals = FALSE){
   # 
   # s1[cube(pik1,as.matrix(Xm1))] <- 1
   # s2[cube(pik2,as.matrix(Xm2))] <- 1
-  # s1 <- srswor(n1,N)
-  # s2 <- srswor(n2,N)
-  
   s1 <- srswor(n1,N)
-  comple <- which(s1 == 0)
-  s2 <- rep(0,N)
-  s2[comple[sample.int(length(comple),n2)]] <- 1
+  s2 <- srswor(n2,N)
+  
+  
+  # without intersection
+  # s1 <- srswor(n1,N)
+  # comple <- which(s1 == 0)
+  # s2 <- rep(0,N)
+  # s2[comple[sample.int(length(comple),n2)]] <- 1
   
   
   X1 <- Xm[s1 == 1,]
