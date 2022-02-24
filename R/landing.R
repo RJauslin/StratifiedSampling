@@ -17,37 +17,35 @@
 #'
 #' @export
 #' @examples
-#' 
 #' N <- 1000
 #' n <- 10
 #' p <- 4
 #' pik <- rep(n/N,N)
 #' X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
 #' pikstar <- ffphase(X,pik) 
-#' s <- landingRM(X/pik,pikstar)
+#' s <- landingRM(X/pik*pikstar,pikstar)
 #' sum(s)
 #' t(X/pik)%*%pik
 #' t(X/pik)%*%pikstar
 #' t(X/pik)%*%s
-landingRM <- function(X,pikstar){
+landingRM <- function(A,pikstar){
 
 
   ##----------------------------------------------------------------
   ##                          Initializing                         -
   ##----------------------------------------------------------------
 
-
-  EPS = 1e-8
-  N = nrow(X)
+  EPS = 1e-6
+  N = nrow(A)
   i = which(pikstar > EPS & pikstar < (1 - EPS))
   i_size = length(i)
   
   pikland <- pikstar[i]
 
-  Xland <- X[i,]
+  Aland <- A[i,]
   Nland = length(pikland)
   nland = sum(pikland)
-  p <- ncol(Xland)
+  p <- ncol(Aland)
   
   
   j <-  which(pikland > EPS & pikland < (1 - EPS))
@@ -58,34 +56,60 @@ landingRM <- function(X,pikstar){
   ##                          Main loop                           -
   ##---------------------------------------------------------------
   
+
+  ####### COMMENT TO CHECK THAT LANDING WORKS
+  # print(Aland[j,]/pikland[j]) # should have 1 on the first columns 
   
   for(k in 0:(p-1)){
-
-    Bland <- Xland[j,]*pikland[j]
+    
+    # Bland <- Aland[j,]*pikland[j] # ffphase need X instead of A so why * by pikland
+    Bland <- Aland[j,] # ffphase need X instead of A so why * by pikland
     Bland <- Bland[,1:(p-k)]
-
+    
     kern <- MASS::Null(Bland)
-    if(length(kern)!=0){
+    if(length(kern) != 0){
+      pik_tmp <- pikland[j] # keep old pik to update A 
       
-      pikland[j] <- ffphase(as.matrix(Bland),pikland[j])
+      ####### COMMENT TO CHECK THAT LANDING WORKS 
+      # print(sum(pik_tmp))
+      # print(Bland/pikland[j])
       
-      j = which(pikland > EPS & pikland < (1 - EPS))
-      j_size <- length(j)
-      # print(i_size)
+      pikland[j] <- ffphase(as.matrix(Bland),pikland[j]) # need X 
+      Aland[j,] <- (Aland[j,]/pik_tmp)*pikland[j] # update A
+      j = which(pikland > EPS & pikland < (1 - EPS)) # new j
+      
+      ####### COMMENT TO CHECK THAT LANDING WORKS
+      # print(sum(pikland[j]))
+      
+      # break if no longer unit that need to be put equal to 0 or 1
+      if(length(j) < EPS){
+        break;
+      }
     }
-    if(j_size <= 1){
-      break;
-    }
-
   }
   
   pikstar[i] = pikland
   i <- which(pikstar > EPS & pikstar < (1 - EPS))
   
+  # cat("pikstar after dropping variables:", pikstar[i],"\n")
+  # cat("sum pikstar after dropping variables:", sum(pikstar[i]),"\n")
+  
   if(length(i) != 0){
-    pikstar[i] <- stats::rbinom(1,1,pikstar[i])
-    # cat("it remains",length(i), "units that are not put to 0 or 1")
+    stop("error you still have, after landing, at least one unit that have inlcusion probability not equal to 0 or 1.")
   }
-
-  return(round(pikstar,10))
+  
+  # cat("pikstar after dropping variables:", pikstar[i],"\n")
+  # cat("sum pikstar after dropping variables:", sum(pikstar[i]),"\n")
+  
+  
+  
+  
+  # if(length(i) != 0){
+  # print("rounding ending")
+  # pikstar[i] <- stats::rbinom(1,1,pikstar[i])
+  # cat("it remains",length(i), "units that are not put to 0 or 1")
+  # }
+  
+  return(round(pikstar,6))
 }
+

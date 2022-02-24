@@ -81,11 +81,11 @@ simu <- function(Xm,Y,Z,id,n1,n2,totals = FALSE){
   }
   
   
-
+  
   
   
   #----------------- RENSSEN
-    
+  
   QR.1 <- qr(X1 * sqrt(w1))
   beta.yx.1 <- qr.coef(QR.1, Y1_dis * sqrt(w1))
   beta.yx.1[is.na(beta.yx.1)] <- 0
@@ -119,9 +119,9 @@ simu <- function(Xm,Y,Z,id,n1,n2,totals = FALSE){
   Y1_random <- cbind(X1[as.character(out$object$id1),],y = Y1[as.character(out$object$id1),])
   Z2_random <- cbind(X2[as.character(out$object$id2),],z = Z2[as.character(out$object$id2),])
   YZ_random <- tapply(out$object$weight/out$q,list(Y1_random$y,Z2_random$z),sum)
-    
+  
   cat("Random done \n\n")
-
+  
   return(list(YZ = YZ, YZ_ren = YZ.CIA, YZ_opt = YZ_optimal, YZ_ran = YZ_random))
   
 }
@@ -201,74 +201,74 @@ simu <- function(Xm,Y,Z,id,n1,n2,totals = FALSE){
 #'
 #' @examples
 simuCor <- function(Xm,Y,Z,id,n1,n2,totals = FALSE){
-
+  
   # SET UP
   y <- colnames(Y)
   z <- colnames(Z)
   N <- nrow(Xm)
   YZ <- table(cbind(Y,Z))
-
+  
   # samples
   s1 <- srswor(n1,N)
   s2 <- srswor(n2,N)
-
+  
   X1 <- Xm[s1 == 1,]
   X2 <- Xm[s2 == 1,]
-
-
+  
+  
   Y1 <- data.frame(Y[s1 == 1,])
   colnames(Y1) <- y
   Z2 <- as.data.frame(Z[s2 == 1,])
   colnames(Z2) <- z
-
+  
   id1 <- id[s1 == 1]
   id2 <- id[s2 == 1]
-
+  
   rownames(Y1) <- id1
   rownames(Z2) <- id2
-
+  
   d1 <- rep(N/n1,n1)
   d2 <- rep(N/n2,n2)
-
+  
   # disjunctive form
   Y_dis <- sampling::disjunctive(as.matrix(Y))
   Z_dis <- sampling::disjunctive(as.matrix(Z))
-
+  
   # Y1_dis <- sampling::disjunctive(as.matrix(Y1))
   # Z2_dis <- sampling::disjunctive(as.matrix(Z2))
-
+  
   Y1_dis <- Y_dis[s1 ==1,]
   Z2_dis <- Z_dis[s2 ==1,]
-
+  
   # harmonization
   # if(totals == TRUE){
   #   re <- harmonize(X1,d1,id1,X2,d2,id2,totals = c(N,colSums(Xm)))
   # }else{
-    re <- harmonize(X1,d1,id1,X2,d2,id2)
+  re <- harmonize(X1,d1,id1,X2,d2,id2)
   # }
   w1 = re$w1
   w2 = re$w2
-
+  
   cat("Harmonization done \n\n")
   if(abs(sum(w1) - sum(w2)) > 1e-7){
     w2 <- w2/sum(w2)*sum(w1)
   }
-
+  
   object = otmatch(X1,id1,X2,id2,w1,w2)
   Y1_optimal <- cbind(X1[as.character(object$id1),],y = Y1[as.character(object$id1),])
   Z2_optimal <- cbind(X2[as.character(object$id2),],z = Z2[as.character(object$id2),])
-
+  
   mw_y <- sum(object[,3]*Y1_optimal$y)/sum(object[,3])
   mw_z <- sum(object[,3]*Z2_optimal$z)/sum(object[,3])
-
+  
   v_y <-  t(object[,3]*(Y1_optimal$y - mw_y))%*%(Y1_optimal$y - mw_y)/sum(object[,3])
   v_z <-  t(object[,3]*(Z2_optimal$z - mw_z))%*%(Z2_optimal$z - mw_z)/sum(object[,3])
-
+  
   cv_y_z <- (t(object[,3]*(Y1_optimal$y - mw_y))%*%((Z2_optimal$z - mw_z)))/sum(object[,3])
-
+  
   cv_y_z/sqrt(v_y*v_z)
   cov.wt(x = cbind(Y1_optimal$y,Z2_optimal$z),wt = object[,3],cor = TRUE)$cor
-
+  
   mean((Y$hy040n - mean(Y$hy040n))*(Z$eqIncome - mean(Z$eqIncome)))/ sqrt(mean((Y$hy040n - mean(Y$hy040n))^2)*mean((Z$eqIncome - mean(Z$eqIncome))^2))
-
+  
 }

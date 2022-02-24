@@ -155,11 +155,13 @@ stratifiedcube <- function(X,strata,pik){
   # ##----------------------------------------------------------------
   # ##            Landing on unit that are alone in the strata       -
   # ##----------------------------------------------------------------
-  # print(sum(pikstar[i]))
+  
+  
+  
   if(length(i) > 0){
     pikstar[i] <- landingRM(cbind(pikstar[i],X[i,]/pik[i]),pikstar[i])    
   }
-
+  
   
   return(round(pikstar,10))
 }
