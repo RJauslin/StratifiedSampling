@@ -1,8 +1,8 @@
 # NEWS for Package "StratifiedSampling"
 
 ## StratifiedSampling 0.4.0
-# modify landingRM
-# add full option in osod
+* add EPS in stratifedcube and landingRM
+* add full option in osod
 * add cps C++ implementation of the UPmaxentropy function from sampling package.
 * add balseq stream sampling
   - add distunitk in src folder.

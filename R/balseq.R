@@ -135,6 +135,7 @@ balseq <- function(pik,Xaux,Xspread = NULL){
     # lines(Xspread[index[1],1],Xspread[index[1],2],type ="p",pch = 16,col = "red")
     # lines(Xspread[unit0,1],Xspread[unit0,2],type ="p",pch = 16)
     # lines(Xspread[unit1,1],Xspread[unit1,2],type ="p",pch = 16,col = "orange")
+    # Sys.sleep(1)
     
     # if we can no longer find solution and index is at the end of the vector then exit and return pikstar
     if(status == 1 & is.na(index[n])){
@@ -175,7 +176,9 @@ balseq <- function(pik,Xaux,Xspread = NULL){
     }
   }else{
     if(length(index) != 0){
-      s <- landingRM(Xaux/as.vector(pikInit),pik)
+      tmp <- as.vector(pik/pikInit)
+      s <- landingRM(Xaux*tmp,pik)
+      # s <- landingRM(Xaux/as.vector(pikInit),pik)
       s <- which(s > (1-eps))
     } else{
       pik <- round(pik,10)

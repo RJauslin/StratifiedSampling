@@ -7,6 +7,7 @@
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integers that specifies the stratification..
 #' @param pik A vector of inclusion probabilities.
+#' @param EPS epsilon value
 #'
 #' @details 
 #' 
@@ -38,13 +39,12 @@
 #' t(Xcat)%*%s
 #' t(Xcat)%*%pik
 #' 
-stratifiedcube <- function(X,strata,pik){
+stratifiedcube <- function(X,strata,pik,EPS = 1e-7){
   
   ##----------------------------------------------------------------
   ##                        Initialization                         -
   ##----------------------------------------------------------------
   strata <- as.matrix(strata)
-  EPS = 1e-8
   A = X/pik
   pikstar <- pik
   p = ncol(X)
@@ -144,13 +144,13 @@ stratifiedcube <- function(X,strata,pik){
   #---------------- check
   # Xcat <- disjMatrix(strata)
   # 
-  # t(X/pik)%*%pik
-  # t(X/pik)%*%pikstar
-  # t(Xcat)%*%pik
-  # t(Xcat)%*%pikstar
-  # length(i)
-  # sum(pikstar)
-  
+  # print(t(X/pik)%*%pik)
+  # print(t(X/pik)%*%pikstar)
+  # print(t(Xcat)%*%pik)
+  # print(t(Xcat)%*%pikstar)
+  # print(length(i))
+  # print(sum(pikstar))
+   
   
   # ##----------------------------------------------------------------
   # ##            Landing on unit that are alone in the strata       -
@@ -159,7 +159,7 @@ stratifiedcube <- function(X,strata,pik){
   
   
   if(length(i) > 0){
-    pikstar[i] <- landingRM(cbind(pikstar[i],X[i,]/pik[i]),pikstar[i])    
+    pikstar[i] <- landingRM(cbind(pikstar[i],X[i,]/pik[i]),pikstar[i],EPS)    
   }
   
   

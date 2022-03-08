@@ -1,7 +1,8 @@
 #' @title Landing by suppression of variables
 #'
-#' @param X matrix of auxiliary variables on which the sample must be balanced. (The matrix should be divided by the original inclusion probabilities.)
+#' @param A matrix of auxiliary variables on which the sample must be balanced. (The matrix should be divided by the original inclusion probabilities.)
 #' @param pikstar vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}
+#' @param EPS epsilon value
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #' 
@@ -28,7 +29,7 @@
 #' t(X/pik)%*%pik
 #' t(X/pik)%*%pikstar
 #' t(X/pik)%*%s
-landingRM <- function(A,pikstar){
+landingRM <- function(A,pikstar,EPS = 1e-7){
 
 
   ##----------------------------------------------------------------
@@ -59,7 +60,7 @@ landingRM <- function(A,pikstar){
 
   ####### COMMENT TO CHECK THAT LANDING WORKS
   # print(Aland[j,]/pikland[j]) # should have 1 on the first columns 
-  
+  # print(Aland)
   for(k in 0:(p-1)){
     
     # Bland <- Aland[j,]*pikland[j] # ffphase need X instead of A so why * by pikland

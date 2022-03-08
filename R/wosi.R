@@ -93,7 +93,7 @@ wosi <- function(pik,H)
       
       
       #----- why ceiling here... possible to have bad behaviour with 3.0000001 that turns out to be transofmr to 4
-      pikkk2 <- inclusionprobabilities(pikkk,H)
+      pikkk2 <- sampling::inclusionprobabilities(pikkk,H)
       # pikkk2 <- inclusionprobabilities(pikkk,sum(pikkk))
       
       
@@ -228,7 +228,7 @@ wosi2 <- function(pik,H){
       
       pikai <- H - (m - pik[i])
       pikstar <- c(pik[(k+1):(i-1)],pikai)
-      pikstar2 <- inclusionprobabilities(pikstar,H)
+      pikstar2 <- sampling::inclusionprobabilities(pikstar,H)
       
       
       if(s_tmp[length(s_tmp)] == 1){
