@@ -7,11 +7,11 @@ library(BalancedSampling)
 devtools::load_all(".")
 
 # path <- "C:/Users/Raph/switchdrive/StratifiedSampling/StratifiedSampling"
-path <- "C:/Users/Raphael/switchdrive/StratifiedSampling/StratifiedSampling"
+path <- "C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling"
 
 
 
-devtools::load_all(path)
+# devtools::load_all(path)
 source(file.path(path,"./inst/matching/simu2.R"))
 
 # k = 1
@@ -91,64 +91,66 @@ Xcat <- disj(strata)
 t(Xcat)%*%s
 t(Xcat)%*%pik1
 
-SIM <- 1000
+SIM <- 10000
 
-# set.seed(156)
-# simu_strata(Xm,Y,Z,id,pik1,pik2,strata,totals = TRUE)
 
-l_sim <- list()
-for(i in 1:SIM){
-  print(i)
-  set.seed(i)
-  # l_sim[[i]] <- simu2(Xm,Y,Z,id,n1,n2,totals = TRUE)
-  l_sim[[i]] <- simu_strata(Xm,Y,Z,id,pik1,pik2,strata,totals = TRUE)
-}
+##------------- simu UN parrallel
+# # set.seed(156)
+# # simu_strata(Xm,Y,Z,id,pik1,pik2,strata,totals = TRUE)
+# 
+# l_sim <- list()
+# for(i in 1:SIM){
+#   print(i)
+#   set.seed(i)
+#   # l_sim[[i]] <- simu2(Xm,Y,Z,id,n1,n2,totals = TRUE)
+#   l_sim[[i]] <- simu_strata(Xm,Y,Z,id,pik1,pik2,strata,totals = TRUE)
+# }
 
 
 ##------------- simu parrallel
-# cl <- makeCluster(detectCores())
-# clusterEvalQ(cl,{
-#   path <- "C:/Users/Raph/switchdrive/StratifiedSampling/StratifiedSampling"
-#   library(BalancedSampling)
-#   devtools::load_all(path)
-#   source(file.path(path,"./inst/matching/simu2.R"))
-# })
-# 
-# f1 <- function(n,Xm,Y,Z,id,n1,n2){
-#   l <- simu2(Xm,Y,Z,id,n1,n2,totals = FALSE)
-#   return(list(res_ren =  l$res_ren,res_opt = l$res_opt, res_ran = l$res_ran))
-# }
-# 
-# 
-# # f1(1,Xm,Y,Z,id,n1,n2)
-# 
-# # Sys.sleep(1800)
-# 
-# 
-# start <- Sys.time ()
-# 
-# l_sim <- parLapply(cl = cl,
-#                    X = 1:SIM,
-#                    fun = f1,
-#                    Xm = Xm,
-#                    Y = Y,
-#                    Z = Z,
-#                    id = id,
-#                    n1 = n1,
-#                    n2 = n2)
-# print(Sys.time () - start)
-# 
-# stopCluster(cl)
+cl <- makeCluster(detectCores())
+clusterEvalQ(cl,{
+  path <- "C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling"
+  library(BalancedSampling)
+  devtools::load_all(path)
+  source(file.path(path,"./inst/matching/simu2.R"))
+})
+
+f1 <- function(n,Xm,Y,Z,id,pik1,pik2,strata){
+  l <- simu_strata(Xm,Y,Z,id,pik1,pik2,strata,totals = TRUE)
+  # l <- simu2(Xm,Y,Z,id,n1,n2,totals = FALSE)
+  return(list(res_ren =  l$res_ren,res_opt = l$res_opt, res_ran = l$res_ran))
+}
+
+f1(1,Xm,Y,Z,id,pik1,pik2,strata)
+
+Sys.sleep(7200)
+
+start <- Sys.time()
+
+l_sim <- parLapply(cl = cl,
+                   X = 1:SIM,
+                   fun = f1,
+                   Xm = Xm,
+                   Y = Y,
+                   Z = Z,
+                   id = id,
+                   pik1 = pik1,
+                   pik2 = pik2,
+                   strata = strata)
+print(Sys.time () - start)
+
+stopCluster(cl)
 
 #------ save
 
-saveRDS(l_sim, file = "C:/Users/Raphael/switchdrive/StratifiedSampling/StratifiedSampling/inst/matching/l_sim3.rds")
+saveRDS(l_sim, file = "C:/Users/jauslinr/switchdrive/StratifiedSampling/StratifiedSampling/inst/matching/l_sim_10032022.rds")
 
 
 #------ load
 
 
-l_sim <- readRDS("C:/Users/Raphael/switchdrive/StratifiedSampling/StratifiedSampling/inst/matching/l_sim3.rds")
+l_sim <- readRDS("C:/Users/Raphael/switchdrive/StratifiedSampling/StratifiedSampling/inst/matching/l_sim_10032022.rds")
 length(l_sim)
 
 

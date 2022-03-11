@@ -111,7 +111,8 @@ simu_strata <- function(Xm,Y,Z,id,pik1,pik2,strata,totals = FALSE){
   N <- nrow(Xm)
   # res_true <- tapply(YZ$income,list(YZ$ecostat),mean)
   
-  
+  n1 <- sum(pik1)
+  n2 <- sum(pik2)
   
   # stratified balanced sampling
   
