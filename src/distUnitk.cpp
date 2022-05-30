@@ -51,8 +51,8 @@
 //'   distUnitk(X,k = 2,tore = FALSE,toreBound = -1)
 //' @export
 // [[Rcpp::export]]
-arma::vec distUnitk(arma::mat& X,
-                    int& k,
+arma::vec distUnitk(arma::mat X,
+                    int k,
                     bool tore,
                     double toreBound){
   

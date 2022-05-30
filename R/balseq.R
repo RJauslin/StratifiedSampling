@@ -62,7 +62,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #' The function selects a sample using a sequential algorithm. At the same time, it respects the balancing equations (\code{Xaux}) and select a well-spread sample (\code{Xspread}). Algorithm uses a 
 #' linear program to satisfy the constraints.
 #'
-#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+#' @return A vector with elements equal to 0 or 1.
 #'
 #' @seealso \code{\link[BalancedSampling:lcube]{lcube}}, \code{\link[sampling:samplecube]{samplecube}}. 
 #' @export

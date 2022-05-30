@@ -72,13 +72,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // distUnitk
-arma::vec distUnitk(arma::mat& X, int& k, bool tore, double toreBound);
+arma::vec distUnitk(arma::mat X, int k, bool tore, double toreBound);
 RcppExport SEXP _StratifiedSampling_distUnitk(SEXP XSEXP, SEXP kSEXP, SEXP toreSEXP, SEXP toreBoundSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< int& >::type k(kSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
     Rcpp::traits::input_parameter< bool >::type tore(toreSEXP);
     Rcpp::traits::input_parameter< double >::type toreBound(toreBoundSEXP);
     rcpp_result_gen = Rcpp::wrap(distUnitk(X, k, tore, toreBound));
@@ -263,6 +263,46 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vEst
+arma::mat vEst(arma::mat Xauxs, arma::vec piks, arma::vec ys);
+RcppExport SEXP _StratifiedSampling_vEst(SEXP XauxsSEXP, SEXP piksSEXP, SEXP ysSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Xauxs(XauxsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type piks(piksSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type ys(ysSEXP);
+    rcpp_result_gen = Rcpp::wrap(vEst(Xauxs, piks, ys));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vDBS
+double vDBS(arma::mat Xauxs, arma::mat Xspreads, arma::vec piks, arma::vec ys);
+RcppExport SEXP _StratifiedSampling_vDBS(SEXP XauxsSEXP, SEXP XspreadsSEXP, SEXP piksSEXP, SEXP ysSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Xauxs(XauxsSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Xspreads(XspreadsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type piks(piksSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type ys(ysSEXP);
+    rcpp_result_gen = Rcpp::wrap(vDBS(Xauxs, Xspreads, piks, ys));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vApp
+arma::mat vApp(arma::mat Xaux, arma::vec pik, arma::vec y);
+RcppExport SEXP _StratifiedSampling_vApp(SEXP XauxSEXP, SEXP pikSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Xaux(XauxSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pik(pikSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(vApp(Xaux, pik, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // wosicpp
 IntegerVector wosicpp(NumericVector pikr, int H);
 RcppExport SEXP _StratifiedSampling_wosicpp(SEXP pikrSEXP, SEXP HSEXP) {
@@ -298,6 +338,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_lambda", (DL_FUNC) &_StratifiedSampling_lambda, 1},
     {"_StratifiedSampling_sample_int", (DL_FUNC) &_StratifiedSampling_sample_int, 2},
     {"_StratifiedSampling_osod", (DL_FUNC) &_StratifiedSampling_osod, 2},
+    {"_StratifiedSampling_vEst", (DL_FUNC) &_StratifiedSampling_vEst, 3},
+    {"_StratifiedSampling_vDBS", (DL_FUNC) &_StratifiedSampling_vDBS, 4},
+    {"_StratifiedSampling_vApp", (DL_FUNC) &_StratifiedSampling_vApp, 3},
     {"_StratifiedSampling_wosicpp", (DL_FUNC) &_StratifiedSampling_wosicpp, 2},
     {NULL, NULL, 0}
 };

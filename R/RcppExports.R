@@ -424,6 +424,75 @@ osod <- function(pikr, full = FALSE) {
     .Call(`_StratifiedSampling_osod`, pikr, full)
 }
 
+#' @encoding UTF-8
+#' @title Variance Estimation for balanced sample
+#' 
+#' @description
+#' Estimated variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)
+#' 
+#' 
+#' @param Xauxs Matrix of balancing constraints.
+#' @param piks Vector of inclusion probabilities.
+#' @param ys variable of interest.
+#' 
+#' @references 
+#' Tillé, Y. (2020), Sampling and Estimation from finite populations, Wiley,
+#'
+#' @return Estimated variance of the horvitz-thompson estimator.
+#' 
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @export
+vEst <- function(Xauxs, piks, ys) {
+    .Call(`_StratifiedSampling_vEst`, Xauxs, piks, ys)
+}
+
+#' @encoding UTF-8
+#' @title Variance Estimation for double balanced sample.
+#' 
+#' @description
+#' Variance estimator for sample that are at the same time well spread and balanced on auxiliary variables. See Grafstr\"om and Till\'é (2013)
+#' 
+#' @param Xauxs Matrix of balancing constraints.
+#' @param Xspreads Matrix of spatial coordinates.
+#' @param piks Vector of inclusion probabilities.
+#' @param ys variable of interest.
+#' 
+#' @references 
+#' Grafstr\"om, A. and Till\'e, Y. (2013), Doubly balanced spatial sampling with spreading and restitution of auxiliary totals, Environmetrics, 14(2):120-131
+#'
+#' @return Estimated variance of the horvitz-thompson estimator.
+#' 
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @export
+vDBS <- function(Xauxs, Xspreads, piks, ys) {
+    .Call(`_StratifiedSampling_vDBS`, Xauxs, Xspreads, piks, ys)
+}
+
+#' @encoding UTF-8
+#' @title Approximated variance for balanced sample
+#' 
+#' @description
+#' 
+#' Variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)
+#' 
+#' @param Xaux Matrix of balancing constraints.
+#' @param pik Vector of inclusion probabilities.
+#' @param y variable of interest.
+#' 
+#' @references 
+#' Tillé, Y. (2020), Sampling and Estimation from finite populations, Wiley,
+#' 
+#' @return Approximated variance of the Horvitz-Thompson estimator 
+#' 
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @export
+vApp <- function(Xaux, pik, y) {
+    .Call(`_StratifiedSampling_vApp`, Xaux, pik, y)
+}
+
 #' @title wosi
 #'
 #' @description sakdhfa

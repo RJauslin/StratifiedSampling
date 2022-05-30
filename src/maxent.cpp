@@ -29,6 +29,9 @@ using namespace Rcpp;
 NumericMatrix qfromw(NumericVector& w,const int& n){
 
   
+  
+  
+  
   // transform to arma for subvec 
   arma::vec wr(w.begin(),w.size(),false); // same memory
   
@@ -76,10 +79,10 @@ NumericMatrix qfromw(NumericVector& w,const int& n){
       // }else{
       //   ratio = num/den;
       // }
-      Rcout << wr[i] << std::endl;
-      Rcout << num << std::endl;
-      Rcout << den << std::endl;
-      Rcout << wr[i]*ratio << std::endl<< std::endl;
+      // Rcout << wr[i] << std::endl;
+      // Rcout << num << std::endl;
+      // Rcout << den << std::endl;
+      // Rcout << wr[i]*ratio << std::endl<< std::endl;
       
       q(i,z) = wr[i]*ratio;
       // Rcout << expa(i+1,z-1) << std::endl;
@@ -462,7 +465,7 @@ data("swissmunicipalities")
 eps <- 1e-7 # epsilon tolerance
 n <- 200 # sample size
 pik <- inclusionprobabilities(swissmunicipalities$POPTOT,n)
-maxent(pik)
+cps(pik)
 mask <- (pik < (1 - eps)) & (pik > eps)
 pik <-  pik[mask]
 
