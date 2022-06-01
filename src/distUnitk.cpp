@@ -1,9 +1,9 @@
 #include <RcppArmadillo.h>
 
 // [[Rcpp::depends(RcppArmadillo)]]
+
 //' @title Squared Euclidean distances of the unit k.
-//'
-//'
+//' 
 //' @description
 //' Calculate the squared Euclidean distance from unit \eqn{k} to the other units.
 //' 

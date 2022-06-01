@@ -14,7 +14,7 @@ balseq(pik, Xaux, Xspread = NULL)
 \item{Xspread}{An optional matrix of spatial coordinates.}
 }
 \value{
-A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+A vector with elements equal to 0 or 1.
 }
 \description{
 Selects at the same time a well-spread and a balanced sample using a sequential implementation.
@@ -24,23 +24,24 @@ The function selects a sample using a sequential algorithm. At the same time, it
 linear program to satisfy the constraints.
 }
 \examples{
-N=100
+N <- 100
 n <- 10
-p=10
-# pik=runif(N)
-pik=inclprob(runif(N),n)
+p <- 10
+
+pik <- rep(n/N,N)
+
 Xaux <- array(rnorm(N*p,3,1),c(N,p))
 
 Xspread <- cbind(runif(N),runif(N)) 
 Xaux <- cbind(pik,Xaux)
 
 s <- balseq(pik,Xaux)
-colSums(Xaux[s,]/as.vector(pik[s,]))
+colSums(Xaux[s,]/as.vector(pik[s]))
 colSums(Xaux)
 
 
 s <- balseq(pik,Xaux,Xspread)
-colSums(Xaux[s,]/as.vector(pik[s,]))
+colSums(Xaux[s,]/as.vector(pik[s]))
 colSums(Xaux)
 
 }

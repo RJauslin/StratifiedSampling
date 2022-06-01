@@ -18,7 +18,7 @@
 #' @useDynLib StratifiedSampling, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' 
-#' @seealso \code{\link{ffphase}},\code{\link{landingRM}}
+#' @seealso \code{\link{ffphase}}, \code{\link{landingRM}}
 #' 
 #' 
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}

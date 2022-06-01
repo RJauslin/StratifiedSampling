@@ -119,8 +119,7 @@ disjMatrix <- function(strata) {
 }
 
 #' @title Squared Euclidean distances of the unit k.
-#'
-#'
+#' 
 #' @description
 #' Calculate the squared Euclidean distance from unit \eqn{k} to the other units.
 #' 
@@ -364,34 +363,6 @@ maxentpi2 <- function(pikr) {
     .Call(`_StratifiedSampling_maxentpi2`, pikr)
 }
 
-psi <- function(n, w) {
-    .Call(`_StratifiedSampling_psi`, n, w)
-}
-
-psipik <- function(n, pik) {
-    .Call(`_StratifiedSampling_psipik`, n, pik)
-}
-
-logit <- function(x) {
-    .Call(`_StratifiedSampling_logit`, x)
-}
-
-w <- function(pik, tol = 1e-6, max_iter = 500L) {
-    .Call(`_StratifiedSampling_w`, pik, tol, max_iter)
-}
-
-piktilde <- function(pik, tol = 1e-6, max_iter = 500L) {
-    .Call(`_StratifiedSampling_piktilde`, pik, tol, max_iter)
-}
-
-lambda <- function(piktilde) {
-    .Call(`_StratifiedSampling_lambda`, piktilde)
-}
-
-sample_int <- function(n, N) {
-    .Call(`_StratifiedSampling_sample_int`, n, N)
-}
-
 #' @title One-step One Decision sampling method
 #'
 #' @description This function implements the One-step One Decision method. It can be used using equal or unequal inclusion probabilities. The method is particularly useful for selecting a sample from a stream. 
@@ -430,10 +401,9 @@ osod <- function(pikr, full = FALSE) {
 #' @description
 #' Estimated variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)
 #' 
-#' 
-#' @param Xauxs Matrix of balancing constraints.
-#' @param piks Vector of inclusion probabilities.
-#' @param ys variable of interest.
+#' @param Xauxs A matrix of size (\eqn{n} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param piks A vector of inclusion probabilities. The vector has the size of the sample \eqn{s}.
+#' @param ys A variable of interest.The vector has the size \eqn{n} of the sample \eqn{s}.
 #' 
 #' @references 
 #' Tillé, Y. (2020), Sampling and Estimation from finite populations, Wiley,
@@ -442,21 +412,44 @@ osod <- function(pikr, full = FALSE) {
 #' 
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
+#' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
+#' 
 #' @export
+#' 
+#' @examples
+#' 
+#' N <- 100 
+#' n <- 40
+#' x1 <- rgamma(N,4,25)
+#' x2 <- rgamma(N,4,25)
+#' 
+#' pik <- rep(n/N,N)
+#' Xaux <- cbind(pik,as.matrix(matrix(c(x1,x2),ncol = 2)))
+#' Xspread <- cbind(runif(N),runif(N))
+#'   
+#' 
+#' s <- balseq(pik,Xaux,Xspread)
+#'   
+#' y <- Xaux%*%c(1,1,3) + rnorm(N,120) # variable of interest
+#'   
+#' vEst(Xaux[s,],pik[s],y[s])
+#' vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
+#' vApp(Xaux,pik,y)
+#' 
 vEst <- function(Xauxs, piks, ys) {
     .Call(`_StratifiedSampling_vEst`, Xauxs, piks, ys)
 }
 
 #' @encoding UTF-8
-#' @title Variance Estimation for double balanced sample.
+#' @title Variance Estimation for Doubly Balanced Sample.
 #' 
 #' @description
-#' Variance estimator for sample that are at the same time well spread and balanced on auxiliary variables. See Grafstr\"om and Till\'é (2013)
+#' Variance estimator for sample that are at the same time well spread and balanced on auxiliary variables. See Grafstr\"om and Till\'e (2013)
 #' 
-#' @param Xauxs Matrix of balancing constraints.
+#' @param Xauxs A matrix of size (\eqn{n} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param Xspreads Matrix of spatial coordinates.
-#' @param piks Vector of inclusion probabilities.
-#' @param ys variable of interest.
+#' @param piks A vector of inclusion probabilities. The vector has the size \eqn{n} of the sample \eqn{s}.
+#' @param ys A variable of interest. The vector has the size \eqn{n} of the sample \eqn{s}.
 #' 
 #' @references 
 #' Grafstr\"om, A. and Till\'e, Y. (2013), Doubly balanced spatial sampling with spreading and restitution of auxiliary totals, Environmetrics, 14(2):120-131
@@ -465,7 +458,30 @@ vEst <- function(Xauxs, piks, ys) {
 #' 
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
+#' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
+#' 
 #' @export
+#' 
+#' @examples
+#' 
+#' N <- 100 
+#' n <- 40
+#' x1 <- rgamma(N,4,25)
+#' x2 <- rgamma(N,4,25)
+#' 
+#' pik <- rep(n/N,N)
+#' Xaux <- cbind(pik,as.matrix(matrix(c(x1,x2),ncol = 2)))
+#' Xspread <- cbind(runif(N),runif(N))
+#'   
+#' 
+#' s <- balseq(pik,Xaux,Xspread)
+#'   
+#' y <- Xaux%*%c(1,1,3) + rnorm(N,120) # variable of interest
+#'   
+#' vEst(Xaux[s,],pik[s],y[s])
+#' vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
+#' vApp(Xaux,pik,y)
+#' 
 vDBS <- function(Xauxs, Xspreads, piks, ys) {
     .Call(`_StratifiedSampling_vDBS`, Xauxs, Xspreads, piks, ys)
 }
@@ -477,45 +493,42 @@ vDBS <- function(Xauxs, Xspreads, piks, ys) {
 #' 
 #' Variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)
 #' 
-#' @param Xaux Matrix of balancing constraints.
-#' @param pik Vector of inclusion probabilities.
-#' @param y variable of interest.
+#' @param Xaux A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param pik A vector of inclusion probabilities. The vector has the size \eqn{N} of the population \eqn{U}.
+#' @param y A variable of interest.
 #' 
 #' @references 
 #' Tillé, Y. (2020), Sampling and Estimation from finite populations, Wiley,
 #' 
-#' @return Approximated variance of the Horvitz-Thompson estimator 
+#' @return Approximated variance of the Horvitz-Thompson estimator.
 #' 
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
+#' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
+#' 
 #' @export
-vApp <- function(Xaux, pik, y) {
-    .Call(`_StratifiedSampling_vApp`, Xaux, pik, y)
-}
-
-#' @title wosi
-#'
-#' @description sakdhfa
-#' 
-#' @param pikr A vector of inclusion probabilities.
-#' 
-#' @details
-#' 
-#' 
-#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
-#'
-#' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
-#'
 #' 
 #' @examples
 #' 
-#' N <- 1000
-#' n <- 100
-#' pik <- inclprob(runif(N),n)
-#' s <- osod(pik)
+#' N <- 100 
+#' n <- 40
+#' x1 <- rgamma(N,4,25)
+#' x2 <- rgamma(N,4,25)
 #' 
-#' @export
-wosicpp <- function(pikr, H) {
-    .Call(`_StratifiedSampling_wosicpp`, pikr, H)
+#' pik <- rep(n/N,N)
+#' Xaux <- cbind(pik,as.matrix(matrix(c(x1,x2),ncol = 2)))
+#' Xspread <- cbind(runif(N),runif(N))
+#'   
+#' 
+#' s <- balseq(pik,Xaux,Xspread)
+#'   
+#' y <- Xaux%*%c(1,1,3) + rnorm(N,120) # variable of interest
+#'   
+#' vEst(Xaux[s,],pik[s],y[s])
+#' vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
+#' vApp(Xaux,pik,y)
+#' 
+vApp <- function(Xaux, pik, y) {
+    .Call(`_StratifiedSampling_vApp`, Xaux, pik, y)
 }
 

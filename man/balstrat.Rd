@@ -45,7 +45,7 @@ t(Xcat)\%*\%pik
 Chauvet, G. (2009). Stratified balanced sampling. \emph{Survey Methodology}, 35:115-119.
 }
 \seealso{
-\code{\link{ffphase}},\code{\link{landingRM}}
+\code{\link{ffphase}}, \code{\link{landingRM}}
 }
 \author{
 Raphaël Jauslin \email{raphael.jauslin@unine.ch}

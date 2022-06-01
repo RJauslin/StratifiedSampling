@@ -9,10 +9,9 @@
 //' @description
 //' Estimated variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)
 //' 
-//' 
-//' @param Xauxs Matrix of balancing constraints.
-//' @param piks Vector of inclusion probabilities.
-//' @param ys variable of interest.
+//' @param Xauxs A matrix of size (\eqn{n} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+//' @param piks A vector of inclusion probabilities. The vector has the size of the sample \eqn{s}.
+//' @param ys A variable of interest.The vector has the size \eqn{n} of the sample \eqn{s}.
 //' 
 //' @references 
 //' Tillé, Y. (2020), Sampling and Estimation from finite populations, Wiley,
@@ -21,7 +20,30 @@
 //' 
 //' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
+//' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
+//' 
 //' @export
+//' 
+//' @examples
+//' 
+//' N <- 100 
+//' n <- 40
+//' x1 <- rgamma(N,4,25)
+//' x2 <- rgamma(N,4,25)
+//' 
+//' pik <- rep(n/N,N)
+//' Xaux <- cbind(pik,as.matrix(matrix(c(x1,x2),ncol = 2)))
+//' Xspread <- cbind(runif(N),runif(N))
+//'   
+//' 
+//' s <- balseq(pik,Xaux,Xspread)
+//'   
+//' y <- Xaux%*%c(1,1,3) + rnorm(N,120) # variable of interest
+//'   
+//' vEst(Xaux[s,],pik[s],y[s])
+//' vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
+//' vApp(Xaux,pik,y)
+//' 
 // [[Rcpp::export]]
 arma::mat vEst(arma::mat Xauxs,
                arma::vec piks,
@@ -45,16 +67,40 @@ arma::mat vEst(arma::mat Xauxs,
   
 }
 
+/*** R
+
+N <- 100
+n <- 40
+
+x1 <- rgamma(N,4,25)
+x2 <- rgamma(N,4,25)
+
+pik <- rep(n/N,N)
+Xaux <- cbind(pik,as.matrix(matrix(c(x1,x2),ncol = 2)))
+Xspread <- cbind(runif(N),runif(N))
+
+s <- balseq(pik,Xaux)
+s <- balseq(pik,Xaux,Xspread)
+
+y <- Xaux%*%c(1,1,3) + rnorm(N,120) # variable of interest
+
+vEst(Xaux[s,],pik[s],y[s])
+vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
+vApp(Xaux,pik,y)
+
+*/
+
+
 //' @encoding UTF-8
-//' @title Variance Estimation for double balanced sample.
+//' @title Variance Estimation for Doubly Balanced Sample.
 //' 
 //' @description
-//' Variance estimator for sample that are at the same time well spread and balanced on auxiliary variables. See Grafstr\"om and Till\'é (2013)
+//' Variance estimator for sample that are at the same time well spread and balanced on auxiliary variables. See Grafstr\"om and Till\'e (2013)
 //' 
-//' @param Xauxs Matrix of balancing constraints.
+//' @param Xauxs A matrix of size (\eqn{n} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 //' @param Xspreads Matrix of spatial coordinates.
-//' @param piks Vector of inclusion probabilities.
-//' @param ys variable of interest.
+//' @param piks A vector of inclusion probabilities. The vector has the size \eqn{n} of the sample \eqn{s}.
+//' @param ys A variable of interest. The vector has the size \eqn{n} of the sample \eqn{s}.
 //' 
 //' @references 
 //' Grafstr\"om, A. and Till\'e, Y. (2013), Doubly balanced spatial sampling with spreading and restitution of auxiliary totals, Environmetrics, 14(2):120-131
@@ -63,7 +109,30 @@ arma::mat vEst(arma::mat Xauxs,
 //' 
 //' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
+//' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
+//' 
 //' @export
+//' 
+//' @examples
+//' 
+//' N <- 100 
+//' n <- 40
+//' x1 <- rgamma(N,4,25)
+//' x2 <- rgamma(N,4,25)
+//' 
+//' pik <- rep(n/N,N)
+//' Xaux <- cbind(pik,as.matrix(matrix(c(x1,x2),ncol = 2)))
+//' Xspread <- cbind(runif(N),runif(N))
+//'   
+//' 
+//' s <- balseq(pik,Xaux,Xspread)
+//'   
+//' y <- Xaux%*%c(1,1,3) + rnorm(N,120) # variable of interest
+//'   
+//' vEst(Xaux[s,],pik[s],y[s])
+//' vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
+//' vApp(Xaux,pik,y)
+//' 
 // [[Rcpp::export]]
 double vDBS(arma::mat Xauxs,
                arma::mat Xspreads,
@@ -137,18 +206,41 @@ vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
 //' 
 //' Variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)
 //' 
-//' @param Xaux Matrix of balancing constraints.
-//' @param pik Vector of inclusion probabilities.
-//' @param y variable of interest.
+//' @param Xaux A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+//' @param pik A vector of inclusion probabilities. The vector has the size \eqn{N} of the population \eqn{U}.
+//' @param y A variable of interest.
 //' 
 //' @references 
 //' Tillé, Y. (2020), Sampling and Estimation from finite populations, Wiley,
 //' 
-//' @return Approximated variance of the Horvitz-Thompson estimator 
+//' @return Approximated variance of the Horvitz-Thompson estimator.
 //' 
 //' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
+//' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
+//' 
 //' @export
+//' 
+//' @examples
+//' 
+//' N <- 100 
+//' n <- 40
+//' x1 <- rgamma(N,4,25)
+//' x2 <- rgamma(N,4,25)
+//' 
+//' pik <- rep(n/N,N)
+//' Xaux <- cbind(pik,as.matrix(matrix(c(x1,x2),ncol = 2)))
+//' Xspread <- cbind(runif(N),runif(N))
+//'   
+//' 
+//' s <- balseq(pik,Xaux,Xspread)
+//'   
+//' y <- Xaux%*%c(1,1,3) + rnorm(N,120) # variable of interest
+//'   
+//' vEst(Xaux[s,],pik[s],y[s])
+//' vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
+//' vApp(Xaux,pik,y)
+//' 
 // [[Rcpp::export]]
 arma::mat vApp(arma::mat Xaux,
                arma::vec pik,
@@ -176,7 +268,24 @@ arma::mat vApp(arma::mat Xaux,
 
 /*** R
 
+N <- 100
+n <- 40
 
+x1 <- rgamma(N,4,25)
+x2 <- rgamma(N,4,25)
+
+pik <- rep(n/N,N)
+Xaux <- cbind(pik,as.matrix(matrix(c(x1,x2),ncol = 2)))
+Xspread <- cbind(runif(N),runif(N))
+
+s <- balseq(pik,Xaux)
+s <- balseq(pik,Xaux,Xspread)
+
+y <- Xaux%*%c(1,1,3) + rnorm(N,120) # variable of interest
+
+vEst(Xaux[s,],pik[s],y[s])
+vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
+vApp(Xaux,pik,y)
 
 
 */

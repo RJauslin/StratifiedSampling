@@ -39,6 +39,8 @@ IntegerVector osod(NumericVector pikr,
                    bool full = false){ 
   
   
+  
+  
   // transfer memory for arma vector
   double eps = 1e-8;
   int N = pikr.size();
