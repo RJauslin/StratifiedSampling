@@ -1,18 +1,24 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Stratified Sampling
+# StratifiedSampling package
 
-Integrating a stratified structure in the population in a sampling
-design can considerably reduce the variance of the Horvitz-Thompson
-estimator. We propose in this package different methods to handle the
-selection of a balanced sample in stratified population. For more
-details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021)
-<https://arxiv.org/abs/2101.05568>.
+In this R package, different functions are implemented for selecting
+samples .
 
-The package propose also a method to do statistical matching using
-optimal transport and balanced sampling. For more details see Raphaël
-Jauslin and Yves Tillé (2021) <https://arxiv.org/abs/2105.08379>.
+-   If the population of interest is stratified. Different functions are
+    implemented, for more details see
+    <https://doi.org/10.1007/s42081-021-00134-y>.
+-   If two datasets are available for statistical matching. A method
+    based on optimal transport is implemented, for more details see
+    <https://arxiv.org/abs/2105.08379>.
+-   If you are interested in the Sequential Spatially Balanced method.
+    <http://arxiv.org/abs/2112.01164>
+-   If you are interested in the One step One decision method.
+    <https://arxiv.org/abs/2111.08433>
+
+The package contains also some useful functions. Look at the manual of
+the package for more information.
 
 ## Installation
 
@@ -32,12 +38,32 @@ devtools::install_github("Rjauslin/StratifiedSampling")
 
 ## Optimal transport matching
 
-A complete example on how to use the package to make an optimal
-statistical transport match can be found in the following vignette:
+The package proposes a method to do statistical matching using optimal
+transport and balanced sampling. For more details see Raphaël Jauslin
+and Yves Tillé (2021) <https://arxiv.org/abs/2105.08379>. A complete
+example on how to use the package to make an optimal statistical
+transport match can be found in the following vignette:
 
     vignette("ot_matching", package = "StratifiedSampling")
 
+## Sequential spatially balanced sampling
+
+The package proposes a method to select a well-spread sample balanced on
+some auxiliary variables. For more details see Raphaël Jauslin and Yves
+Tillé (2022) <http://arxiv.org/abs/2112.01164>. A complete example on
+how to use the different functions to select a well-spread and balanced
+sample can be found in the following vignette:
+
+    vignette("sequential_balanced", package = "StratifiedSampling")
+
 ## Simple example on stratified population
+
+Integrating a stratified structure in the population in a sampling
+design can considerably reduce the variance of the Horvitz-Thompson
+estimator. We propose in this package different methods to handle the
+selection of a balanced sample in stratified population. For more
+details see Raphaël Jauslin, Esther Eustache and Yves Tillé (2021)
+<https://doi.org/10.1007/s42081-021-00134-y>.
 
 This basic example shows you how to set up a stratified sampling design.
 The example is done on the `swissmunicipalities` dataset from the
@@ -84,22 +110,22 @@ and have the right number of units selected in each stratum.
 
 ``` r
 head(s)
-#> [1] 0 1 0 0 0 0
+#> [1] 0 0 0 0 1 0
 
 sum(s)
 #> [1] 560
 t(X/pik)%*%s
 #>          [,1]
-#>  [1,] 3892478
-#>  [2,] 1265936
-#>  [3,] 3788646
-#>  [4,] 3962247
-#>  [5,] 7750893
-#>  [6,] 1742343
-#>  [7,] 2316102
-#>  [8,] 2493605
-#>  [9,] 1198844
-#> [10,] 3354876
+#>  [1,] 3913625
+#>  [2,] 1247745
+#>  [3,] 3845692
+#>  [4,] 4007772
+#>  [5,] 7853464
+#>  [6,] 1761659
+#>  [7,] 2326537
+#>  [8,] 2529834
+#>  [9,] 1235434
+#> [10,] 3411215
 t(X/pik)%*%pik
 #>          [,1]
 #>  [1,] 3998831
