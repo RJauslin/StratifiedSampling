@@ -87,7 +87,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #' colSums(Xaux[s,]/as.vector(pik[s]))
 #' colSums(Xaux)
 #' 
-balseq <- function(pik,Xaux,Xspread = NULL){
+balseq <- function(pik,Xaux,Xspread = NULL,rord = TRUE){
   # initializing
   deg = 1
   N <- length(pik)
@@ -104,8 +104,9 @@ balseq <- function(pik,Xaux,Xspread = NULL){
     # cat("Step :",counter,"\n")
     # print(length(index))
     # print(n)
-    
-    i <- which.max(pik[index])
+   
+    i <- which.max(pik[index])  
+  
     
     if(!is.null(Xspread)){
       #take distance of the considered unit 
@@ -118,7 +119,12 @@ balseq <- function(pik,Xaux,Xspread = NULL){
       # index[1] <- index[i]
       # index[i] <- tmp
       
-      index <- index[order(pik[index],decreasing = TRUE)]
+      if(rord == TRUE){
+        index <- index[order(pik[index],decreasing = TRUE)]
+      }
+      
+      # print(index);cat("\n\n")
+      # print(pik[index])
     }
     
     l <- balseq_onestep(Xaux,pik,pikInit,index,deg)
@@ -175,6 +181,8 @@ balseq <- function(pik,Xaux,Xspread = NULL){
     }
   }else{
     if(length(index) != 0){
+      print(index)
+      print("Landing Phase")
       tmp <- as.vector(pik/pikInit)
       s <- landingRM(Xaux*tmp,pik)
       # s <- landingRM(Xaux/as.vector(pikInit),pik)

@@ -4,7 +4,7 @@
 \alias{balseq}
 \title{Sequential balanced sampling}
 \usage{
-balseq(pik, Xaux, Xspread = NULL)
+balseq(pik, Xaux, Xspread = NULL, rord = TRUE)
 }
 \arguments{
 \item{pik}{A vector of inclusion probabilities.}

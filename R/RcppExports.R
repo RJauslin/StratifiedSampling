@@ -50,8 +50,34 @@ c_bound <- function(pik) {
 #' @references Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York
 #' 
 #' @export
-calibRaking <- function(Xs, d, total, q, max_iter = 500L, tol = 1e-9) {
-    .Call(`_StratifiedSampling_calibRaking`, Xs, d, total, q, max_iter, tol)
+calibRaking <- function(Xs, d, total, q, max_iter = 500L, tol = 1e-9, comment = TRUE) {
+    .Call(`_StratifiedSampling_calibRaking`, Xs, d, total, q, max_iter, tol, comment)
+}
+
+#' @title Generalized calibration using raking ratio  
+#'
+#' @description This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibration estimator.
+#' 
+#' @param Xs A matrix of calibration variables.
+#' @param d A vector, the initial weights.
+#' @param total A vector that represents the initial weights.
+#' @param q A vector of positive value that account for heteroscedasticity.
+#' @param max_iter An integer, the maximum number of iterations. Default = 500.
+#' @param tol A scalar that represents the tolerance value for the algorithm. Default = 1e-9.
+#'
+#' @details
+#' More details on the different calibration methods can be read in Tillé Y. (2020).
+#'
+#' @return A vector, the value of the g-weights.
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#'
+#'
+#' @references Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York
+#' 
+#' @export
+gencalibRaking <- function(Xs, Zs, d, total, q, max_iter = 500L, tol = 1e-9, comment = TRUE) {
+    .Call(`_StratifiedSampling_gencalibRaking`, Xs, Zs, d, total, q, max_iter, tol, comment)
 }
 
 #' @title Disjunctive

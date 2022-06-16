@@ -23,8 +23,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // calibRaking
-Rcpp::NumericVector calibRaking(arma::mat Xs, arma::vec d, arma::vec total, arma::vec q, int max_iter, double tol);
-RcppExport SEXP _StratifiedSampling_calibRaking(SEXP XsSEXP, SEXP dSEXP, SEXP totalSEXP, SEXP qSEXP, SEXP max_iterSEXP, SEXP tolSEXP) {
+Rcpp::List calibRaking(arma::mat Xs, arma::vec d, arma::vec total, arma::vec q, int max_iter, double tol, bool comment);
+RcppExport SEXP _StratifiedSampling_calibRaking(SEXP XsSEXP, SEXP dSEXP, SEXP totalSEXP, SEXP qSEXP, SEXP max_iterSEXP, SEXP tolSEXP, SEXP commentSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -34,7 +34,26 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type q(qSEXP);
     Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(calibRaking(Xs, d, total, q, max_iter, tol));
+    Rcpp::traits::input_parameter< bool >::type comment(commentSEXP);
+    rcpp_result_gen = Rcpp::wrap(calibRaking(Xs, d, total, q, max_iter, tol, comment));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gencalibRaking
+Rcpp::List gencalibRaking(arma::mat Xs, arma::mat Zs, arma::vec d, arma::vec total, arma::vec q, int max_iter, double tol, bool comment);
+RcppExport SEXP _StratifiedSampling_gencalibRaking(SEXP XsSEXP, SEXP ZsSEXP, SEXP dSEXP, SEXP totalSEXP, SEXP qSEXP, SEXP max_iterSEXP, SEXP tolSEXP, SEXP commentSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Xs(XsSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Zs(ZsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type d(dSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type total(totalSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type q(qSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< bool >::type comment(commentSEXP);
+    rcpp_result_gen = Rcpp::wrap(gencalibRaking(Xs, Zs, d, total, q, max_iter, tol, comment));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -222,7 +241,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_c_bound", (DL_FUNC) &_StratifiedSampling_c_bound, 1},
-    {"_StratifiedSampling_calibRaking", (DL_FUNC) &_StratifiedSampling_calibRaking, 6},
+    {"_StratifiedSampling_calibRaking", (DL_FUNC) &_StratifiedSampling_calibRaking, 7},
+    {"_StratifiedSampling_gencalibRaking", (DL_FUNC) &_StratifiedSampling_gencalibRaking, 8},
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},
