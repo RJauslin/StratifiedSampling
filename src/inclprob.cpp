@@ -5,7 +5,7 @@ using namespace Rcpp;
 
 
 //' @title Inclusion Probabilities
-//'
+//' @name inclprob
 //' @description Computes first-order inclusion probabilities from a vector of positive numbers.
 //' 
 //' @param x vector of positive numbers.

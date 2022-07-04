@@ -47,6 +47,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 }
 
 #' @title Sequential balanced sampling
+#' @name balseq
 #'
 #' @description 
 #' Selects at the same time a well-spread and a balanced sample using a sequential implementation.
@@ -54,6 +55,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #' @param pik A vector of inclusion probabilities.
 #' @param Xaux A matrix of auxiliary variables. The matrix must contains the \code{pik} vector to have fixed sample size.
 #' @param Xspread An optional matrix of spatial coordinates.
+#' @param rord A logical variable that specify if reordering is applied. Default TRUE.
 #'
 #' @details 
 #' 
@@ -63,7 +65,6 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #' @return A vector with elements equal to 0 or 1.
 #'
 #' @seealso \code{\link[BalancedSampling:lcube]{lcube}}, \code{\link[sampling:samplecube]{samplecube}}. 
-#' @export
 #' @importFrom stats runif
 #' 
 #' @examples
@@ -87,6 +88,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #' colSums(Xaux[s,]/as.vector(pik[s]))
 #' colSums(Xaux)
 #' 
+#' @export
 balseq <- function(pik,Xaux,Xspread = NULL,rord = TRUE){
   # initializing
   deg = 1

@@ -4,7 +4,7 @@
 \alias{calibRaking}
 \title{Calibration using raking ratio}
 \usage{
-calibRaking(Xs, d, total, q, max_iter = 500L, tol = 1e-09, comment = TRUE)
+calibRaking(Xs, d, total, q, max_iter = 500L, tol = 1e-09)
 }
 \arguments{
 \item{Xs}{A matrix of calibration variables.}

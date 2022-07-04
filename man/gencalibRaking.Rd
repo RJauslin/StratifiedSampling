@@ -4,19 +4,12 @@
 \alias{gencalibRaking}
 \title{Generalized calibration using raking ratio}
 \usage{
-gencalibRaking(
-  Xs,
-  Zs,
-  d,
-  total,
-  q,
-  max_iter = 500L,
-  tol = 1e-09,
-  comment = TRUE
-)
+gencalibRaking(Xs, Zs, d, total, q, max_iter = 500L, tol = 1e-09)
 }
 \arguments{
 \item{Xs}{A matrix of calibration variables.}
+
+\item{Zs}{A matrix of instrumental variables with same dimension as Xs.}
 
 \item{d}{A vector, the initial weights.}
 

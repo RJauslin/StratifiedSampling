@@ -1,5 +1,5 @@
 #' @title Find best sub-matrix B in stratifiedcube
-#'
+#' @name findB
 #' @description
 #' This function is computing a sub-matrix used in \code{\link{stratifiedcube}}.
 #' 

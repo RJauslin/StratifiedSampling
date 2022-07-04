@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 
 //' @title One-step One Decision sampling method
-//'
+//' @name osod
 //' @description This function implements the One-step One Decision method. It can be used using equal or unequal inclusion probabilities. The method is particularly useful for selecting a sample from a stream. 
 //' 
 //' @param pikr A vector of inclusion probabilities.
@@ -62,6 +62,7 @@ IntegerVector osod(NumericVector pikr,
     pik[N-1] = ceil(n)-n;
     n = arma::sum(pik);
     ghost = true;
+    Rcpp::Rcout << "ghost = TRUE" << std::endl;
   }
   
   
@@ -80,35 +81,63 @@ IntegerVector osod(NumericVector pikr,
     // no need to do a step if equal to 0 or 1
     if(w > eps && w < (1.0-eps)){
       
-      
       if(full == true){
-        bound = N-1-i;
+        bound = N-1;
       }else{
-        bound = c_bound(pik.subvec(i,N-1));  
+        
+        //INITIALIZING
+        bool ck = false;
+        int j = i+1;
+        
+        
+        // CHECK THAT THE SUM IS GREATER THAN 1 for pik and 1-pik
+        double x1 = 0.0;
+        double x2 = 0.0;
+        do{
+          if(j >= N-1){
+            j = N-1;
+            break;
+          }
+          x1 = arma::sum(pik(arma::span(i,j)));
+          x2 = arma::sum(1.0 - pik(arma::span(i,j)));
+          j++;
+        } while ((x1 < (1-0-eps)) || (x2 < (1.0-eps)));
+        // Rcout << x1 << std::endl;
+        // Rcout << x2 << std::endl;
+        
+        
+        // CHECK THAT THE CONDITION IS FULLFILLED
+        do{
+          ck = c_bound2(pik(arma::span(i,j)));
+          j++;
+          if(j >= (N-1)){
+            j = N-1;
+            break;
+          }
+        } while (ck == false);
+        
+        // PUT THE RIGHT BOUND
+        bound = j;
+        
       }
       
-      index = arma::regspace<arma::uvec>(i+1,i + bound);
-      
-      pik_s = pik.elem(index);
-      n_tmp = arma::sum(pik_s) + w;
 
-      
+      pik_s = pik(arma::span(i+1,bound));
+      n_tmp = arma::sum(pik_s) + w;
       pik[i] = 0.0;// put unit i equal to 0
       pik_s = inclprob(pik_s,n_tmp); // update inclusion prob
   
-      
+      // MODIFICATION
       if(runif(1)[0] < w){
-      
-        pik.elem(index) = (pik.elem(index) - pik_s*(1.0-w))/w;
+        pik(arma::span(i+1,bound)) = (pik(arma::span(i+1,bound)) - pik_s*(1.0-w))/w;
         pik[i] = 1.0;
       }else{
-        pik.elem(index) = pik_s;
+        pik(arma::span(i+1,bound)) = pik_s;
       }
       
-      
+      // Rcout << pik << std::endl;
+ 
     }
-    
-    
   }
   
   // rounding and return as IntegerVector
@@ -120,7 +149,7 @@ IntegerVector osod(NumericVector pikr,
     return(s);
   }else{
     IntegerVector s(N);  
-    for(int i = 0;i< N;i++){
+    for(int i = 0; i< N; i++){
       if(pik[i] > (1-eps)){
         s[i] = 1;
       }
@@ -138,7 +167,7 @@ N <- 1000
 n <- 100
 pik <- inclprob(runif(N),n)
 s <- osod(pik,full = FALSE)
-
+s
 
 
 pik<-c(.4,.2,.4,.3,.3,.4)

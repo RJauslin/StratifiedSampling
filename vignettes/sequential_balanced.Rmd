@@ -2,7 +2,10 @@
 title: "Sequential balanced sampling"
 author: "Raphaël Jauslin"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
 bibliography: ref.bib
 vignette: >
   %\VignetteIndexEntry{Sequential balanced sampling}

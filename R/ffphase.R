@@ -1,5 +1,5 @@
 #' @title Fast flight phase of the cube method
-#'
+#' @name ffphase
 #' @description 
 #' 
 #' This function computes the flight phase of the cube method proposed by Chauvet and Tillé (2006).

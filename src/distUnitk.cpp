@@ -3,7 +3,7 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 //' @title Squared Euclidean distances of the unit k.
-//' 
+//' @name distUnitk
 //' @description
 //' Calculate the squared Euclidean distance from unit \eqn{k} to the other units.
 //' 
@@ -15,6 +15,7 @@
 //'
 //'
 //' @details
+//' 
 //' 
 //' Let \eqn{\mathbf{x}_k,\mathbf{x}_l} be the spatial coordinates of the unit \eqn{k,l \in U}. The classical euclidean distance is given by
 //' 

@@ -5,7 +5,7 @@
 
 //' @encoding UTF-8
 //' @title Variance Estimation for balanced sample
-//' 
+//' @name vEst
 //' @description
 //' Estimated variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)
 //' 
@@ -93,7 +93,7 @@ vApp(Xaux,pik,y)
 
 //' @encoding UTF-8
 //' @title Variance Estimation for Doubly Balanced Sample.
-//' 
+//' @name vDBS
 //' @description
 //' Variance estimator for sample that are at the same time well spread and balanced on auxiliary variables. See Grafstr\"om and Till\'e (2013)
 //' 
@@ -201,7 +201,7 @@ vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
 
 //' @encoding UTF-8
 //' @title Approximated variance for balanced sample
-//' 
+//' @name vApp
 //' @description
 //' 
 //' Variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)

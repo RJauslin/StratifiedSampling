@@ -1,5 +1,5 @@
 #' @title Statistical Matching using Optimal transport
-#'
+#' @name otmatch
 #' @description 
 #' 
 #' This function computes the statistical matching between two complex survey samples with weighting schemes. The function uses the function \code{\link[transport:transport]{transport}} of the package \code{transport}.

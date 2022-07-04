@@ -1,5 +1,5 @@
 #' @title Statistical matching using optimal transport and balanced sampling
-#' 
+#' @name bsmatch
 #' @description 
 #' 
 #' We propose a method based on the output of the function \code{\link{otmatch}}. The method consists of choosing a unit from sample 2 to assign to a particular unit from sample 1.

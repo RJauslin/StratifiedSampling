@@ -6,7 +6,7 @@ using namespace Rcpp;
 
 
 //' @title q from w
-//'
+//' @name qfromw
 //' @description This function finds the matrix \code{q} form a particular \code{w}.
 //'  
 //' @param w A vector of weights.
@@ -120,7 +120,7 @@ sum(pikt)
 
 
 //' @title s from q
-//'
+//' @name sfromq
 //' @description This function finds sample \code{s} form the matrix \code{q}.
 //'  
 //' @param q A matrix that is computed from the function \code{\link{qfromw}}. 
@@ -161,7 +161,7 @@ IntegerVector sfromq(const NumericMatrix& q){
 
 
 //' @title pik from q
-//'
+//' @name pikfromq
 //' @description This function finds the \code{pik} from an initial \code{q}.
 //'  
 //' @param q A matrix that is computed from the function \code{\link{qfromw}}. 
@@ -210,7 +210,7 @@ NumericVector pikfromq(NumericMatrix& q){
 
 
 //' @title pikt from pik
-//'
+//' @name piktfrompik
 //' @description This function finds the \code{pikt} from an initial \code{pik}.
 //'  
 //' @param pik A vector of inclusion probabilities. The vector must contains only value that are not integer.
@@ -309,7 +309,7 @@ NumericVector piktfrompik(NumericVector& pik, int max_iter = 500,double tol = 1e
 
 
 //' @title Conditional Poisson sampling design
-//'
+//' @name cps
 //' @description Maximum entropy sampling with fixed sample size. It select a sample with fixed sample size with unequal inclusion probabilities.
 //'  
 //' @param pik A vector of inclusion probabilities. 
@@ -617,7 +617,7 @@ NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
 
 
 //' @title Joint inclusion probabilities of maximum entropy.
-//'
+//' @name maxentpi2
 //' @description This function computes the matrix of the joint inclusion of the maximum entropy sampling with fixed sample size. It can handle unequal inclusion probabilities.
 //' 
 //' @param pikr A vector of inclusion probabilities.

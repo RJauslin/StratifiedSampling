@@ -1,5 +1,5 @@
 #' @title Balanced Stratification
-#' 
+#' @name balstrat
 #' @description 
 #' 
 #' Select a stratified balanced sample. The function is similar to \code{\link[sampling:balancedstratification]{balancedstratification}} of the package sampling.

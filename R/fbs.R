@@ -1,5 +1,5 @@
 #' @title  Fast Balanced Sampling
-#' 
+#' @name fbs
 #' @description 
 #' 
 #' This function implements the method proposed by Hasler and Tillé (2014). It should be used for selecting a sample from highly stratified population.

@@ -2,7 +2,7 @@
 
 // [[Rcpp::depends(RcppArmadillo)]]
 //' @title Calibration using raking ratio  
-//'
+//' @name calibRaking
 //' @description This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibration estimator.
 //' 
 //' @param Xs A matrix of calibration variables.
@@ -29,8 +29,7 @@ Rcpp::List calibRaking(arma::mat Xs,
                                 arma::vec total,
                                 arma::vec q,
                                 int max_iter = 500,
-                                double tol = 1e-9,
-                                bool comment = true){
+                                double tol = 1e-9){
   
   // intiializing
   // int n = Xs.n_rows;
@@ -158,10 +157,11 @@ calibRaking(as.matrix(XX1),d1,totals,q)
 
 // [[Rcpp::depends(RcppArmadillo)]]
 //' @title Generalized calibration using raking ratio  
-//'
+//' @name gencalibRaking
 //' @description This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibration estimator.
 //' 
 //' @param Xs A matrix of calibration variables.
+//' @param Zs A matrix of instrumental variables with same dimension as Xs. 
 //' @param d A vector, the initial weights.
 //' @param total A vector that represents the initial weights.
 //' @param q A vector of positive value that account for heteroscedasticity.
@@ -186,8 +186,7 @@ Rcpp::List gencalibRaking(arma::mat Xs,
                        arma::vec total,
                        arma::vec q,
                        int max_iter = 500,
-                       double tol = 1e-9,
-                       bool comment = true){
+                       double tol = 1e-9){
   
   // intiializing
   // int n = Xs.n_rows;

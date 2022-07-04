@@ -1,5 +1,5 @@
 #' @title Stratified Sampling
-#' 
+#' @name stratifiedcube
 #' @description  
 #' 
 #' This function implements a method for selecting a stratified sample. It really improves the performance of the function \code{\link{fbs}} and \code{\link{balstrat}}.

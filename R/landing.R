@@ -1,5 +1,5 @@
 #' @title Landing by suppression of variables
-#'
+#' @name landingRM
 #' @param A matrix of auxiliary variables on which the sample must be balanced. (The matrix should be divided by the original inclusion probabilities.)
 #' @param pikstar vector of updated inclusion probabilities by the flight phase. See \code{\link{ffphase}}
 #' @param EPS epsilon value
@@ -16,7 +16,6 @@
 #' @references
 #' Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{Computational Statistics}, 21/1:53-62
 #'
-#' @export
 #' @examples
 #' N <- 1000
 #' n <- 10
@@ -29,6 +28,7 @@
 #' t(X/pik)%*%pik
 #' t(X/pik)%*%pikstar
 #' t(X/pik)%*%s
+#' @export
 landingRM <- function(A,pikstar,EPS = 1e-7){
 
 

@@ -12,6 +12,8 @@ balseq(pik, Xaux, Xspread = NULL, rord = TRUE)
 \item{Xaux}{A matrix of auxiliary variables. The matrix must contains the \code{pik} vector to have fixed sample size.}
 
 \item{Xspread}{An optional matrix of spatial coordinates.}
+
+\item{rord}{A logical variable that specify if reordering is applied. Default TRUE.}
 }
 \value{
 A vector with elements equal to 0 or 1.

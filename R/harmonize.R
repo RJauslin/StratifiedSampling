@@ -1,5 +1,5 @@
 #' @title Harmonization by calibration
-#' 
+#' @name harmonize
 #' @description 
 #' This function harmonize the two weight schemes such that the totals are equal.
 #'
@@ -73,8 +73,8 @@ harmonize <- function(X1,d1,id1,X2,d2,id2,totals)
   }
   
   # calibration with sampling package
-  w1=d1*calibRaking(as.matrix(XX1),d1,totals,q = rep(1,length(d1)))
-  w2=d2*calibRaking(as.matrix(XX2),d2,totals,q = rep(1,length(d2)))
+  w1=d1*calibRaking(as.matrix(XX1),d1,totals,q = rep(1,length(d1)))$g
+  w2=d2*calibRaking(as.matrix(XX2),d2,totals,q = rep(1,length(d2)))$g
   
   # w1=d1*calibRaking(as.matrix(XX1),d1,totals,q = rep(1,length(d1)))
   # w2=d2*calibRaking(as.matrix(XX2),d2,totals,q = rep(1,length(d2)))

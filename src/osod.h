@@ -5,5 +5,4 @@
 
 Rcpp::IntegerVector osod(Rcpp::NumericVector pikr,bool full = false);
 
-
 #endif

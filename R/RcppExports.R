@@ -2,7 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @title C bound
-#'
+#' @name c_bound
 #' @description This function is returning the number of unit that we need such that some conditions are fulfilled. See Details
 #' 
 #' @param pik vector of the inclusion probabilities.
@@ -28,8 +28,35 @@ c_bound <- function(pik) {
     .Call(`_StratifiedSampling_c_bound`, pik)
 }
 
-#' @title Calibration using raking ratio  
+#' @title C bound
+#' @name c_bound2
+#' @description This function is returning the number of unit that we need such that some conditions are fulfilled. See Details
+#' 
+#' @param pik vector of the inclusion probabilities.
+#' 
+#' @details
+#' The function is computing the number of unit \eqn{K} that we need to add such that the following conditions are fulfilled :
 #'
+#' \itemize{
+#' \item \eqn{\sum_{k = 1}^K \pi_k \geq 1}
+#' \item \eqn{\sum_{k = 1}^K 1 - \pi_k \geq 1}
+#' \item Let \eqn{c} be the constant such that \eqn{\sum_{k = 2}^K min(c\pi_k,1) = n }, we must have that \eqn{ \pi_1 \geq 1- 1/c}
+#' }
+#' 
+#' @return An integer value, the number of units that we need to respect the constraints.
+#'
+#' @seealso \code{\link{osod}}
+#'
+#' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
+#'
+#' 
+#' @export
+c_bound2 <- function(pik) {
+    .Call(`_StratifiedSampling_c_bound2`, pik)
+}
+
+#' @title Calibration using raking ratio  
+#' @name calibRaking
 #' @description This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibration estimator.
 #' 
 #' @param Xs A matrix of calibration variables.
@@ -50,15 +77,16 @@ c_bound <- function(pik) {
 #' @references Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York
 #' 
 #' @export
-calibRaking <- function(Xs, d, total, q, max_iter = 500L, tol = 1e-9, comment = TRUE) {
-    .Call(`_StratifiedSampling_calibRaking`, Xs, d, total, q, max_iter, tol, comment)
+calibRaking <- function(Xs, d, total, q, max_iter = 500L, tol = 1e-9) {
+    .Call(`_StratifiedSampling_calibRaking`, Xs, d, total, q, max_iter, tol)
 }
 
 #' @title Generalized calibration using raking ratio  
-#'
+#' @name gencalibRaking
 #' @description This function is inspired by the function \code{\link[sampling:calib]{calib}} of the package sampling. It computes the g-weights of the calibration estimator.
 #' 
 #' @param Xs A matrix of calibration variables.
+#' @param Zs A matrix of instrumental variables with same dimension as Xs. 
 #' @param d A vector, the initial weights.
 #' @param total A vector that represents the initial weights.
 #' @param q A vector of positive value that account for heteroscedasticity.
@@ -76,12 +104,12 @@ calibRaking <- function(Xs, d, total, q, max_iter = 500L, tol = 1e-9, comment = 
 #' @references Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York
 #' 
 #' @export
-gencalibRaking <- function(Xs, Zs, d, total, q, max_iter = 500L, tol = 1e-9, comment = TRUE) {
-    .Call(`_StratifiedSampling_gencalibRaking`, Xs, Zs, d, total, q, max_iter, tol, comment)
+gencalibRaking <- function(Xs, Zs, d, total, q, max_iter = 500L, tol = 1e-9) {
+    .Call(`_StratifiedSampling_gencalibRaking`, Xs, Zs, d, total, q, max_iter, tol)
 }
 
 #' @title Disjunctive
-#'
+#' @name disj
 #' @description
 #' This function transforms a categorical vector into a matrix of indicators.
 #'
@@ -101,7 +129,7 @@ disj <- function(strata) {
 }
 
 #' @title Number of categories
-#'
+#' @name ncat
 #' @description
 #' This function returns the number of factor in each column of a categorical matrix.
 #'
@@ -123,7 +151,7 @@ ncat <- function(Xcat) {
 }
 
 #' @title Disjunctive for matrix  
-#'
+#' @name disjMatrix
 #' @description
 #' This function transforms a categorical matrix into a matrix of indicators variables.
 #'
@@ -145,7 +173,7 @@ disjMatrix <- function(strata) {
 }
 
 #' @title Squared Euclidean distances of the unit k.
-#' 
+#' @name distUnitk
 #' @description
 #' Calculate the squared Euclidean distance from unit \eqn{k} to the other units.
 #' 
@@ -157,6 +185,7 @@ disjMatrix <- function(strata) {
 #'
 #'
 #' @details
+#' 
 #' 
 #' Let \eqn{\mathbf{x}_k,\mathbf{x}_l} be the spatial coordinates of the unit \eqn{k,l \in U}. The classical euclidean distance is given by
 #' 
@@ -197,7 +226,7 @@ distUnitk <- function(X, k, tore, toreBound) {
 }
 
 #' @title Inclusion Probabilities
-#'
+#' @name inclprob
 #' @description Computes first-order inclusion probabilities from a vector of positive numbers.
 #' 
 #' @param x vector of positive numbers.
@@ -224,7 +253,7 @@ inclprob <- function(x, n) {
 }
 
 #' @title q from w
-#'
+#' @name qfromw
 #' @description This function finds the matrix \code{q} form a particular \code{w}.
 #'  
 #' @param w A vector of weights.
@@ -248,7 +277,7 @@ qfromw <- function(w, n) {
 }
 
 #' @title s from q
-#'
+#' @name sfromq
 #' @description This function finds sample \code{s} form the matrix \code{q}.
 #'  
 #' @param q A matrix that is computed from the function \code{\link{qfromw}}. 
@@ -270,7 +299,7 @@ sfromq <- function(q) {
 }
 
 #' @title pik from q
-#'
+#' @name pikfromq
 #' @description This function finds the \code{pik} from an initial \code{q}.
 #'  
 #' @param q A matrix that is computed from the function \code{\link{qfromw}}. 
@@ -292,7 +321,7 @@ pikfromq <- function(q) {
 }
 
 #' @title pikt from pik
-#'
+#' @name piktfrompik
 #' @description This function finds the \code{pikt} from an initial \code{pik}.
 #'  
 #' @param pik A vector of inclusion probabilities. The vector must contains only value that are not integer.
@@ -320,7 +349,7 @@ piktfrompik <- function(pik, max_iter = 500L, tol = 1e-8) {
 }
 
 #' @title Conditional Poisson sampling design
-#'
+#' @name cps
 #' @description Maximum entropy sampling with fixed sample size. It select a sample with fixed sample size with unequal inclusion probabilities.
 #'  
 #' @param pik A vector of inclusion probabilities. 
@@ -366,7 +395,7 @@ cps <- function(pik, eps = 1e-6) {
 }
 
 #' @title Joint inclusion probabilities of maximum entropy.
-#'
+#' @name maxentpi2
 #' @description This function computes the matrix of the joint inclusion of the maximum entropy sampling with fixed sample size. It can handle unequal inclusion probabilities.
 #' 
 #' @param pikr A vector of inclusion probabilities.
@@ -390,7 +419,7 @@ maxentpi2 <- function(pikr) {
 }
 
 #' @title One-step One Decision sampling method
-#'
+#' @name osod
 #' @description This function implements the One-step One Decision method. It can be used using equal or unequal inclusion probabilities. The method is particularly useful for selecting a sample from a stream. 
 #' 
 #' @param pikr A vector of inclusion probabilities.
@@ -423,7 +452,7 @@ osod <- function(pikr, full = FALSE) {
 
 #' @encoding UTF-8
 #' @title Variance Estimation for balanced sample
-#' 
+#' @name vEst
 #' @description
 #' Estimated variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)
 #' 
@@ -468,7 +497,7 @@ vEst <- function(Xauxs, piks, ys) {
 
 #' @encoding UTF-8
 #' @title Variance Estimation for Doubly Balanced Sample.
-#' 
+#' @name vDBS
 #' @description
 #' Variance estimator for sample that are at the same time well spread and balanced on auxiliary variables. See Grafstr\"om and Till\'e (2013)
 #' 
@@ -514,7 +543,7 @@ vDBS <- function(Xauxs, Xspreads, piks, ys) {
 
 #' @encoding UTF-8
 #' @title Approximated variance for balanced sample
-#' 
+#' @name vApp
 #' @description
 #' 
 #' Variance approximation calculated as the conditional variance with respect to the balancing equations of a particular Poisson design. See Tillé (2020)

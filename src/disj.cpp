@@ -2,7 +2,7 @@
 
 // [[Rcpp::depends(RcppArmadillo)]]
 //' @title Disjunctive
-//'
+//' @name disj
 //' @description
 //' This function transforms a categorical vector into a matrix of indicators.
 //'
@@ -69,7 +69,7 @@ system.time(M <- sampling::disjunctive(strata))
 
 // [[Rcpp::depends(RcppArmadillo)]]
 //' @title Number of categories
-//'
+//' @name ncat
 //' @description
 //' This function returns the number of factor in each column of a categorical matrix.
 //'
@@ -117,7 +117,7 @@ system.time(test <- ncat(Xcat))
 
 // [[Rcpp::depends(RcppArmadillo)]]
 //' @title Disjunctive for matrix  
-//'
+//' @name disjMatrix
 //' @description
 //' This function transforms a categorical matrix into a matrix of indicators variables.
 //'

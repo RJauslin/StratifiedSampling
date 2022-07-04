@@ -6,7 +6,7 @@ using namespace Rcpp;
 
 
 //' @title C bound
-//'
+//' @name c_bound
 //' @description This function is returning the number of unit that we need such that some conditions are fulfilled. See Details
 //' 
 //' @param pik vector of the inclusion probabilities.
@@ -65,7 +65,7 @@ int c_bound(arma::vec pik){
     }
     
     j = j+1;
-    if(j >= N-1){
+    if(j > N-1){
       j = N;
       break;
     }
@@ -86,4 +86,51 @@ cond(pik)
 
 
 */
+
+
+
+//' @title C bound
+//' @name c_bound2
+//' @description This function is returning the number of unit that we need such that some conditions are fulfilled. See Details
+//' 
+//' @param pik vector of the inclusion probabilities.
+//' 
+//' @details
+//' The function is computing the number of unit \eqn{K} that we need to add such that the following conditions are fulfilled :
+//'
+//' \itemize{
+//' \item \eqn{\sum_{k = 1}^K \pi_k \geq 1}
+//' \item \eqn{\sum_{k = 1}^K 1 - \pi_k \geq 1}
+//' \item Let \eqn{c} be the constant such that \eqn{\sum_{k = 2}^K min(c\pi_k,1) = n }, we must have that \eqn{ \pi_1 \geq 1- 1/c}
+//' }
+//' 
+//' @return An integer value, the number of units that we need to respect the constraints.
+//'
+//' @seealso \code{\link{osod}}
+//'
+//' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
+//'
+//' 
+//' @export
+// [[Rcpp::export]]
+bool c_bound2(arma::vec pik){
+  
+  int N = pik.size();
+  double eps = 1e-6;
+  
+  arma::vec pik_tmp;
+  double n_tmp = arma::sum(pik);
+  
+  pik_tmp = pik(arma::span(1,N-1));
+  pik_tmp = inclprob(pik_tmp,n_tmp);
+    
+  double c = max(pik_tmp/pik(arma::span(1,N-1)));
+  
+  if(c < 1.0/(1.0-pik[0])){
+    return(true);
+  }else{
+    return(false);
+  }
+  
+}
 
