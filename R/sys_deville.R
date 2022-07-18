@@ -153,22 +153,54 @@ sys_devillepi2 <- function(pik){
   n <- sum(pik)
   out <-  matrix(rep(0,N*N),ncol = N,nrow = N)
   
+  
   ## MICROSTRATA CREATION 
   U <- microstrata(pik)
   
   ## CROSS AND NONCROSS UNITS
   noncross <- lapply(U,function(x){
-    if(length(x$m) > 2){
-      return(x$m[seq(2,length(x$m)-1,1)])
+    if(length(x$m) < (2 + 1e-7) && x$b < 1e-7){
+      return(x$m)
+    }else if(length(x$m) > 2){
+      if(x$b > 1e-7){
+        return(x$m[seq(2,length(x$m)-1,1)])  
+      }else{
+        return(x$m[seq(2,length(x$m),1)])  
+      }
     }else{
       return(NULL)
     }
   })
   noncross[[1]] <- c(1,noncross[[1]])
-  noncross[[length(noncross)]] <- c(noncross[[length(noncross)]],N)
   
-  cross <- lapply(U,function(x){x$m[1]})
-  cross <- cross[-1]
+
+  
+  # noncross[[length(noncross)]] <- c(noncross[[length(noncross)]],N)
+  
+  
+  cross <- lapply(U,function(x){
+    if(x$b < 1e-7){
+      return(NULL)
+    }else{
+      x$m[length(x$m)]
+    }
+  })
+  cross <- cross[-length(cross)]
+  
+  if(any(cross[[length(cross)]] == noncross[[length(noncross)]])){
+    noncross[[length(noncross)]] <- noncross[[length(noncross)]][-which(cross[[length(cross)]] == noncross[[length(noncross)]])]
+    
+  }
+  
+  # nonull <- do.call(c,lapply(cross,function(x){!is.null(x)}))
+  # cross <- cross[nonull]
+  
+  
+  # cross <- lapply(U,function(x){x$m[length(x$m)]})
+  # cross <- cross[-length(cross)]
+  
+  # cross <- lapply(U,function(x){x$m[1]})
+  # cross <- cross[-1]
   
   b <- lapply(U,function(x){x$b})
   a <- lapply(U,function(x){x$a})
@@ -199,18 +231,25 @@ sys_devillepi2 <- function(pik){
     out[nn[k,1],nn[k,2]] = pik[nn[k,1]]*pik[nn[k,2]]*(1- nn[k,3])
   }
   
-  image(as(as.matrix(out),"sparseMatrix"))
+  # image(as(as.matrix(out),"sparseMatrix"))
   
   ##------------- k CROSSBORDER UNIT l NONCROSSBORDER UNIT (row element of out)
   nn <- data.frame(k = NULL,l = NULL, c = NULL)
-  for(i in 1:length(cross)){
-    for(u in (i+1):length(noncross)){
-      if(!is.null(noncross[[u]])){
-        # cat(i,u,"\n")
-        nn <- rbind(nn,data.frame( k = rep(cross[[i]][1],length(noncross[[u]])),
-                                   l = noncross[[u]],
-                                   c = rep(cij(i,u-1,U),length(noncross[[u]])),
-                                   b = rep(b[[i]],length(noncross[[u]]))))
+  for(i in 1:length(cross)){ # j >= i +1
+    if(!is.null(cross[[i]])){
+      for(u in (i+1):length(noncross)){
+        if(!is.null(noncross[[u]])){
+          # cat(i,u,"\n")
+          nn <- rbind(nn,data.frame( k = rep(cross[[i]][1],length(noncross[[u]])),
+                                     l = noncross[[u]],
+                                     c = rep(cij(i+1,u,U),length(noncross[[u]])),
+                                     b = rep(b[[i]],length(noncross[[u]]))))
+          # nn <- rbind(nn,data.frame( k = rep(cross[[i]][1],length(noncross[[u]])),
+          #                            l = noncross[[u]],
+          #                            c = rep(cij(i,u-1,U),length(noncross[[u]])),
+          #                            a = rep(b[[i]],length(noncross[[u]]))))
+          
+        }
       }
     }
   }
@@ -219,18 +258,20 @@ sys_devillepi2 <- function(pik){
     out[nn[k,1],nn[k,2]] = pik[nn[k,1]]*pik[nn[k,2]]*(1 - nn[k,4]*(1-pik[nn[k,1]])*(pik[nn[k,1]]*(1-nn[k,4]))^(-1)*nn[k,3])
   }
   
-  image(as(as.matrix(out),"sparseMatrix"))
+  # image(as(as.matrix(out),"sparseMatrix"))
   
   ##------------- k NONCROSSBORDER UNIT and l BORDER UNIT (column element of out)
   nn <- data.frame(k = NULL,l = NULL, c = NULL)
-  for(i in 1:length(cross)){
-    for(u in i:1){
-      # cat(u,i,"\n")
-      if(!is.null(noncross[[u]])){
-        nn <- rbind(nn,data.frame( k = noncross[[u]],
-                                   l = rep(cross[[i]],length(noncross[[u]])),
-                                   c = rep(cij(u,i,U),length(noncross[[u]])), # i+1 if bi
-                                   a = rep(a[[i]],length(noncross[[u]]))))
+  for(i in 1:length(cross)){ # j >= i
+    if(!is.null(cross[[i]])){
+      for(u in i:1){
+        # cat(u,i,"\n")
+        if(!is.null(noncross[[u]])){
+          nn <- rbind(nn,data.frame( k = noncross[[u]],
+                                     l = rep(cross[[i]],length(noncross[[u]])),
+                                     c = rep(cij(u,i,U),length(noncross[[u]])), # i+1 if bi
+                                     a = rep(a[[i]],length(noncross[[u]]))))
+        }
       }
     }
   }
@@ -239,28 +280,37 @@ sys_devillepi2 <- function(pik){
     out[nn[k,1],nn[k,2]] = pik[nn[k,1]]*pik[nn[k,2]]*(1 - (1-pik[nn[k,2]])*(nn[k,4])*(pik[nn[k,2]]*(1 - nn[k,4]))^(-1)*nn[k,3])
   }
   
+  # image(as(as.matrix(out),"sparseMatrix"))
+  
   ##------------- k CROSSBORDER UNIT l CROSSBORDER UNIT
   nn <- data.frame(k = NULL,l = NULL, c = NULL)
   for(i in 1:(length(cross)-1)){
-    for(u in (i+1):length(cross)){
-      # cat(i,u,"\n")
-      nn <- rbind(nn,data.frame( k = cross[[i]],
-                                 l = cross[[u]],
-                                 c = cij(i,u,U),
-                                 b1 = b[[i]],
-                                 b2 = b[[u]],
-                                 a = a[[u]]))
+    if(!is.null(cross[[i]])){
+      for(u in (i+1):length(cross)){
+        if(!is.null(cross[[u]])){
+        # cat(i,u,"\n")
+        nn <- rbind(nn,data.frame( k = cross[[i]],
+                                   l = cross[[u]],
+                                   c = cij(i+1,u,U),
+                                   b1 = b[[i]],
+                                   # b2 = b[[u]],
+                                   # a1 = a[[i]],
+                                   a2 = a[[u]]))
+        }
+      }
     }
   }
   
   for(k in 1:nrow(nn)){
-    out[nn[k,1],nn[k,2]] = pik[nn[k,1]]*pik[nn[k,2]] - (1-pik[nn[k,1]])*(1-pik[nn[k,2]]) * ((nn[k,4])*(nn[k,5])) *((1-nn[k,5])*(1-nn[k,6]))^(-1)*nn[k,3]
+    out[nn[k,1],nn[k,2]] = pik[nn[k,1]]*pik[nn[k,2]] - nn[k,3]*((1-pik[nn[k,1]])*(1-pik[nn[k,2]]) * ((nn[k,4])*(nn[k,5])) *((1-nn[k,4])*(1-nn[k,5]))^(-1))
   }
   
   
   ## return matrix
   out <- out + t(out)
   out <- out + diag(pik)
+  
+  rowSums(out)
   
   return(out)
   
