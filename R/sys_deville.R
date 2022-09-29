@@ -64,9 +64,12 @@ microstrata <- function(pik){
 #' @title Deville's systematic
 #' @name sys_deville
 #' 
+#' @description 
+#' This function implements a method to select a sample using the Deville's systmatic algorithm.
+#' 
 #' @param pik A vector of inclusion probabilities
 #'
-#' @return A vector that contains the selected units.
+#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #' 
 #' @references Deville, J.-C. (1998), Une nouvelle méthode de tirage à probabilité inégales. Technical Report 9804, Ensai, France.
 #' 
@@ -124,10 +127,13 @@ sys_deville <- function(pik){
 
 
 
-#' Second order inclusion probabilities of Deville's systematic
+#' @title Second order inclusion probabilities of Deville's systematic
 #'
 #' @param pik A vector of inclusion probabilities
 #'
+#' @description 
+#' This function returns the second order inclusion probabilities of Deville's systematic. 
+#' 
 #' @return A matrix of second order inclusion probabilities.
 #' 
 #' @references Deville, J.-C. (1998), Une nouvelle méthode de tirage à probabilité inégales. Technical Report 9804, Ensai, France.
@@ -140,11 +146,11 @@ sys_deville <- function(pik){
 #' n <- 4
 #' pik <- as.vector(inclprob(runif(N),n))
 #' PI <- sys_devillepi2(pik)
-#' image(as(as.matrix(PI),"sparseMatrix"))
+#' #image(as(as.matrix(PI),"sparseMatrix"))
 #' 
 #' pik <- c(0.2,0.5,0.3,0.4,0.9,0.8,0.5,0.4)
 #' PI <- sys_devillepi2(pik)
-#' image(as(as.matrix(PI),"sparseMatrix"))
+#' #image(as(as.matrix(PI),"sparseMatrix"))
 #' @export
 sys_devillepi2 <- function(pik){
   
@@ -310,7 +316,7 @@ sys_devillepi2 <- function(pik){
   out <- out + t(out)
   out <- out + diag(pik)
   
-  rowSums(out)
+  # rowSums(out)
   
   return(out)
   

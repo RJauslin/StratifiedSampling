@@ -64,7 +64,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #'
 #' @return A vector with elements equal to 0 or 1.
 #'
-#' @seealso \code{\link[BalancedSampling:lcube]{lcube}}, \code{\link[sampling:samplecube]{samplecube}}. 
+#' @seealso \code{\link[BalancedSampling:lcube]{BalancedSampling:lcube}}, \code{\link[sampling:samplecube]{sampling:samplecube}}. 
 #' @importFrom stats runif
 #' 
 #' @examples

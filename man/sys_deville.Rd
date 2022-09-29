@@ -10,10 +10,10 @@ sys_deville(pik)
 \item{pik}{A vector of inclusion probabilities}
 }
 \value{
-A vector that contains the selected units.
+A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 }
 \description{
-Deville's systematic
+This function implements a method to select a sample using the Deville's systmatic algorithm.
 }
 \examples{
 pik <- c(0.2,0.5,0.3,0.4,0.9,0.8,0.5,0.4)

@@ -13,7 +13,7 @@ sys_devillepi2(pik)
 A matrix of second order inclusion probabilities.
 }
 \description{
-Second order inclusion probabilities of Deville's systematic
+This function returns the second order inclusion probabilities of Deville's systematic.
 }
 \examples{
 set.seed(1)
@@ -21,11 +21,11 @@ N <- 30
 n <- 4
 pik <- as.vector(inclprob(runif(N),n))
 PI <- sys_devillepi2(pik)
-image(as(as.matrix(PI),"sparseMatrix"))
+#image(as(as.matrix(PI),"sparseMatrix"))
 
 pik <- c(0.2,0.5,0.3,0.4,0.9,0.8,0.5,0.4)
 PI <- sys_devillepi2(pik)
-image(as(as.matrix(PI),"sparseMatrix"))
+#image(as(as.matrix(PI),"sparseMatrix"))
 }
 \references{
 Deville, J.-C. (1998), Une nouvelle méthode de tirage à probabilité inégales. Technical Report 9804, Ensai, France.

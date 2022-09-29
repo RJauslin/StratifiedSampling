@@ -48,5 +48,5 @@ colSums(Xaux)
 
 }
 \seealso{
-\code{\link[BalancedSampling:lcube]{lcube}}, \code{\link[sampling:samplecube]{samplecube}}.
+\code{\link[BalancedSampling:lcube]{BalancedSampling:lcube}}, \code{\link[sampling:samplecube]{sampling:samplecube}}.
 }

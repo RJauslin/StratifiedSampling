@@ -1,6 +1,8 @@
 # NEWS for Package "StratifiedSampling"
 
 ## StratifiedSampling 0.4.0
+# add vignette on Deville systematic
+* add Deville systematic functions (sys_deville, sys_devillepi2)
 * add EPS in stratifedcube and landingRM
 * add full option in osod
 * add cps C++ implementation of the UPmaxentropy function from sampling package.

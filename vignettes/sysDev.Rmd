@@ -35,7 +35,7 @@ Inclusion probabilities are generated unequal and proportional to a random unifo
 library(sampling)
 library(StratifiedSampling)
 library(BalancedSampling)
-devtools::load_all(".")
+
 set.seed(1)
 N <- 20
 n <- 3
