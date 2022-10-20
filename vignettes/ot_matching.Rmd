@@ -35,7 +35,7 @@ We will estimate the contingency table when the factor variable which represents
 library(laeken)
 library(sampling)
 library(StratifiedSampling)
-devtools::load_all(".")
+
 data("eusilc")
 eusilc <- na.omit(eusilc)
 N <- nrow(eusilc)

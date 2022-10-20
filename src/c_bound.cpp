@@ -121,6 +121,7 @@ bool c_bound2(arma::vec pik){
   arma::vec pik_tmp;
   double n_tmp = arma::sum(pik);
   
+  
   pik_tmp = pik(arma::span(1,N-1));
   pik_tmp = inclprob(pik_tmp,n_tmp);
     

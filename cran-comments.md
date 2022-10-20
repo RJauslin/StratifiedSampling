@@ -7,6 +7,12 @@
 
 ## rhub
 
+- Windows Servers 2022
+  * checking for detritus in the temp directory ... NOTE
+  Found the following files/directories:
+  'lastMiKTeXException'
+  
+
 - Fedora Linux, R-devel, clang, gfortran
  
  * There were no ERRORs, WARNINGs or NOTEs

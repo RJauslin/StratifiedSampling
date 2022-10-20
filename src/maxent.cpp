@@ -290,7 +290,7 @@ NumericVector piktfrompik(NumericVector& pik, int max_iter = 500,double tol = 1e
   // w = exp(w);
   q = qfromw(w,n);
   pikt1 = pikt + p - pikfromq(q);
-  arr = sum(abs(pikt - pikt1));
+  arr = sum(Rcpp::abs(pikt - pikt1));
   pikt = pikt1;
   count++;
  }
@@ -571,7 +571,7 @@ NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
   
   for(int k = 0; k < N; k++){
     for(int l = 0; l < N; l++){
-      if( (abs(pik[k] - pik[l]) > eps) & (k != l)){
+      if( (std::abs(pik[k] - pik[l]) > eps) & (k != l)){
       // if(pik[k] != pik[l] & k != l){
         M(k,l) = (pik[k]* w[l] - pik[l]*w[k])/(w[l] - w[k]);
       }else{
@@ -593,7 +593,7 @@ NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
     comp = 0;
     for(int l = 0; l < N; l++){
       // if(M(k,l) != -1.0){
-      if(abs(M(k,l) + 1.0) > eps){  
+      if(std::abs(M(k,l) + 1.0) > eps){  
         tt = tt + M(k,l);  
       }else{
         comp = comp + 1.0;
@@ -601,7 +601,7 @@ NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
     }
     cc = (n * pik[k] - tt)/comp;
     for(int l = 0; l < N; l++){
-      if(abs(M(k,l) + 1) < eps){
+      if(std::abs(M(k,l) + 1) < eps){
       // if(M(k,l) == -1.0){
         M(k,l) = cc;
       }

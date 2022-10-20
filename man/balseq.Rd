@@ -16,7 +16,7 @@ balseq(pik, Xaux, Xspread = NULL, rord = TRUE)
 \item{rord}{A logical variable that specify if reordering is applied. Default TRUE.}
 }
 \value{
-A vector with elements equal to 0 or 1.
+Return the selected indices in 1,2,...,N
 }
 \description{
 Selects at the same time a well-spread and a balanced sample using a sequential implementation.

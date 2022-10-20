@@ -7,10 +7,10 @@
 sys_deville(pik)
 }
 \arguments{
-\item{pik}{A vector of inclusion probabilities}
+\item{pik}{A vector of inclusion probabilities.}
 }
 \value{
-A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+Return the selected indices in 1,2,...,N
 }
 \description{
 This function implements a method to select a sample using the Deville's systmatic algorithm.

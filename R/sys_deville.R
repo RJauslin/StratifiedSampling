@@ -67,9 +67,9 @@ microstrata <- function(pik){
 #' @description 
 #' This function implements a method to select a sample using the Deville's systmatic algorithm.
 #' 
-#' @param pik A vector of inclusion probabilities
+#' @param pik A vector of inclusion probabilities.
 #'
-#' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
+#' @return Return the selected indices in 1,2,...,N
 #' 
 #' @references Deville, J.-C. (1998), Une nouvelle méthode de tirage à probabilité inégales. Technical Report 9804, Ensai, France.
 #' 

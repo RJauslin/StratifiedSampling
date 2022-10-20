@@ -148,8 +148,6 @@ calibRaking(as.matrix(XX1),d1,totals,q)
 
 
 
-
-
 */
 
 

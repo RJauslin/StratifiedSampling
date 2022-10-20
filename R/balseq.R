@@ -62,7 +62,7 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #' The function selects a sample using a sequential algorithm. At the same time, it respects the balancing equations (\code{Xaux}) and select a well-spread sample (\code{Xspread}). Algorithm uses a 
 #' linear program to satisfy the constraints.
 #'
-#' @return A vector with elements equal to 0 or 1.
+#' @return Return the selected indices in 1,2,...,N
 #'
 #' @seealso \code{\link[BalancedSampling:lcube]{BalancedSampling:lcube}}, \code{\link[sampling:samplecube]{sampling:samplecube}}. 
 #' @importFrom stats runif
@@ -183,8 +183,8 @@ balseq <- function(pik,Xaux,Xspread = NULL,rord = TRUE){
     }
   }else{
     if(length(index) != 0){
-      print(index)
-      print("Landing Phase")
+      # print(index)
+      # print("Landing Phase")
       tmp <- as.vector(pik/pikInit)
       s <- landingRM(Xaux*tmp,pik)
       # s <- landingRM(Xaux/as.vector(pikInit),pik)

@@ -57,7 +57,7 @@ landingRM <- function(A,pikstar,EPS = 1e-7){
   ##                          Main loop                           -
   ##---------------------------------------------------------------
   
-
+  
   ####### COMMENT TO CHECK THAT LANDING WORKS
   # print(Aland[j,]/pikland[j]) # should have 1 on the first columns 
   # print(Aland)
@@ -66,7 +66,6 @@ landingRM <- function(A,pikstar,EPS = 1e-7){
     # Bland <- Aland[j,]*pikland[j] # ffphase need X instead of A so why * by pikland
     Bland <- Aland[j,] # ffphase need X instead of A so why * by pikland
     Bland <- Bland[,1:(p-k)]
-    
     kern <- MASS::Null(Bland)
     if(length(kern) != 0){
       pik_tmp <- pikland[j] # keep old pik to update A 
@@ -96,20 +95,8 @@ landingRM <- function(A,pikstar,EPS = 1e-7){
   # cat("sum pikstar after dropping variables:", sum(pikstar[i]),"\n")
   
   if(length(i) != 0){
-    stop("error you still have, after landing, at least one unit that have inlcusion probability not equal to 0 or 1.")
+    stop("error you still have, after landing, at least one unit that have inlcusion probability not equal to 0 or 1. Check that you have put the vector of inclusion probabilities as first column on the auxiliary variables.")
   }
-  
-  # cat("pikstar after dropping variables:", pikstar[i],"\n")
-  # cat("sum pikstar after dropping variables:", sum(pikstar[i]),"\n")
-  
-  
-  
-  
-  # if(length(i) != 0){
-  # print("rounding ending")
-  # pikstar[i] <- stats::rbinom(1,1,pikstar[i])
-  # cat("it remains",length(i), "units that are not put to 0 or 1")
-  # }
   
   return(round(pikstar,6))
 }

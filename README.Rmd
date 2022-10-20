@@ -19,7 +19,6 @@ In this R package, different functions are implemented for selecting samples .
 * If the population of interest is stratified. Different functions are implemented, for more details see <https://doi.org/10.1007/s42081-021-00134-y>.
 * If two datasets are available for statistical matching. A method based on optimal transport is implemented, for more details see <https://arxiv.org/abs/2105.08379>.
 * If you are interested in the Sequential Spatially Balanced method. <http://arxiv.org/abs/2112.01164>
-* If you are interested in the One step One decision method. <https://arxiv.org/abs/2111.08433>
 
 The package contains also some useful functions. Look at the manual of the package for more information. 
 
@@ -50,7 +49,7 @@ vignette("ot_matching", package = "StratifiedSampling")
 
 ## Sequential spatially balanced sampling
 
-The package proposes a method to select a well-spread sample balanced on some auxiliary variables. For more details see Raphaël Jauslin and Yves Tillé (2022) <http://arxiv.org/abs/2112.01164>. A complete example on how to use the different functions to select a well-spread and balanced sample can be found in the following vignette:
+The package proposes a method to select a well-spread sample balanced on some auxiliary variables. For more details see Raphaël Jauslin and Yves Tillé (2022) <https://arxiv.org/abs/2112.01164>. A complete example on how to use the different functions to select a well-spread and balanced sample can be found in the following vignette:
 ```
 vignette("sequential_balanced", package = "StratifiedSampling")
 ```

@@ -14,8 +14,6 @@ samples .
     <https://arxiv.org/abs/2105.08379>.
 -   If you are interested in the Sequential Spatially Balanced method.
     <http://arxiv.org/abs/2112.01164>
--   If you are interested in the One step One decision method.
-    <https://arxiv.org/abs/2111.08433>
 
 The package contains also some useful functions. Look at the manual of
 the package for more information.
@@ -50,7 +48,7 @@ transport match can be found in the following vignette:
 
 The package proposes a method to select a well-spread sample balanced on
 some auxiliary variables. For more details see Raphaël Jauslin and Yves
-Tillé (2022) <http://arxiv.org/abs/2112.01164>. A complete example on
+Tillé (2022) <https://arxiv.org/abs/2112.01164>. A complete example on
 how to use the different functions to select a well-spread and balanced
 sample can be found in the following vignette:
 
@@ -110,22 +108,22 @@ and have the right number of units selected in each stratum.
 
 ``` r
 head(s)
-#> [1] 0 0 0 0 1 0
+#> [1] 1 0 0 0 0 0
 
 sum(s)
 #> [1] 560
 t(X/pik)%*%s
 #>          [,1]
-#>  [1,] 3913625
-#>  [2,] 1247745
-#>  [3,] 3845692
-#>  [4,] 4007772
-#>  [5,] 7853464
-#>  [6,] 1761659
-#>  [7,] 2326537
-#>  [8,] 2529834
-#>  [9,] 1235434
-#> [10,] 3411215
+#>  [1,] 3905216
+#>  [2,] 1265342
+#>  [3,] 3713465
+#>  [4,] 3892095
+#>  [5,] 7605561
+#>  [6,] 1737116
+#>  [7,] 2229309
+#>  [8,] 2480836
+#>  [9,] 1158300
+#> [10,] 3248634
 t(X/pik)%*%pik
 #>          [,1]
 #>  [1,] 3998831

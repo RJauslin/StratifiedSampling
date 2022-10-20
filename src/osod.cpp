@@ -56,7 +56,7 @@ IntegerVector osod(NumericVector pikr,
   
   // ghost unit, depending if the sum of the inclusion probabilities are equal to integer a ghost unit is added.
   bool ghost = false;
-  if(abs(n-n_int) > 1e-6){
+  if(std::abs(n-n_int) > 1e-6){
     pik.resize(N+1);
     N = pik.size();
     pik[N-1] = ceil(n)-n;
