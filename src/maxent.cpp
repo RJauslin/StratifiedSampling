@@ -95,7 +95,6 @@ NumericMatrix qfromw(NumericVector& w,const int& n){
 
 /*** R
 
-rm(list = ls())
 set.seed(9)
 
 pik <-inclprob(runif(8000),500)
@@ -389,12 +388,6 @@ IntegerVector cps(NumericVector& pik,
 
 /*** R
 
-
-
-
-
-
-rm(list = ls())
 
 pik <- sampling::inclusionprobabilities(runif(8000),500)
 
@@ -788,9 +781,6 @@ sum(UPMEpiktildefrompik(pik))
 sum(piktfrompik(pik))
 
 
-
-
-# rm(list = ls())
 N=1000
 n=200
 pik=sampling::inclusionprobabilities(runif(N),n)

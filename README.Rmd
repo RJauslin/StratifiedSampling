@@ -18,7 +18,7 @@ In this R package, different functions are implemented for selecting samples .
 
 * If the population of interest is stratified. Different functions are implemented, for more details see <https://doi.org/10.1007/s42081-021-00134-y>.
 * If two datasets are available for statistical matching. A method based on optimal transport is implemented, for more details see <https://arxiv.org/abs/2105.08379>.
-* If you are interested in the Sequential Spatially Balanced method. <http://arxiv.org/abs/2112.01164>
+* If you are interested in the Sequential Spatially Balanced method. <https://arxiv.org/abs/2112.01164>
 
 The package contains also some useful functions. Look at the manual of the package for more information. 
 

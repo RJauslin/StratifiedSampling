@@ -6,6 +6,4 @@
 int c_bound(arma::vec pik);
 bool c_bound2(arma::vec pik);
   
-  
-  
 #endif

@@ -13,7 +13,7 @@ samples .
     based on optimal transport is implemented, for more details see
     <https://arxiv.org/abs/2105.08379>.
 -   If you are interested in the Sequential Spatially Balanced method.
-    <http://arxiv.org/abs/2112.01164>
+    <https://arxiv.org/abs/2112.01164>
 
 The package contains also some useful functions. Look at the manual of
 the package for more information.
@@ -108,22 +108,22 @@ and have the right number of units selected in each stratum.
 
 ``` r
 head(s)
-#> [1] 1 0 0 0 0 0
+#> [1] 0 1 0 0 1 0
 
 sum(s)
 #> [1] 560
 t(X/pik)%*%s
 #>          [,1]
-#>  [1,] 3905216
-#>  [2,] 1265342
-#>  [3,] 3713465
-#>  [4,] 3892095
-#>  [5,] 7605561
-#>  [6,] 1737116
-#>  [7,] 2229309
-#>  [8,] 2480836
-#>  [9,] 1158300
-#> [10,] 3248634
+#>  [1,] 4035368
+#>  [2,] 1279586
+#>  [3,] 3736660
+#>  [4,] 3901323
+#>  [5,] 7637982
+#>  [6,] 1734546
+#>  [7,] 2289617
+#>  [8,] 2443589
+#>  [9,] 1170231
+#> [10,] 3301463
 t(X/pik)%*%pik
 #>          [,1]
 #>  [1,] 3998831

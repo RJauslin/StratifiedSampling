@@ -15,9 +15,16 @@
 
 - Fedora Linux, R-devel, clang, gfortran
  
- * There were no ERRORs, WARNINGs or NOTEs
+ * checking installed package size ... NOTE
+    installed size is  5.5Mb
+    sub-directories of 1Mb or more:
+      libs   5.1Mb
 
-- Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+  * checking HTML version of manual ... NOTE
+      Skipping checking HTML validation: no command 'tidy' found
+      
+It seems this warning could be supressed by setting _R_CHECK_RD_VALIDATE_RD2HTML_ to false, but apparently that just turns off HTML validation, which happens anyways.
+  
 - Ubuntu Linux 20.04.1 LTS, R-release, GCC 
 - Debian Linux, R-devel, GCC ASAN/UBSAN
  
