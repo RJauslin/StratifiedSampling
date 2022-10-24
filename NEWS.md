@@ -1,7 +1,10 @@
 # NEWS for Package "StratifiedSampling"
 
+
+## StratifiedSampling 0.4.1
+* (ERROR fixed, the cumsum/floor function does not have the same result on mac. This is what was producing the error.)
+
 ## StratifiedSampling 0.4.0
-# add vignette on Deville systematic
 * add Deville systematic functions (sys_deville, sys_devillepi2)
 * add EPS in stratifedcube and landingRM
 * add full option in osod

@@ -16,6 +16,7 @@ Return the selected indices in 1,2,...,N
 This function implements a method to select a sample using the Deville's systmatic algorithm.
 }
 \examples{
+set.seed(1)
 pik <- c(0.2,0.5,0.3,0.4,0.9,0.8,0.5,0.4)
 sys_deville(pik)
 }

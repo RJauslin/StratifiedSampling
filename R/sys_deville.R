@@ -14,29 +14,35 @@ cij <- function(i,j,U){
 #' @noRd
 microstrata <- function(pik){
   
+  eps <- 1e-7
+  
   ## INITIALIZING CONSTANT
   N <- length(pik)
-  n <- sum(pik)
-  Vk <- cumsum(pik)
-  Vk_1 <- c(0,cumsum(pik)) 
+  n <- round(sum(pik)) # ONLY to integer 
+  n <- as.integer(n) # ensure that correctly integer
+  
+  
+  # add eps to ensure that cumsum is rightly calculated
+  Vk <- cumsum(pik + eps) 
+  Vk_1 <- c(0,cumsum(pik + eps)) 
   Vk_1 <- Vk_1[-length(Vk_1)]
   
-  ki <- which(diff(c(0,floor(cumsum(pik)))) == 1)
+  ki <- which(diff(c(0,floor(cumsum(pik + eps)))) == 1)
+  
   Vki <- Vk[ki]
   Vki_1 <- Vk[ki - 1]
-  ai <- seq(1,n,1) - Vki_1
-  bi <- Vki - seq(1,n,1)
-  
-  
+  ai <- seq(from = 1, to = n,by = 1) - Vki_1
+  bi <- Vki - seq(from = 1,to = n,by = 1)
+
   # CREATION OF MICROSTRATA
   U <- rep(list(rep(list(0),3)),n)
   
   for(i in 1:n){
     
     if(i == 1){
-      U[[i]][[1]] <- seq(1,ki[i],1)
+      U[[i]][[1]] <- seq(from = 1,to = ki[i],by = 1)
     }else{
-      U[[i]][[1]] <- seq(ki[i-1],ki[i],1)
+      U[[i]][[1]] <- seq(from = ki[i-1],to = ki[i],by = 1)
     }
     
     U[[i]][[2]] = ai[i];
@@ -76,6 +82,7 @@ microstrata <- function(pik){
 #'  Chauvet, G. (2012), On a characterization of ordered pivotal sampling, Bernoulli, 18(4):1320-1340
 #' 
 #' @examples 
+#' set.seed(1)
 #' pik <- c(0.2,0.5,0.3,0.4,0.9,0.8,0.5,0.4)
 #' sys_deville(pik)
 #' @export sys_deville
@@ -169,9 +176,9 @@ sys_devillepi2 <- function(pik){
       return(x$m)
     }else if(length(x$m) > 2){
       if(x$b > 1e-7){
-        return(x$m[seq(2,length(x$m)-1,1)])  
+        return(x$m[seq(from = 2,to = (length(x$m)-1),by = 1)])  
       }else{
-        return(x$m[seq(2,length(x$m),1)])  
+        return(x$m[seq(from = 2,to = length(x$m),by = 1)])  
       }
     }else{
       return(NULL)

@@ -5,6 +5,15 @@
 
 - There were no ERRORs, WARNINGs or NOTEs
 
+
+- devtools::check_mac_release
+  * checking installed package size ... NOTE
+  installed size is  6.3Mb
+  sub-directories of 1Mb or more:
+    libs   6.0Mb
+
+- (ERROR fixed, the cumsum/floor function does not have the same result on mac. This is what was producing the error.)
+
 ## rhub
 
 - Windows Servers 2022
