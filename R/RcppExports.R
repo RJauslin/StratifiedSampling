@@ -108,23 +108,6 @@ gencalibRaking <- function(Xs, Zs, d, total, q, max_iter = 500L, tol = 1e-9) {
     .Call(`_StratifiedSampling_gencalibRaking`, Xs, Zs, d, total, q, max_iter, tol)
 }
 
-#' @title title
-#'
-#'
-#'
-#' @param X matrix of auxiliary variables.
-#' @param pik vector of inclusion probabilities
-#' @param EPS tolerance
-#'
-#' @return a sample
-#'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
-#'
-#' @export
-ffphase_cpp <- function(X, pik, EPS = 0.0000001) {
-    .Call(`_StratifiedSampling_ffphase_cpp`, X, pik, EPS)
-}
-
 #' @title Disjunctive
 #' @name disj
 #' @description
@@ -242,72 +225,45 @@ distUnitk <- function(X, k, tore, toreBound) {
     .Call(`_StratifiedSampling_distUnitk`, X, k, tore, toreBound)
 }
 
-#' @title reduced row echelon form arma implementation
-#'
-#'
-#' @param M matrix 
-#'
-#' @return NULL (transform matrix)
-#'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
-#'
-#' @export
-rrefArma <- function(M) {
-    invisible(.Call(`_StratifiedSampling_rrefArma`, M))
-}
-
-#' @title title
-#'
-#' @description
-#' description
-#'
-#'
-#' @param prob inclusion probabilities
-#' @param Bm matrix of auxiliary variables
-#'
-#' @details
-#'
-#' details
-#'
-#' @return a vector
-#'
-#'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
-#'
-#' @seealso
-#' func
-#'
-#' @examples
-#'
-#' @export
-osffphase <- function(prob, Bm) {
-    .Call(`_StratifiedSampling_osffphase`, prob, Bm)
-}
-
-#' @title Fast Flight phase
-#'
+#' @title Fast flight phase of the cube method
 #'
 #' @description
 #' 
-#' Modified version of \code{\link[BalancedSampling:flightphase]{flightphase}}
+#' This function computes the flight phase of the cube method proposed by Chauvet and Tillé (2006).
 #'
-#' @param prob vector of inclusion probabilities of size N.
-#' @param Xbal Matrix of auxiliary variables of dimension N x p
-#' @param order if reordering at first step, Default TRUE.
-#' @param redux if the matrix should be reduced. Default FALSE.
-#'
-#' @details
-#'
-#' details
-#'
-#' @return a sample with at most p value not update to 0 or 1. 
+#' @param Xbal A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+#' @param prob A vector of inclusion probabilities.
+#' @param order if the units are reordered, Default TRUE.
 #'
 #'
+#' @details 
+#' This function implements the method proposed by (Chauvet and Tillé 2006). It recursively transforms the vector of inclusion probabilities \code{pik} into a
+#' sample that respects the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
+#' For more information see (Chauvet and Tillé 2006).
+#' 
+#' This function is a modified version of \code{\link[BalancedSampling:flightphase]{flightphase}}
+#' 
+#'
+#' @return Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
+#'
+#' @seealso \code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:flightphase]{flightphase}}.
+#' 
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
+#' @examples
+#' N <- 100
+#' n <- 10
+#' p <- 4
+#' pik <- rep(n/N,N)
+#' X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
+#' 
+#' pikstar <- ffphase(X,pik) 
+#' t(X/pik)%*%pikstar
+#' t(X/pik)%*%pik
+#' pikstar
 #' @export
-ffphase_graf <- function(prob, Xbal, order = TRUE, redux = FALSE) {
-    .Call(`_StratifiedSampling_ffphase_graf`, prob, Xbal, order, redux)
+ffphase <- function(Xbal, prob, order = TRUE) {
+    .Call(`_StratifiedSampling_ffphase`, Xbal, prob, order)
 }
 
 #' @title Inclusion Probabilities
@@ -534,33 +490,6 @@ maxentpi2 <- function(pikr) {
 osod <- function(pikr, full = FALSE) {
     .Call(`_StratifiedSampling_osod`, pikr, full)
 }
-
-#' @encoding UTF-8
-#' @title Projection operator
-#'
-#'
-#' @description
-#'
-#' This operator projects the vector v orthogonally onto the line spanned by vector u.
-#'
-#' @param v vector projected.
-#' @param u vector that define the line on which we project.
-#' 
-#' @details
-#' 
-#' The projection operator is defined by :
-#' 
-#' \deqn{proj_u(v) = \frac{\langle u , v \rangle}{\langle u, u \rangle} u}
-#'  where \eqn{\langle . , . \rangle} is the inner product also written \eqn{u^\top v}.
-#' 
-#' @return The projection of the vector v onto the line spanned by the vector u.
-#' 
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
-#' 
-#' @references 
-#' \url{https://en.wikipedia.org/wiki/Projection_(linear_algebra)}s
-#' 
-NULL
 
 #' @encoding UTF-8
 #' @title Variance Estimation for balanced sample

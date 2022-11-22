@@ -4,17 +4,8 @@ using namespace Rcpp;
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
-//' @title reduced row echelon form arma implementation
-//'
-//'
-//' @param M matrix 
-//'
-//' @return NULL (transform matrix)
-//'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
-//'
-//' @export
-// [[Rcpp::export]]
+
+
 void rrefArma(arma::mat& M){
   int lead = 0;
   int rowCount = M.n_rows;
@@ -83,32 +74,6 @@ test
 */
 
 
-// [[Rcpp::depends(RcppArmadillo)]]
-//' @title title
-//'
-//' @description
-//' description
-//'
-//'
-//' @param prob inclusion probabilities
-//' @param Bm matrix of auxiliary variables
-//'
-//' @details
-//'
-//' details
-//'
-//' @return a vector
-//'
-//'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
-//'
-//' @seealso
-//' func
-//'
-//' @examples
-//'
-//' @export
-// [[Rcpp::export]]
 arma::vec osffphase(arma::vec prob, arma::mat Bm){
   int ncol = Bm.n_cols;
   int nrow = Bm.n_rows;
@@ -192,7 +157,7 @@ arma::vec osffphase(arma::vec prob, arma::mat Bm){
 }
 
 // for case where naux < p+1
-void onestep_cpp2(arma::vec& u,arma::vec& pik,double EPS=0.0000001){
+void onestep_cpp_ending(arma::vec& u,arma::vec& pik,double EPS=0.0000001){
   
   arma::uword N = pik.size();
   double l1 = 1e+200;
@@ -228,30 +193,46 @@ void onestep_cpp2(arma::vec& u,arma::vec& pik,double EPS=0.0000001){
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
-//' @title Fast Flight phase
-//'
+
+//' @title Fast flight phase of the cube method
 //'
 //' @description
 //' 
-//' Modified version of \code{\link[BalancedSampling:flightphase]{flightphase}}
+//' This function computes the flight phase of the cube method proposed by Chauvet and Tillé (2006).
 //'
-//' @param prob vector of inclusion probabilities of size N.
-//' @param Xbal Matrix of auxiliary variables of dimension N x p
-//' @param order if reordering at first step, Default TRUE.
-//' @param redux if the matrix should be reduced. Default FALSE.
-//'
-//' @details
-//'
-//' details
-//'
-//' @return a sample with at most p value not update to 0 or 1. 
+//' @param Xbal A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
+//' @param prob A vector of inclusion probabilities.
+//' @param order if the units are reordered, Default TRUE.
 //'
 //'
+//' @details 
+//' This function implements the method proposed by (Chauvet and Tillé 2006). It recursively transforms the vector of inclusion probabilities \code{pik} into a
+//' sample that respects the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
+//' For more information see (Chauvet and Tillé 2006).
+//' 
+//' This function is a modified version of \code{\link[BalancedSampling:flightphase]{flightphase}}
+//' 
+//'
+//' @return Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
+//'
+//' @seealso \code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:flightphase]{flightphase}}.
+//' 
 //' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //'
+//' @examples
+//' N <- 100
+//' n <- 10
+//' p <- 4
+//' pik <- rep(n/N,N)
+//' X <- cbind(pik,matrix(rgamma(N*p,4,25),ncol= p))
+//' 
+//' pikstar <- ffphase(X,pik) 
+//' t(X/pik)%*%pikstar
+//' t(X/pik)%*%pik
+//' pikstar
 //' @export
 // [[Rcpp::export]]
-arma::vec ffphase_graf(arma::vec prob, arma::mat Xbal, bool order = true, bool redux = false){
+arma::vec ffphase(arma::mat Xbal,arma::vec prob, bool order = true){
   int N = prob.size();
   int naux = Xbal.n_cols;
   
@@ -320,7 +301,7 @@ arma::vec ffphase_graf(arma::vec prob, arma::mat Xbal, bool order = true, bool r
         }else{
           arma::vec u(N);
           u = kern.col(0);
-          onestep_cpp2(u,p_small);
+          onestep_cpp_ending(u,p_small);
         }
       }else{
         p_small = osffphase(p_small,B); 
@@ -362,6 +343,7 @@ arma::vec ffphase_graf(arma::vec prob, arma::mat Xbal, bool order = true, bool r
 /*** R
 
 library(microbenchmark)
+library(sampling)
 rm(list = ls())
 # set.seed(3)
 N <-  1000
@@ -377,8 +359,8 @@ B=cbind(Z,-Z)
 X <- cbind(X,B*pik)
 A <- X/pik
 
-s1 <- round(ffphase(X,pik),9)
-s2 <- round(ffphase_graf(pik,X),9)
+s1 <- round(sampling::fastflightcube(X,pik),9)
+s2 <- round(ffphase(X,pik),9)
 s3 <- round(BalancedSampling::flightphase(pik,X),9)
 
 dim(X)
@@ -391,9 +373,8 @@ t(A)%*%s2
 t(A)%*%s3
 t(A)%*%pik
 
-micro_timings = microbenchmark(ffphase(X,pik),
-                               ffphase_cpp(X,pik),
-                               ffphase_graf(pik,X),
+micro_timings = microbenchmark(sampling::fastflightcube(X,pik,comment = FALSE),
+                               ffphase(X,pik),
                                BalancedSampling::flightphase(pik,X),
                                times = 30)
 plot(micro_timings)

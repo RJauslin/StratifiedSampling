@@ -51,8 +51,8 @@ n <- 10
 X <- cbind(rgamma(N,4,25),rbinom(N,20,0.1),rlnorm(N,9,0.1),runif(N))
 colSums(X)
 strata <- rbinom(N,10,0.7)
-strata <- cleanstrata(strata)
-pik <- as.vector(inclusionprobastrata(strata,ceiling(table(strata)*0.10)))
+strata <- sampling::cleanstrata(strata)
+pik <- as.vector(sampling::inclusionprobastrata(strata,ceiling(table(strata)*0.10)))
 EPS = 1e-7
 
 s <- stratifiedcube(X,strata,pik)
@@ -71,7 +71,7 @@ N <- 100
 n <- 10
 X <- cbind(rgamma(N,4,25),rbinom(N,20,0.1),rlnorm(N,9,0.1),runif(N))
 strata <- rbinom(N,10,0.7)
-strata <- cleanstrata(strata)
+strata <- sampling::cleanstrata(strata)
 pik <- runif(N)
 EPS = 1e-7
 tapply(pik,strata,sum)
