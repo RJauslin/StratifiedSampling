@@ -126,6 +126,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rrefArma
+void rrefArma(arma::mat& M);
+RcppExport SEXP _StratifiedSampling_rrefArma(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type M(MSEXP);
+    rrefArma(M);
+    return R_NilValue;
+END_RCPP
+}
+// osffphase
+arma::vec osffphase(arma::vec prob, arma::mat Bm);
+RcppExport SEXP _StratifiedSampling_osffphase(SEXP probSEXP, SEXP BmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type prob(probSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Bm(BmSEXP);
+    rcpp_result_gen = Rcpp::wrap(osffphase(prob, Bm));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ffphase_graf
+arma::vec ffphase_graf(arma::vec prob, arma::mat Xbal, bool order, bool redux);
+RcppExport SEXP _StratifiedSampling_ffphase_graf(SEXP probSEXP, SEXP XbalSEXP, SEXP orderSEXP, SEXP reduxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type prob(probSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Xbal(XbalSEXP);
+    Rcpp::traits::input_parameter< bool >::type order(orderSEXP);
+    Rcpp::traits::input_parameter< bool >::type redux(reduxSEXP);
+    rcpp_result_gen = Rcpp::wrap(ffphase_graf(prob, Xbal, order, redux));
+    return rcpp_result_gen;
+END_RCPP
+}
 // inclprob
 arma::vec inclprob(arma::vec& x, const double& n);
 RcppExport SEXP _StratifiedSampling_inclprob(SEXP xSEXP, SEXP nSEXP) {
@@ -271,6 +307,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},
     {"_StratifiedSampling_distUnitk", (DL_FUNC) &_StratifiedSampling_distUnitk, 4},
+    {"_StratifiedSampling_rrefArma", (DL_FUNC) &_StratifiedSampling_rrefArma, 1},
+    {"_StratifiedSampling_osffphase", (DL_FUNC) &_StratifiedSampling_osffphase, 2},
+    {"_StratifiedSampling_ffphase_graf", (DL_FUNC) &_StratifiedSampling_ffphase_graf, 4},
     {"_StratifiedSampling_inclprob", (DL_FUNC) &_StratifiedSampling_inclprob, 2},
     {"_StratifiedSampling_qfromw", (DL_FUNC) &_StratifiedSampling_qfromw, 2},
     {"_StratifiedSampling_sfromq", (DL_FUNC) &_StratifiedSampling_sfromq, 1},

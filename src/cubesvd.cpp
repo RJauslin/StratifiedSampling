@@ -260,6 +260,7 @@ pik=inclusionprobabilities(runif(N),n)
 X=cbind(pik,matrix(rnorm(N*p),c(N,p)))
 
 
+
 library("microbenchmark")
 
 micro_timings = microbenchmark(ffphase(X,pik),

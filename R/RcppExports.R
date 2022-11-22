@@ -242,6 +242,74 @@ distUnitk <- function(X, k, tore, toreBound) {
     .Call(`_StratifiedSampling_distUnitk`, X, k, tore, toreBound)
 }
 
+#' @title reduced row echelon form arma implementation
+#'
+#'
+#' @param M matrix 
+#'
+#' @return NULL (transform matrix)
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#'
+#' @export
+rrefArma <- function(M) {
+    invisible(.Call(`_StratifiedSampling_rrefArma`, M))
+}
+
+#' @title title
+#'
+#' @description
+#' description
+#'
+#'
+#' @param prob inclusion probabilities
+#' @param Bm matrix of auxiliary variables
+#'
+#' @details
+#'
+#' details
+#'
+#' @return a vector
+#'
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#'
+#' @seealso
+#' func
+#'
+#' @examples
+#'
+#' @export
+osffphase <- function(prob, Bm) {
+    .Call(`_StratifiedSampling_osffphase`, prob, Bm)
+}
+
+#' @title Fast Flight phase
+#'
+#'
+#' @description
+#' 
+#' Modified version of \code{\link[BalancedSampling:flightphase]{flightphase}}
+#'
+#' @param prob vector of inclusion probabilities of size N.
+#' @param Xbal Matrix of auxiliary variables of dimension N x p
+#' @param order if reordering at first step, Default TRUE.
+#' @param redux if the matrix should be reduced. Default FALSE.
+#'
+#' @details
+#'
+#' details
+#'
+#' @return a sample with at most p value not update to 0 or 1. 
+#'
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#'
+#' @export
+ffphase_graf <- function(prob, Xbal, order = TRUE, redux = FALSE) {
+    .Call(`_StratifiedSampling_ffphase_graf`, prob, Xbal, order, redux)
+}
+
 #' @title Inclusion Probabilities
 #' @name inclprob
 #' @description Computes first-order inclusion probabilities from a vector of positive numbers.
