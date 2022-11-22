@@ -191,6 +191,41 @@ arma::vec osffphase(arma::vec prob, arma::mat Bm){
   return prob;
 }
 
+// for case where naux < p+1
+void onestep_cpp2(arma::vec& u,arma::vec& pik,double EPS=0.0000001){
+  
+  arma::uword N = pik.size();
+  double l1 = 1e+200;
+  double l2 = 1e+200;
+  double l = 1e-9;
+  
+  for(arma::uword k = 0; k < N; k++){
+    if(u[k]> 0){
+      l1 = std::min(l1,(1.0 - pik[k])/u[k]);
+      l2 = std::min(l2,pik[k]/u[k]);
+    }
+    if(u[k]< 0){
+      l1 = std::min(l1,-pik[k]/u[k]);
+      l2 = std::min(l2,(pik[k]-1.0)/u[k]);
+    }
+  }
+  if(Rcpp::runif(1)[0]<l2/(l1+l2)){
+    l = l1;
+  }else{
+    l = -l2;
+  }
+  for(arma::uword k = 0; k < N; k++){
+    pik[k] = pik[k] + l*u[k];
+    if(pik[k] < EPS){
+      pik[k] = 0;
+    }
+    if(pik[k] > (1-EPS)){
+      pik[k] = 1;
+    }
+  }
+  // return(pik);
+}
+
 
 // [[Rcpp::depends(RcppArmadillo)]]
 //' @title Fast Flight phase
@@ -254,30 +289,42 @@ arma::vec ffphase_graf(arma::vec prob, arma::mat Xbal, bool order = true, bool r
     }
   }
   
-  
   // remaining are index from done to N-1
   while( done < N ){
     
     // find cluster of size howmany
     howmany = std::min(naux + 1,N-done);
-    if(howmany <= naux){done=N; break;}
+    // if(howmany <= naux){done=N; break;}
     
     if( howmany > 1 ){
       arma::vec p_small(howmany);
       arma::vec dists(howmany); dists = 1e+20;
       arma::vec index_small(howmany);
-      arma::mat B(howmany-1,howmany);
-      // arma::mat B(naux,howmany);
+      // arma::mat B(howmany-1,howmany);
+      arma::mat B(naux,howmany);
       
       
       for(int i = 0;i < howmany; i++){
         index_small[i] = index[done+i];
-        for(int j = 0;j < howmany-1;j++){ // HERE WE CHANGED j < howmany by ----- > j < naux
+        for(int j = 0;j < naux; j++){ // HERE WE CHANGED j < howmany by ----- > j < naux
           B(j,i) = Xbal(index_small[i],j)/prob[index_small[i]];
         }
         p_small[i] = p[index_small[i]];
       }
-      p_small = osffphase(p_small,B); 
+      
+      if(howmany < naux + 1){
+        // std::cout << "diff ending" << std::endl;
+        arma::mat kern = arma::null(B);
+        if(kern.empty()){
+          break;
+        }else{
+          arma::vec u(N);
+          u = kern.col(0);
+          onestep_cpp2(u,p_small);
+        }
+      }else{
+        p_small = osffphase(p_small,B); 
+      }
 
       // update prob
       for(int i = 0;i < howmany;i++){
@@ -314,6 +361,43 @@ arma::vec ffphase_graf(arma::vec prob, arma::mat Xbal, bool order = true, bool r
 
 /*** R
 
+library(microbenchmark)
+rm(list = ls())
+# set.seed(3)
+N <-  1000
+n <-  300
+p <-  10
+q <-  7
+eps <- 1e-12
+z <-  runif(N)
+pik <-  inclusionprobabilities(z,n)
+X <-  cbind(pik,matrix(rnorm(N*p),c(N,p)))
+Z=cbind(matrix(rbinom(N*q,1,1/2),c(N,q)))
+B=cbind(Z,-Z)
+X <- cbind(X,B*pik)
+A <- X/pik
+
+s1 <- round(ffphase(X,pik),9)
+s2 <- round(ffphase_graf(pik,X),9)
+s3 <- round(BalancedSampling::flightphase(pik,X),9)
+
+dim(X)
+length(which(s1 > eps & s1 < (1-eps)))
+length(which(s2 > eps & s2 < (1-eps)))
+length(which(s3 > eps & s3 < (1-eps)))
+
+t(A)%*%s1
+t(A)%*%s2
+t(A)%*%s3
+t(A)%*%pik
+
+micro_timings = microbenchmark(ffphase(X,pik),
+                               ffphase_cpp(X,pik),
+                               ffphase_graf(pik,X),
+                               BalancedSampling::flightphase(pik,X),
+                               times = 30)
+plot(micro_timings)
+micro_timings
 
 library(sampling)
 rm(list = ls())
@@ -322,8 +406,14 @@ n = 200
 p = 10
 pik=inclusionprobabilities(runif(N),n)
 X=cbind(pik,matrix(rnorm(N*p),c(N,p)))
+A <- X/pik
+s1 <- ffphase(X,pik)
+s2 <- ffphase_graf(pik,X)
+length(which(s1 > 1e-7 & s1 < (1 - 1e-7)))
+length(which(s2 > 1e-7 & s2 < (1 - 1e-7)))
 
-ffphase_graf(pik,X)
+t(A)%*%s
+t(A)%*%pik
 
 library("microbenchmark")
 
