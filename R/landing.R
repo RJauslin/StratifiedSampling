@@ -32,6 +32,9 @@
 landingRM <- function(A,pikstar,EPS = 1e-7){
 
 
+  
+  
+  
   ##----------------------------------------------------------------
   ##                          Initializing                         -
   ##----------------------------------------------------------------
@@ -95,8 +98,12 @@ landingRM <- function(A,pikstar,EPS = 1e-7){
   # cat("sum pikstar after dropping variables:", sum(pikstar[i]),"\n")
   
   if(length(i) != 0){
-    stop("error you still have, after landing, at least one unit that have inlcusion probability not equal to 0 or 1. Check that you have put the vector of inclusion probabilities as first column on the auxiliary variables.")
+    # stop("error you still have, after landing, at least one unit that have inlcusion probability not equal to 0 or 1. Check that you have put the vector of inclusion probabilities as first column on the auxiliary variables.")
   }
+  if(length(i) == 1){
+    pikstar[i] = rbinom(1,1,pik[i]);  
+  }
+  
   
   return(round(pikstar,6))
 }

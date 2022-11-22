@@ -108,6 +108,23 @@ gencalibRaking <- function(Xs, Zs, d, total, q, max_iter = 500L, tol = 1e-9) {
     .Call(`_StratifiedSampling_gencalibRaking`, Xs, Zs, d, total, q, max_iter, tol)
 }
 
+#' @title title
+#'
+#'
+#'
+#' @param X matrix of auxiliary variables.
+#' @param pik vector of inclusion probabilities
+#' @param EPS tolerance
+#'
+#' @return a sample
+#'
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#'
+#' @export
+ffphase_cpp <- function(X, pik, EPS = 0.0000001) {
+    .Call(`_StratifiedSampling_ffphase_cpp`, X, pik, EPS)
+}
+
 #' @title Disjunctive
 #' @name disj
 #' @description
@@ -449,6 +466,33 @@ maxentpi2 <- function(pikr) {
 osod <- function(pikr, full = FALSE) {
     .Call(`_StratifiedSampling_osod`, pikr, full)
 }
+
+#' @encoding UTF-8
+#' @title Projection operator
+#'
+#'
+#' @description
+#'
+#' This operator projects the vector v orthogonally onto the line spanned by vector u.
+#'
+#' @param v vector projected.
+#' @param u vector that define the line on which we project.
+#' 
+#' @details
+#' 
+#' The projection operator is defined by :
+#' 
+#' \deqn{proj_u(v) = \frac{\langle u , v \rangle}{\langle u, u \rangle} u}
+#'  where \eqn{\langle . , . \rangle} is the inner product also written \eqn{u^\top v}.
+#' 
+#' @return The projection of the vector v onto the line spanned by the vector u.
+#' 
+#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @references 
+#' \url{https://en.wikipedia.org/wiki/Projection_(linear_algebra)}s
+#' 
+NULL
 
 #' @encoding UTF-8
 #' @title Variance Estimation for balanced sample

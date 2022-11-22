@@ -66,6 +66,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ffphase_cpp
+arma::vec ffphase_cpp(arma::mat& X, arma::vec pik, double EPS);
+RcppExport SEXP _StratifiedSampling_ffphase_cpp(SEXP XSEXP, SEXP pikSEXP, SEXP EPSSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pik(pikSEXP);
+    Rcpp::traits::input_parameter< double >::type EPS(EPSSEXP);
+    rcpp_result_gen = Rcpp::wrap(ffphase_cpp(X, pik, EPS));
+    return rcpp_result_gen;
+END_RCPP
+}
 // disj
 arma::umat disj(arma::uvec strata);
 RcppExport SEXP _StratifiedSampling_disj(SEXP strataSEXP) {
@@ -253,6 +266,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_StratifiedSampling_c_bound2", (DL_FUNC) &_StratifiedSampling_c_bound2, 1},
     {"_StratifiedSampling_calibRaking", (DL_FUNC) &_StratifiedSampling_calibRaking, 6},
     {"_StratifiedSampling_gencalibRaking", (DL_FUNC) &_StratifiedSampling_gencalibRaking, 7},
+    {"_StratifiedSampling_ffphase_cpp", (DL_FUNC) &_StratifiedSampling_ffphase_cpp, 3},
     {"_StratifiedSampling_disj", (DL_FUNC) &_StratifiedSampling_disj, 1},
     {"_StratifiedSampling_ncat", (DL_FUNC) &_StratifiedSampling_ncat, 1},
     {"_StratifiedSampling_disjMatrix", (DL_FUNC) &_StratifiedSampling_disjMatrix, 1},

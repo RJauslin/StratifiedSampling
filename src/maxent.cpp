@@ -27,10 +27,6 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 NumericMatrix qfromw(NumericVector& w,const int& n){
-
-  
-  
-  
   
   // transform to arma for subvec 
   arma::vec wr(w.begin(),w.size(),false); // same memory

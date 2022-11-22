@@ -22,6 +22,8 @@
 #' Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{Computational Statistics}, 21/1:53-62
 #'
 #' @examples
+#' 
+#' # EXAMPLE WITH EQUAL INCLUSION PROBABILITES AND SUM IN EACH STRATA INTEGER
 #' N <- 100
 #' n <- 10
 #' p <- 4
@@ -39,7 +41,78 @@
 #' t(Xcat)%*%s
 #' t(Xcat)%*%pik
 #' 
-stratifiedcube <- function(X,strata,pik,EPS = 1e-7){
+#' 
+#' # EXAMPLE WITH UNEQUAL INCLUSION PROBABILITES AND SUM IN EACH STRATA INTEGER
+#' N <- 100
+#' n <- 10
+#' X <- cbind(rgamma(N,4,25),rbinom(N,20,0.1),rlnorm(N,9,0.1),runif(N))
+#' colSums(X)
+#' strata <- rbinom(N,10,0.7)
+#' strata <- cleanstrata(strata)
+#' pik <- as.vector(inclusionprobastrata(strata,ceiling(table(strata)*0.10)))
+#' EPS = 1e-7
+#' 
+#' s <- stratifiedcube(X,strata,pik)
+#' 
+#' t(X/pik)%*%s
+#' t(X/pik)%*%pik
+#' 
+#' Xcat <- disj(strata)
+#' 
+#' t(Xcat)%*%s
+#' t(Xcat)%*%pik
+#' 
+#' 
+#' # EXAMPLE WITH UNEQUAL INCLUSION PROBABILITES AND SUM IN EACH STRATA NOT INTEGER
+#' N <- 100
+#' n <- 10
+#' X <- cbind(rgamma(N,4,25),rbinom(N,20,0.1),rlnorm(N,9,0.1),runif(N))
+#' strata <- rbinom(N,10,0.7)
+#' strata <- cleanstrata(strata)
+#' pik <- runif(N)
+#' EPS = 1e-7
+#' tapply(pik,strata,sum)
+#' 
+#' 
+#' s <- stratifiedcube(X,strata,pik,landing = TRUE)
+#' 
+#' t(X/pik)%*%s
+#' t(X/pik)%*%pik
+#' 
+#' Xcat <- disj(strata)
+#' 
+#' t(Xcat)%*%s
+#' t(Xcat)%*%pik
+#' 
+#' 
+stratifiedcube <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landing = TRUE){
+  
+  if(rand == TRUE){
+    strataInit <- strata
+    ## cleanstrata
+    a = sort(unique(as.vector(strata)))
+    b = 1:length(a)
+    names(b) = a
+    strata <- as.vector(b[as.character(strata)])
+    
+    ## RANDOMIZATION 
+    o <- order(strata)
+    # strata[o] # this order the vector
+    
+    o_split <- split(o, f = strata[o] ) # split and randomize in each category
+    for( i in 1:length(o_split)){
+      o_tmp <- sample(1:length(o_split[[i]]))
+      o_split[[i]] <- o_split[[i]][o_tmp]
+    }
+    o_out <- unlist(o_split[sample(1:length(o_split))]) # unlist and randomize each category
+    
+    XInit <- X
+    pikInit <- pik  
+    
+    X <- X[o_out,]
+    strata <- strata[o_out]
+    pik <- pik[o_out]
+  }
   
   ##----------------------------------------------------------------
   ##                        Initialization                         -
@@ -49,6 +122,8 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7){
   pikstar <- pik
   p = ncol(X)
   nstrata <- length(unique(strata))
+  TOT <- t(A)%*%pik
+  XX <- MASS::ginv(t(A) %*% A)
   
   ##----------------------------------------------------------------
   ##                  Flightphase on each strata                   -
@@ -62,6 +137,7 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7){
   ###################### CHECK
   # t(X/pik)%*%pikstar
   # t(X/pik)%*%pik
+  # Xcat <- disj(strata)
   # t(Xcat)%*%pik
   # t(Xcat)%*%pikstar
   
@@ -150,19 +226,49 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7){
   # print(t(Xcat)%*%pikstar)
   # print(length(i))
   # print(sum(pikstar))
-   
+  
   
   # ##----------------------------------------------------------------
   # ##            Landing on unit that are alone in the strata       -
   # ##----------------------------------------------------------------
   
-  
-  
+
   if(length(i) > 0){
-    pikstar[i] <- landingRM(cbind(pikstar[i],X[i,]/pik[i]),pikstar[i],EPS)    
+    if(length(i) > 20){
+      warnings("The landing by using linear programming might be very time consuming. Think about landing by using drop variables.")
+    }
+    if(landing == TRUE){
+      pikstar <- sampling::landingcube(X,pikstar,pik,comment = FALSE) # pass the whole matrix to compute t(A)%*%A
+    }else{
+      pikstar[i] <- landingRM(cbind(pik[i],X[i,])/pik[i]*pikstar[i],pikstar[i],EPS)  
+    }
   }
   
   
-  return(round(pikstar,10))
+  #---------------- check
+  # XcatInit <- disj(strataInit)
+  # 
+  # print(t(XInit/pikInit)%*%pikInit)
+  # print(t(X/pik)%*%pikstar)
+  # print(t(XInit/pikInit)%*%s_01)
+  # 
+  # 
+  # print(t(Xcat)%*%pik)
+  # print(t(Xcat)%*%pikstar)
+  # print(t(XcatInit)%*%s_01)
+  # 
+  # 
+  # print(sum(pikstar))
+  # print(sum(s_01))
+  
+  if(rand == TRUE){
+    s_01 <- rep(0,length(pikstar))
+    s_01[o_out[which(pikstar > (1-EPS))]] <- 1
+  }else{
+    s_01 <- round(pikstar,10)
+  }
+  
+  return(s_01)
+  
 }
 

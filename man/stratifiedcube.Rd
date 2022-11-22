@@ -4,7 +4,7 @@
 \alias{stratifiedcube}
 \title{Stratified Sampling}
 \usage{
-stratifiedcube(X, strata, pik, EPS = 1e-07)
+stratifiedcube(X, strata, pik, EPS = 1e-07, rand = TRUE, landing = TRUE)
 }
 \arguments{
 \item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
@@ -25,6 +25,8 @@ This function implements a method for selecting a stratified sample. It really i
 The function is selecting a balanced sample very quickly even if the sum of inclusion probabilities within strata are non-integer. The function should be used in preference. Firstly, a flight phase is performed on each strata. Secondly, the function \code{\link{findB}} is used to find a particular matrix to apply a flight phase by using the cube method proposed by Chauvet, G. and Tillé, Y. (2006). Finally, a landing phase is applied by suppression of variables.
 }
 \examples{
+
+# EXAMPLE WITH EQUAL INCLUSION PROBABILITES AND SUM IN EACH STRATA INTEGER
 N <- 100
 n <- 10
 p <- 4
@@ -41,6 +43,50 @@ Xcat <- disj(strata)
 
 t(Xcat)\%*\%s
 t(Xcat)\%*\%pik
+
+
+# EXAMPLE WITH UNEQUAL INCLUSION PROBABILITES AND SUM IN EACH STRATA INTEGER
+N <- 100
+n <- 10
+X <- cbind(rgamma(N,4,25),rbinom(N,20,0.1),rlnorm(N,9,0.1),runif(N))
+colSums(X)
+strata <- rbinom(N,10,0.7)
+strata <- cleanstrata(strata)
+pik <- as.vector(inclusionprobastrata(strata,ceiling(table(strata)*0.10)))
+EPS = 1e-7
+
+s <- stratifiedcube(X,strata,pik)
+
+t(X/pik)\%*\%s
+t(X/pik)\%*\%pik
+
+Xcat <- disj(strata)
+
+t(Xcat)\%*\%s
+t(Xcat)\%*\%pik
+
+
+# EXAMPLE WITH UNEQUAL INCLUSION PROBABILITES AND SUM IN EACH STRATA NOT INTEGER
+N <- 100
+n <- 10
+X <- cbind(rgamma(N,4,25),rbinom(N,20,0.1),rlnorm(N,9,0.1),runif(N))
+strata <- rbinom(N,10,0.7)
+strata <- cleanstrata(strata)
+pik <- runif(N)
+EPS = 1e-7
+tapply(pik,strata,sum)
+
+
+s <- stratifiedcube(X,strata,pik,landing = TRUE)
+
+t(X/pik)\%*\%s
+t(X/pik)\%*\%pik
+
+Xcat <- disj(strata)
+
+t(Xcat)\%*\%s
+t(Xcat)\%*\%pik
+
 
 }
 \references{
