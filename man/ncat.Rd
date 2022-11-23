@@ -4,7 +4,7 @@
 \alias{ncat}
 \title{Number of categories}
 \usage{
-ncat(Xcat)
+ncat(Xcat_input)
 }
 \arguments{
 \item{Xcat}{A matrix of integers that contains categorical vector in each column.}

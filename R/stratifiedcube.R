@@ -132,7 +132,7 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landing = TRUE){
   ##----------------------------------------------------------------
   
   for(k in 1:nstrata){
-    pikstar[strata == k] <-ffphase(cbind(pikstar[strata == k],X[which(strata == k),]),
+    pikstar[strata == k] <-ffphase(as.matrix(cbind(pikstar[strata == k],X[which(strata == k),])),
                                    pikstar[strata == k])
   }
   

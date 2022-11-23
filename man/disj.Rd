@@ -4,7 +4,7 @@
 \alias{disj}
 \title{Disjunctive}
 \usage{
-disj(strata)
+disj(strata_input)
 }
 \arguments{
 \item{strata}{A vector of integers that represents the categories.}

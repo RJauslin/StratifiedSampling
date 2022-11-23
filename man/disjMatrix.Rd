@@ -4,7 +4,7 @@
 \alias{disjMatrix}
 \title{Disjunctive for matrix}
 \usage{
-disjMatrix(strata)
+disjMatrix(strata_input)
 }
 \arguments{
 \item{strata}{A matrix of integers that contains categorical vector in each column.}

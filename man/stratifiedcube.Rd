@@ -35,7 +35,7 @@ N <- 100
 n <- 10
 p <- 4
 X <- matrix(rgamma(N*p,4,25),ncol = p)
-strata <- as.matrix(rep(1:n,each = N/n))
+strata <- rep(1:n,each = N/n)
 pik <- rep(n/N,N)
 
 s <- stratifiedcube(X,strata,pik)
