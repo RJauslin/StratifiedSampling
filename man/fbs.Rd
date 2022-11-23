@@ -4,7 +4,7 @@
 \alias{fbs}
 \title{Fast Balanced Sampling}
 \usage{
-fbs(X, strata, pik)
+fbs(X, strata, pik, rand = TRUE, landing = TRUE)
 }
 \arguments{
 \item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
@@ -12,6 +12,10 @@ fbs(X, strata, pik)
 \item{strata}{A vector of integers that specifies the stratification.}
 
 \item{pik}{A vector of inclusion probabilities.}
+
+\item{rand}{if TRUE, the data are randomly arranged. Default TRUE}
+
+\item{landing}{if TRUE, landing by linear programming otherwise supression of variables. Default TRUE}
 }
 \value{
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.

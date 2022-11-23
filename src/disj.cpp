@@ -18,7 +18,9 @@
 //'
 //' @export
 // [[Rcpp::export]]
-arma::umat disj(arma::uvec strata) {
+Rcpp::IntegerMatrix disj(Rcpp::IntegerVector strata_input) {
+  
+  arma::uvec strata = Rcpp::as<arma::uvec>(strata_input);
   int N = strata.size();
   arma::uvec cat = arma::unique(strata);
   int ncat = cat.size();
@@ -34,7 +36,10 @@ arma::umat disj(arma::uvec strata) {
   for(int i = 0;i < N;i++){
     m(i,strata_tmp(i)) = 1;
   }
-  return(m);
+  // return(m);
+  
+  Rcpp::IntegerMatrix out = Rcpp::wrap(m);
+  return(out);
 }
 
 
@@ -87,18 +92,27 @@ system.time(M <- sampling::disjunctive(strata))
 //'             sample(x = 1:6, size = 100, replace = TRUE)),ncol = 3)
 //' ncat(Xcat)
 // [[Rcpp::export]]
-arma::rowvec ncat(arma::umat Xcat){
+Rcpp::NumericVector ncat(Rcpp::IntegerMatrix Xcat_input){
+  arma::umat Xcat = Rcpp::as<arma::umat>(Xcat_input);
   int p = Xcat.n_cols;
-  arma::rowvec out(p,arma::fill::zeros);
+  arma::rowvec m(p,arma::fill::zeros);
   for(int i = 0; i < p; i++){
     arma::uvec cat = unique(Xcat.col(i));
     int tmp = cat.size();
-    out(i) = tmp;
+    m(i) = tmp;
   }
+  
+  Rcpp::NumericVector out = Rcpp::wrap(m);
+  // out.attr("dim") = R_NilValue;
   return(out);
+  
 }
 
 /***R
+
+strata <-  sample(x = 1:6, size = N, replace = TRUE)
+ncat(strata)
+
 
 Xcat <-  matrix(c(sample(x = 1:6, size = 100, replace = TRUE),
                 sample(x = 1:6, size = 100, replace = TRUE),
@@ -113,6 +127,38 @@ system.time(test <- ncat(Xcat))
 
 */
 
+
+
+
+arma::vec ncat_internal(arma::umat Xcat){
+  int p = Xcat.n_cols;
+  arma::vec out(p,arma::fill::zeros);
+  for(int i = 0; i < p; i++){
+    arma::uvec cat = unique(Xcat.col(i));
+    int tmp = cat.size();
+    out(i) = tmp;
+  }
+  return(out);
+}
+
+arma::umat disj_internal(arma::uvec strata) {
+  
+  int N = strata.size();
+  arma::uvec cat = arma::unique(strata);
+  int ncat = cat.size();
+  
+  arma::uvec val = arma::regspace<arma::uvec>(0,1,ncat-1); // 0 to unique(strata)
+  arma::uvec strata_tmp = strata;
+  for(int i = 0;i<ncat;i++){
+    strata_tmp.replace(cat[i],val[i]);
+  }
+  
+  arma::umat m(N,ncat,arma::fill::zeros);
+  for(int i = 0;i < N;i++){
+    m(i,strata_tmp(i)) = 1;
+  }
+  return(m);
+}
 
 
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -135,23 +181,30 @@ system.time(test <- ncat(Xcat))
 //'
 //' @export
 // [[Rcpp::export]]
-arma::umat disjMatrix(arma::umat strata) {
+Rcpp::IntegerMatrix disjMatrix(Rcpp::IntegerMatrix strata_input) {
 
-  int N = strata.n_rows;
-  int p = strata.n_cols;
-  arma::rowvec all_cat = ncat(strata);
-  int n_all_cat = sum(all_cat);
-
+  
+  arma::umat strata = Rcpp::as<arma::umat>(strata_input);
+  
+  
+  arma::uword N = strata.n_rows;
+  arma::uword p = strata.n_cols;
+  arma::vec all_cat = ncat_internal(strata);
+  
+  int n_all_cat = 0;
+  for(arma::uword i = 0;i < all_cat.size(); i++){
+    n_all_cat += all_cat[i];
+  }
+  
   arma::umat m(N,n_all_cat,arma::fill::zeros);
-  arma::rowvec subind = arma::round(cumsum(all_cat)-1);
+  arma::vec subind = arma::round(cumsum(all_cat)-1);
   arma::uvec ind = arma::conv_to<arma::uvec>::from(subind);
 
-
-  for(int i = 0;i < p;i++){
+  for(arma::uword i = 0;i < p;i++){
     arma::uvec tmp = strata.col(i);
     arma::umat tmp_mat(N,all_cat(i),arma::fill::zeros);
-    tmp_mat = disj(tmp);
-
+    tmp_mat = disj_internal(tmp);
+    
     if(i == 0){
       m.cols(0, ind(i)) = tmp_mat;
     }else{
@@ -160,7 +213,12 @@ arma::umat disjMatrix(arma::umat strata) {
 
   }
 
-  return(m);
+  // return(m);
+  
+  Rcpp::IntegerMatrix out = Rcpp::wrap(m);
+  // out.attr("dim") = R_NilValue;
+  return(out);
+  
 }
 
 

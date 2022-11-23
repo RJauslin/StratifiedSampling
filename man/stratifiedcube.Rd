@@ -14,6 +14,10 @@ stratifiedcube(X, strata, pik, EPS = 1e-07, rand = TRUE, landing = TRUE)
 \item{pik}{A vector of inclusion probabilities.}
 
 \item{EPS}{epsilon value}
+
+\item{rand}{if TRUE, the data are randomly arranged. Default TRUE}
+
+\item{landing}{if TRUE, landing by linear programming otherwise supression of variables. Default TRUE}
 }
 \value{
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.

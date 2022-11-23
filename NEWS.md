@@ -2,7 +2,9 @@
 
 ## StratifiedSampling 0.4.9000
 * ERROR in GLPK if there is a NA or nan in Xaux when balseq is called.
-* stratifiedcube check landingRM
+* stratifiedcube, fbs and balstrat now have a modified landing (linear programming or suppresion of variables). I also add a randomization option.
+* modified version of ffphase. 
+
 
 ## StratifiedSampling 0.4.1
 * (ERROR fixed, the cumsum/floor function does not have the same result on mac. This is what was producing the error.)

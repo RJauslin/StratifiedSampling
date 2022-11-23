@@ -27,13 +27,13 @@
 #'
 findB <- function(X,
                   strata){
-
+  
   strata <- as.matrix(strata)
   X <- as.matrix(X)
   eps <- 1e-9
   N <- nrow(X)
   pInit <- ncol(X)
-
+  
   if(pInit > nrow(strata)){
     # print(pInit)
     # print(nrow(strata))
@@ -46,7 +46,7 @@ findB <- function(X,
   
   nstrata <- sum(ncat(strata_tmp))
   nstrata_tmp <- 0
-
+  
   while(nstrata != nstrata_tmp){
     nstrata_tmp = nstrata
     p =  pInit  + nstrata
@@ -59,10 +59,12 @@ findB <- function(X,
     strata_tmp <- as.matrix(strata[1:(p+1),])
     nstrata <- sum(ncat(strata_tmp))
   }
-
+  
   strata_tmp <- as.matrix(strata_tmp)
   disj_strata <- disjMatrix(strata_tmp)
-
+  
   return(list(X = as.matrix(X[1:(p+1),]),Xcat = disj_strata))
-
+  
 }
+
+

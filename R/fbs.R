@@ -7,6 +7,8 @@
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integers that specifies the stratification.
 #' @param pik A vector of inclusion probabilities.
+#' @param rand if TRUE, the data are randomly arranged. Default TRUE
+#' @param landing if TRUE, landing by linear programming otherwise supression of variables. Default TRUE
 #'
 #' @details 
 #' Firstly a flight phase is performed on each strata. Secondly, several flight phases are applied by adding one by one the stratum. By doing this, some strata are managed on-the-fly. Finally, a landing phase is applied by suppression of the variables. If the number of element selected in each stratum is not equal to an integer, the function can be very time-consuming.
@@ -17,6 +19,8 @@
 #' Hasler, C. and Tillé Y. (2014). Fast balanced sampling for highly stratified population. \emph{Computational Statistics and Data Analysis}, 74, 81-94
 #' 
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
+#' 
+#' @importFrom sampling landingcube
 #' 
 #' @examples
 #' 
@@ -41,9 +45,37 @@
 #' t(Xcat)%*%pik
 #' 
 #'
-
 #' @export
-fbs <- function(X,strata,pik){
+fbs <- function(X,strata,pik,rand = TRUE,landing = TRUE){
+  
+  
+  if(rand == TRUE){
+    strataInit <- strata
+    ## cleanstrata
+    a = sort(unique(as.vector(strata)))
+    b = 1:length(a)
+    names(b) = a
+    strata <- as.vector(b[as.character(strata)])
+    
+    ## RANDOMIZATION 
+    o <- order(strata)
+    # strata[o] # this order the vector
+    
+    o_split <- split(o, f = strata[o] ) # split and randomize in each category
+    for( i in 1:length(o_split)){
+      o_tmp <- sample(1:length(o_split[[i]]))
+      o_split[[i]] <- o_split[[i]][o_tmp]
+    }
+    o_out <- unlist(o_split[sample(1:length(o_split))]) # unlist and randomize each category
+    
+    XInit <- X
+    pikInit <- pik  
+    
+    X <- X[o_out,]
+    strata <- strata[o_out]
+    pik <- pik[o_out]
+  }
+  
   
   H <- as.numeric(ncat(as.matrix(strata)))
   pik_tmp <- pik
@@ -62,12 +94,19 @@ fbs <- function(X,strata,pik){
                                                    pik[strata == k])
     
   }
-  sum(pik_tmp)
+  
+  ###################### CHECK
+  # t(X/pik)%*%pik_tmp
+  # t(X/pik)%*%pik
+  # Xcat <- disj(strata)
+  # t(Xcat)%*%pik
+  # t(Xcat)%*%pik_tmp
   
   ##----------------------------------------------------------------
   ##          Flightphase on the uninon of strata U1 -- Uk         -
   ##----------------------------------------------------------------
   i <- which(pik_tmp > EPS & pik_tmp < (1-EPS))
+  # length(i)
   if(length(i) != 0){
     Xnn <- disj(strata)
     for(k in 1:H){
@@ -94,7 +133,17 @@ fbs <- function(X,strata,pik){
     
     }
   }
-  sum(pik_tmp)
+  
+  
+  
+  
+  ###################### CHECK
+  # t(X/pik)%*%pik_tmp
+  # t(X/pik)%*%pik
+  # Xcat <- disj(strata)
+  # t(Xcat)%*%pik
+  # t(Xcat)%*%pik_tmp
+  
 
   ##---------------------------------------------------------------
   ##              Landing by suppression of variables             -
@@ -103,14 +152,43 @@ fbs <- function(X,strata,pik){
   i <- which(pik_tmp > EPS & pik_tmp < (1-EPS))
 
   
-  if(length(i) != 0){
-    strata_tmp3 <- as.matrix(Xnn)
-    pik_tmp <- landingRM(as.matrix(cbind(pik_tmp,strata_tmp3, X/pik)),
-                          pik_tmp)
-  # pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,], X[i,])),
-  #                         pik_tmp[i],
-  #                         pik[i])
-  
+  if(length(i) > 0){
+    if(landing == TRUE){
+      if(length(i) > 20){
+        warnings("The landing by using linear programming might be very time consuming. Think about landing by using drop variables.")
+      }
+      pik_tmp <- sampling::landingcube(cbind(pik,Xnn,X),pik_tmp,pik,comment = FALSE) # pass the whole matrix to compute t(A)%*%A
+    }else{
+      pik_tmp[i] <- landingRM(cbind(pik[i],Xnn[i,],X[i,])/pik[i]*pik_tmp[i],pik_tmp[i],EPS)
+    }
   }
-  return(round(pik_tmp,10))
+  
+  
+  ###################### CHECK
+  # t(X/pik)%*%pik_tmp
+  # t(X/pik)%*%pik
+  # Xcat <- disj(strata)
+  # t(Xcat)%*%pik
+  # t(Xcat)%*%pik_tmp
+  
+  # if(length(i) != 0){
+  #   strata_tmp3 <- as.matrix(Xnn)
+  #   pik_tmp <- landingRM(as.matrix(cbind(pik_tmp,strata_tmp3, X/pik)),
+  #                         pik_tmp)
+  # # pik_tmp[i] <- landingRM(as.matrix(cbind(Xnn[i,], X[i,])),
+  # #                         pik_tmp[i],
+  # #                         pik[i])
+  # 
+  # }
+  
+  if(rand == TRUE){
+    s_01 <- rep(0,length(pik_tmp))
+    s_01[o_out[which(pik_tmp > (1-EPS))]] <- 1
+  }else{
+    s_01 <- round(pik_tmp,10)
+  }
+  
+  
+  return(s_01)
+  # return(round(pik_tmp,10))
 }

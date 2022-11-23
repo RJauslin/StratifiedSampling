@@ -8,6 +8,8 @@
 #' @param strata A vector of integers that specifies the stratification..
 #' @param pik A vector of inclusion probabilities.
 #' @param EPS epsilon value
+#' @param rand if TRUE, the data are randomly arranged. Default TRUE
+#' @param landing if TRUE, landing by linear programming otherwise supression of variables. Default TRUE
 #'
 #' @details 
 #' 
@@ -28,7 +30,7 @@
 #' n <- 10
 #' p <- 4
 #' X <- matrix(rgamma(N*p,4,25),ncol = p)
-#' strata <- as.matrix(rep(1:n,each = N/n))
+#' strata <- rep(1:n,each = N/n)
 #' pik <- rep(n/N,N)
 #' 
 #' s <- stratifiedcube(X,strata,pik)
@@ -90,7 +92,7 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landing = TRUE){
   if(rand == TRUE){
     strataInit <- strata
     ## cleanstrata
-    a = sort(unique(as.vector(strata)))
+    a = sort(unique(strata))
     b = 1:length(a)
     names(b) = a
     strata <- as.vector(b[as.character(strata)])
@@ -117,20 +119,20 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landing = TRUE){
   ##----------------------------------------------------------------
   ##                        Initialization                         -
   ##----------------------------------------------------------------
-  strata <- as.matrix(strata)
+  # strata <- as.matrix(strata)
   A = X/pik
   pikstar <- pik
   p = ncol(X)
   nstrata <- length(unique(strata))
-  TOT <- t(A)%*%pik
-  XX <- MASS::ginv(t(A) %*% A)
+  # TOT <- t(A)%*%pik
+  # XX <- MASS::ginv(t(A) %*% A)
   
   ##----------------------------------------------------------------
   ##                  Flightphase on each strata                   -
   ##----------------------------------------------------------------
   
   for(k in 1:nstrata){
-    pikstar[strata == k] <-ffphase(as.matrix(cbind(pikstar[strata == k],X[which(strata == k),])),
+    pikstar[strata == k] <-ffphase(cbind(pikstar[strata == k],X[which(strata == k),]),
                                    pikstar[strata == k])
   }
   
@@ -158,15 +160,14 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landing = TRUE){
     while(i_size > 0){
     
       ##------ Remove unique category
-      
-      uCat <- i[duplicated(strata[i,]) | duplicated(strata[i,], fromLast = TRUE)]
+      uCat <- i[duplicated(strata[i]) | duplicated(strata[i], fromLast = TRUE)]
       if(length(uCat) == 0){
         break;
       }
       
       ##------ Find B
-      A_tmp <- as.matrix(X[uCat,]/pik[uCat])
-      B <- findB(A_tmp,as.matrix(strata[uCat,]))
+      A_tmp <- X[uCat,]/pik[uCat]
+      B <- findB(A_tmp,strata[uCat])
       B <- cbind(B$X,B$Xcat)
       ##------ onestep and check if null
       tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
@@ -199,8 +200,8 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landing = TRUE){
       if(k == p){
         B <- as.matrix(pikstar[uCat])/pikstar[uCat]
       }else{
-        A_tmp <- as.matrix(as.matrix(X[uCat,1:(p-k)])/pik[uCat])
-        B <- findB(A_tmp,as.matrix(strata[uCat,]))
+        A_tmp <- X[uCat,1:(p-k)]/pik[uCat]
+        B <- findB(A_tmp,strata[uCat])
         B <- cbind(B$X,B$Xcat)
       }
       
@@ -212,7 +213,7 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landing = TRUE){
       }
       i <- which(pikstar > EPS & pikstar < (1-EPS))
       i_size = length(i)
-      uCat <- i[duplicated(strata[i,]) | duplicated(strata[i,], fromLast = TRUE)]
+      uCat <- i[duplicated(strata[i]) | duplicated(strata[i], fromLast = TRUE)]
       k = k + 1
     }
   }
@@ -232,12 +233,12 @@ stratifiedcube <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landing = TRUE){
   # ##            Landing on unit that are alone in the strata       -
   # ##----------------------------------------------------------------
   
-
+  i <- which(pikstar > EPS & pikstar < (1-EPS))
   if(length(i) > 0){
-    if(length(i) > 20){
-      warnings("The landing by using linear programming might be very time consuming. Think about landing by using drop variables.")
-    }
     if(landing == TRUE){
+      if(length(i) > 20){
+        warning("The landing by using linear programming might be very time consuming. Think about landing by using drop variables.")
+      }
       pikstar <- sampling::landingcube(X,pikstar,pik,comment = FALSE) # pass the whole matrix to compute t(A)%*%A
     }else{
       pikstar[i] <- landingRM(cbind(pik[i],X[i,])/pik[i]*pikstar[i],pikstar[i],EPS)  

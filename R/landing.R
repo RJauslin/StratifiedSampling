@@ -12,6 +12,7 @@
 #' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' @seealso \code{\link{fbs}}, \code{\link{balstrat}}.
+#' @importFrom stats rbinom
 #' 
 #' @references
 #' Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{Computational Statistics}, 21/1:53-62
@@ -31,10 +32,6 @@
 #' @export
 landingRM <- function(A,pikstar,EPS = 1e-7){
 
-
-  
-  
-  
   ##----------------------------------------------------------------
   ##                          Initializing                         -
   ##----------------------------------------------------------------
@@ -101,7 +98,7 @@ landingRM <- function(A,pikstar,EPS = 1e-7){
     # stop("error you still have, after landing, at least one unit that have inlcusion probability not equal to 0 or 1. Check that you have put the vector of inclusion probabilities as first column on the auxiliary variables.")
   }
   if(length(i) == 1){
-    pikstar[i] = rbinom(1,1,pik[i]);  
+    pikstar[i] = stats::rbinom(1,1,pik[i]);  
   }
   
   

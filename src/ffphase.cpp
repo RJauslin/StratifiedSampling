@@ -232,7 +232,7 @@ void onestep_cpp_ending(arma::vec& u,arma::vec& pik,double EPS=0.0000001){
 //' pikstar
 //' @export
 // [[Rcpp::export]]
-arma::vec ffphase(arma::mat Xbal,arma::vec prob, bool order = true){
+Rcpp::NumericVector ffphase(arma::mat Xbal,arma::vec prob, bool order = true){
   int N = prob.size();
   int naux = Xbal.n_cols;
   
@@ -337,7 +337,12 @@ arma::vec ffphase(arma::mat Xbal,arma::vec prob, bool order = true){
       p[index[i]] = 0;
     }
   }
-  return p;
+  
+  
+  Rcpp::NumericVector out = Rcpp::wrap(p);
+  out.attr("dim") = R_NilValue;
+
+  return out;
 }
 
 /*** R

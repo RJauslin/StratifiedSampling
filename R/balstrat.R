@@ -7,6 +7,8 @@
 #' @param X A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.
 #' @param strata A vector of integers that specifies the stratification.
 #' @param pik A vector of inclusion probabilities.
+#' @param rand if TRUE, the data are randomly arranged. Default TRUE
+#' @param landing if TRUE, landing by linear programming otherwise supression of variables. Default TRUE
 #'
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
@@ -17,6 +19,7 @@
 #' @import Matrix
 #' @useDynLib StratifiedSampling, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
+#' @importFrom sampling landingcube
 #' 
 #' @seealso \code{\link{ffphase}}, \code{\link{landingRM}}
 #' 
@@ -41,10 +44,38 @@
 #' t(Xcat)%*%s
 #' t(Xcat)%*%pik
 #' @export
-balstrat <- function (X, strata, pik) 
+balstrat <- function (X, strata, pik,rand = TRUE,landing = TRUE) 
 {
+ 
   
-  H <- as.numeric(ncat(strata))
+  if(rand == TRUE){
+    strataInit <- strata
+    ## cleanstrata
+    a = sort(unique(as.vector(strata)))
+    b = 1:length(a)
+    names(b) = a
+    strata <- as.vector(b[as.character(strata)])
+    
+    ## RANDOMIZATION 
+    o <- order(strata)
+    # strata[o] # this order the vector
+    
+    o_split <- split(o, f = strata[o] ) # split and randomize in each category
+    for( i in 1:length(o_split)){
+      o_tmp <- sample(1:length(o_split[[i]]))
+      o_split[[i]] <- o_split[[i]][o_tmp]
+    }
+    o_out <- unlist(o_split[sample(1:length(o_split))]) # unlist and randomize each category
+    
+    XInit <- X
+    pikInit <- pik  
+    
+    X <- X[o_out,]
+    strata <- strata[o_out]
+    pik <- pik[o_out]
+  }
+  
+  H <- as.numeric(ncat(as.matrix(strata)))
   pik_tmp <- pik
   EPS <- 1e-7
   Xnn <- disj(strata)
@@ -84,7 +115,6 @@ balstrat <- function (X, strata, pik)
   }
   
   
-  
   # ###################### CHECK
   # sum(pik_tmp)
   # t(X/pik)%*%pik_tmp
@@ -100,12 +130,26 @@ balstrat <- function (X, strata, pik)
   i <- which(pik_tmp > EPS & pik_tmp < (1-EPS))
   
   
-  if(length(i) != 0){
-    Xnn <- disj(strata)
-    Xcat_tmp3 <- as.matrix(Xnn)
-    pik_tmp <- landingRM(as.matrix(cbind(pik_tmp,Xcat_tmp3, X/pik)),
-                         pik_tmp)
+  if(length(i) > 0){
+    if(landing == TRUE){
+      if(length(i) > 20){
+        warnings("The landing by using linear programming might be very time consuming. Think about landing by using drop variables.")
+      }
+      pik_tmp <- sampling::landingcube(cbind(pik,Xnn,X),pik_tmp,pik,comment = FALSE) # pass the whole matrix to compute t(A)%*%A
+    }else{
+      pik_tmp[i] <- landingRM(cbind(pik[i],Xnn[i,],X[i,])/pik[i]*pik_tmp[i],pik_tmp[i],EPS)
+    }
   }
-  return(round(pik_tmp,10))
+  
+  
+  if(rand == TRUE){
+    s_01 <- rep(0,length(pik_tmp))
+    s_01[o_out[which(pik_tmp > (1-EPS))]] <- 1
+  }else{
+    s_01 <- round(pik_tmp,10)
+  }
+  
+  
+  return(s_01)
   
 }

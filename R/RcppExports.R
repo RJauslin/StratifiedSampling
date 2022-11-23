@@ -124,8 +124,8 @@ gencalibRaking <- function(Xs, Zs, d, total, q, max_iter = 500L, tol = 1e-9) {
 #' disj(strata)
 #'
 #' @export
-disj <- function(strata) {
-    .Call(`_StratifiedSampling_disj`, strata)
+disj <- function(strata_input) {
+    .Call(`_StratifiedSampling_disj`, strata_input)
 }
 
 #' @title Number of categories
@@ -146,8 +146,8 @@ disj <- function(strata) {
 #'             sample(x = 1:6, size = 100, replace = TRUE),
 #'             sample(x = 1:6, size = 100, replace = TRUE)),ncol = 3)
 #' ncat(Xcat)
-ncat <- function(Xcat) {
-    .Call(`_StratifiedSampling_ncat`, Xcat)
+ncat <- function(Xcat_input) {
+    .Call(`_StratifiedSampling_ncat`, Xcat_input)
 }
 
 #' @title Disjunctive for matrix  
@@ -168,8 +168,8 @@ ncat <- function(Xcat) {
 #' disjMatrix(Xcat)
 #'
 #' @export
-disjMatrix <- function(strata) {
-    .Call(`_StratifiedSampling_disjMatrix`, strata)
+disjMatrix <- function(strata_input) {
+    .Call(`_StratifiedSampling_disjMatrix`, strata_input)
 }
 
 #' @title Squared Euclidean distances of the unit k.

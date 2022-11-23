@@ -67,35 +67,35 @@ BEGIN_RCPP
 END_RCPP
 }
 // disj
-arma::umat disj(arma::uvec strata);
-RcppExport SEXP _StratifiedSampling_disj(SEXP strataSEXP) {
+Rcpp::IntegerMatrix disj(Rcpp::IntegerVector strata_input);
+RcppExport SEXP _StratifiedSampling_disj(SEXP strata_inputSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uvec >::type strata(strataSEXP);
-    rcpp_result_gen = Rcpp::wrap(disj(strata));
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type strata_input(strata_inputSEXP);
+    rcpp_result_gen = Rcpp::wrap(disj(strata_input));
     return rcpp_result_gen;
 END_RCPP
 }
 // ncat
-arma::rowvec ncat(arma::umat Xcat);
-RcppExport SEXP _StratifiedSampling_ncat(SEXP XcatSEXP) {
+Rcpp::NumericVector ncat(Rcpp::IntegerMatrix Xcat_input);
+RcppExport SEXP _StratifiedSampling_ncat(SEXP Xcat_inputSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::umat >::type Xcat(XcatSEXP);
-    rcpp_result_gen = Rcpp::wrap(ncat(Xcat));
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type Xcat_input(Xcat_inputSEXP);
+    rcpp_result_gen = Rcpp::wrap(ncat(Xcat_input));
     return rcpp_result_gen;
 END_RCPP
 }
 // disjMatrix
-arma::umat disjMatrix(arma::umat strata);
-RcppExport SEXP _StratifiedSampling_disjMatrix(SEXP strataSEXP) {
+Rcpp::IntegerMatrix disjMatrix(Rcpp::IntegerMatrix strata_input);
+RcppExport SEXP _StratifiedSampling_disjMatrix(SEXP strata_inputSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::umat >::type strata(strataSEXP);
-    rcpp_result_gen = Rcpp::wrap(disjMatrix(strata));
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type strata_input(strata_inputSEXP);
+    rcpp_result_gen = Rcpp::wrap(disjMatrix(strata_input));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -114,7 +114,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // ffphase
-arma::vec ffphase(arma::mat Xbal, arma::vec prob, bool order);
+Rcpp::NumericVector ffphase(arma::mat Xbal, arma::vec prob, bool order);
 RcppExport SEXP _StratifiedSampling_ffphase(SEXP XbalSEXP, SEXP probSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
