@@ -60,17 +60,21 @@ pik <- as.vector(sampling::inclusionprobastrata(strata,ceiling(table(strata)*0.1
 EPS = 1e-7
 
 s <- stratifiedcube(X,strata,pik)
+test <- stratifiedcube_wo_landing(X,strata,pik)
 
 t(X/pik)\%*\%s
+t(X/pik)\%*\%test
 t(X/pik)\%*\%pik
 
 Xcat <- disj(strata)
 
 t(Xcat)\%*\%s
+t(Xcat)\%*\%test
 t(Xcat)\%*\%pik
 
 
 # EXAMPLE WITH UNEQUAL INCLUSION PROBABILITES AND SUM IN EACH STRATA NOT INTEGER
+set.seed(3)
 N <- 100
 n <- 10
 X <- cbind(rgamma(N,4,25),rbinom(N,20,0.1),rlnorm(N,9,0.1),runif(N))
@@ -79,17 +83,22 @@ strata <- sampling::cleanstrata(strata)
 pik <- runif(N)
 EPS = 1e-7
 tapply(pik,strata,sum)
+table(strata)
 
 
 s <- stratifiedcube(X,strata,pik,landing = TRUE)
+test <- stratifiedcube_wo_landing(X,strata,pik,landing = TRUE)
+
 
 t(X/pik)\%*\%s
+t(X/pik)\%*\%test
 t(X/pik)\%*\%pik
 
 Xcat <- disj(strata)
 
 t(Xcat)\%*\%s
 t(Xcat)\%*\%pik
+t(Xcat)\%*\%test
 
 
 }
