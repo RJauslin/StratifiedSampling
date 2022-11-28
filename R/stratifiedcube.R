@@ -418,14 +418,14 @@ stratifiedcube_wo_landing <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landin
   }
   
   #---------------- check
-  Xcat <- disjMatrix(as.matrix(strata))
-
-  print(t(X/pik)%*%pik)
-  print(t(X/pik)%*%pikstar)
-  print(t(Xcat)%*%pik)
-  print(t(Xcat)%*%pikstar)
-  print(length(i))
-  print(sum(pikstar))
+  # Xcat <- disjMatrix(as.matrix(strata))
+  # 
+  # print(t(X/pik)%*%pik)
+  # print(t(X/pik)%*%pikstar)
+  # print(t(Xcat)%*%pik)
+  # print(t(Xcat)%*%pikstar)
+  # print(length(i))
+  # print(sum(pikstar))
 
     
   if(rand == TRUE){
