@@ -392,29 +392,29 @@ stratifiedcube_wo_landing <- function(X,strata,pik,EPS = 1e-7,rand = TRUE,landin
     # are not put equal to 0 or 1 within each strata
     #
     
-    p <- ncol(X)
-    k = 1
-    while(length(uCat) != 0){
-      ##------ Find B
-      if(k == p){
-        B <- as.matrix(pikstar[uCat])/pikstar[uCat]
-      }else{
-        A_tmp <- X[uCat,1:(p-k)]/pik[uCat]
-        B <- findB(A_tmp,strata[uCat])
-        B <- cbind(B$X,B$Xcat)
-      }
-      
-      # print(pikstar[uCat[1:nrow(B)]])
-      tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
-      # print(tmp)
-      if(!is.null(tmp)){
-        pikstar[uCat[1:nrow(B)]] <- tmp  
-      }
-      i <- which(pikstar > EPS & pikstar < (1-EPS))
-      i_size = length(i)
-      uCat <- i[duplicated(strata[i]) | duplicated(strata[i], fromLast = TRUE)]
-      k = k + 1
-    }
+    # p <- ncol(X)
+    # k = 1
+    # while(length(uCat) != 0){
+    #   ##------ Find B
+    #   if(k == p){
+    #     B <- as.matrix(pikstar[uCat])/pikstar[uCat]
+    #   }else{
+    #     A_tmp <- X[uCat,1:(p-k)]/pik[uCat]
+    #     B <- findB(A_tmp,strata[uCat])
+    #     B <- cbind(B$X,B$Xcat)
+    #   }
+    #   
+    #   # print(pikstar[uCat[1:nrow(B)]])
+    #   tmp <-  onestep(B,pikstar[uCat[1:nrow(B)]],EPS)
+    #   # print(tmp)
+    #   if(!is.null(tmp)){
+    #     pikstar[uCat[1:nrow(B)]] <- tmp  
+    #   }
+    #   i <- which(pikstar > EPS & pikstar < (1-EPS))
+    #   i_size = length(i)
+    #   uCat <- i[duplicated(strata[i]) | duplicated(strata[i], fromLast = TRUE)]
+    #   k = k + 1
+    # }
   }
   
   #---------------- check
