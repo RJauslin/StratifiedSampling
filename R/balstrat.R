@@ -70,8 +70,8 @@ balstrat <- function (X, strata, pik,rand = TRUE,landing = TRUE)
     XInit <- X
     pikInit <- pik  
     
-    X <- X[o_out,]
-    strata <- strata[o_out]
+    X <- as.matrix(X[o_out,])
+    strata <- as.matrix(strata[o_out])
     pik <- pik[o_out]
   }
   
