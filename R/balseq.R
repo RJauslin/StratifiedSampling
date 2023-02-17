@@ -88,6 +88,8 @@ balseq_onestep <- function(Xaux,pik,pikInit,index,deg){
 #' colSums(Xaux[s,]/as.vector(pik[s]))
 #' colSums(Xaux)
 #' 
+#' 
+#' 
 #' @export
 balseq <- function(pik,Xaux,Xspread = NULL,rord = TRUE){
   # initializing
