@@ -22,7 +22,6 @@ using namespace Rcpp;
 //' 
 //' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 //'
-//' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' @seealso \code{\link{c_bound}}
 //' 

@@ -19,7 +19,6 @@ using namespace Rcpp;
 //' 
 //' @return A matrix of size \code{N} x \code{n}, where \code{N} is equal to the length of the vector \code{w}.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @references 
 //' Tille, Y. (2006), Sampling Algorithms, springer
@@ -126,7 +125,6 @@ sum(pikt)
 //' 
 //' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @references 
 //' Tille, Y. (2006), Sampling Algorithms, springer
@@ -167,7 +165,6 @@ IntegerVector sfromq(const NumericMatrix& q){
 //' 
 //' @return A vector of inclusion probability computed from the matrix \code{q}.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @references 
 //' Tille, Y. (2006), Sampling Algorithms, springer
@@ -222,7 +219,6 @@ NumericVector pikfromq(NumericMatrix& q){
 //' 
 //' @return An updated vector of inclusion probability.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @references 
 //' Tille, Y. (2006), Sampling Algorithms, springer
@@ -319,7 +315,6 @@ NumericVector piktfrompik(NumericVector& pik, int max_iter = 500,double tol = 1e
 //' 
 //' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @references 
 //' Tille, Y. (2006), Sampling Algorithms, springer
@@ -619,7 +614,6 @@ NumericMatrix pik2frompik(NumericVector pikr, NumericVector wr){
 //' More details could be find in Tille (2006).
 //' @return A matrix, the joint inclusion probabilities.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @references 
 //' Tille, Y. (2006), Sampling Algorithms, springer

@@ -16,7 +16,6 @@ using namespace Rcpp;
 //'
 //' @return A vector of inclusion probabilities proportional to \code{x} and such that the sum is equal to the value \code{n}.
 //'
-//' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' @seealso \code{\link[sampling]{inclusionprobabilities}}
 //' 

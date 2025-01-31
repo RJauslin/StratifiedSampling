@@ -17,7 +17,6 @@
 //'
 //' @return A vector, the value of the g-weights.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //'
 //' @references Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York
@@ -171,7 +170,6 @@ calibRaking(as.matrix(XX1),d1,totals,q)
 //'
 //' @return A vector, the value of the g-weights.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //'
 //' @references Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York

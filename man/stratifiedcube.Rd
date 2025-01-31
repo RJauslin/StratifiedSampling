@@ -4,7 +4,15 @@
 \alias{stratifiedcube}
 \title{Stratified Sampling}
 \usage{
-stratifiedcube(X, strata, pik, EPS = 1e-07, rand = TRUE, landing = TRUE)
+stratifiedcube(
+  X,
+  strata,
+  pik,
+  EPS = 1e-07,
+  rand = TRUE,
+  landing = TRUE,
+  lp = TRUE
+)
 }
 \arguments{
 \item{X}{A matrix of size (\eqn{N} x \eqn{p}) of auxiliary variables on which the sample must be balanced.}
@@ -17,7 +25,9 @@ stratifiedcube(X, strata, pik, EPS = 1e-07, rand = TRUE, landing = TRUE)
 
 \item{rand}{if TRUE, the data are randomly arranged. Default TRUE}
 
-\item{landing}{if TRUE, landing by linear programming otherwise supression of variables. Default TRUE}
+\item{landing}{if FALSE, no landing phase is done.}
+
+\item{lp}{if TRUE, landing by linear programming otherwise supression of variables. Default TRUE}
 }
 \value{
 A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
@@ -60,7 +70,7 @@ pik <- as.vector(sampling::inclusionprobastrata(strata,ceiling(table(strata)*0.1
 EPS = 1e-7
 
 s <- stratifiedcube(X,strata,pik)
-test <- stratifiedcube_wo_landing(X,strata,pik)
+test <- stratifiedcube(X,strata,pik,landing = FALSE)
 
 t(X/pik)\%*\%s
 t(X/pik)\%*\%test
@@ -87,7 +97,7 @@ table(strata)
 
 
 s <- stratifiedcube(X,strata,pik,landing = TRUE)
-test <- stratifiedcube_wo_landing(X,strata,pik,landing = TRUE)
+test <- stratifiedcube(X,strata,pik,landing = FALSE)
 
 
 t(X/pik)\%*\%s

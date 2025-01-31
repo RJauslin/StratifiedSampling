@@ -34,6 +34,3 @@ s <- osod(pik)
 \seealso{
 \code{\link{c_bound}}
 }
-\author{
-Raphael Jauslin \email{raphael.jauslin@unine.ch}
-}

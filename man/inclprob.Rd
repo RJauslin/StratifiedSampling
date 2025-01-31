@@ -30,6 +30,3 @@ sum(pik)
 \seealso{
 \code{\link[sampling]{inclusionprobabilities}}
 }
-\author{
-Raphael Jauslin \email{raphael.jauslin@unine.ch}
-}

@@ -38,6 +38,3 @@ Chauvet, G. and Tillé, Y. (2006). A fast algorithm of balanced sampling. \emph{
 \seealso{
 \code{\link{fbs}}, \code{\link{balstrat}}.
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

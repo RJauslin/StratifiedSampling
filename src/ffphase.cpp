@@ -210,14 +210,12 @@ void onestep_cpp_ending(arma::vec& u,arma::vec& pik,double EPS=0.0000001){
 //' sample that respects the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
 //' For more information see (Chauvet and Tillé 2006).
 //' 
-//' This function is a modified version of \code{\link[BalancedSampling:flightphase]{flightphase}}
 //' 
 //'
 //' @return Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
 //'
-//' @seealso \code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:flightphase]{flightphase}}.
+//' @seealso \code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:cube]{cube}}.
 //' 
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' @examples
 //' N <- 100
@@ -366,144 +364,5 @@ A <- X/pik
 
 s1 <- round(sampling::fastflightcube(X,pik),9)
 s2 <- round(ffphase(X,pik),9)
-s3 <- round(BalancedSampling::flightphase(pik,X),9)
 
-dim(X)
-length(which(s1 > eps & s1 < (1-eps)))
-length(which(s2 > eps & s2 < (1-eps)))
-length(which(s3 > eps & s3 < (1-eps)))
-
-t(A)%*%s1
-t(A)%*%s2
-t(A)%*%s3
-t(A)%*%pik
-
-micro_timings = microbenchmark(sampling::fastflightcube(X,pik,comment = FALSE),
-                               ffphase(X,pik),
-                               BalancedSampling::flightphase(pik,X),
-                               times = 30)
-plot(micro_timings)
-micro_timings
-
-library(sampling)
-rm(list = ls())
-N = 3000
-n = 200
-p = 10
-pik=inclusionprobabilities(runif(N),n)
-X=cbind(pik,matrix(rnorm(N*p),c(N,p)))
-A <- X/pik
-s1 <- ffphase(X,pik)
-s2 <- ffphase_graf(pik,X)
-length(which(s1 > 1e-7 & s1 < (1 - 1e-7)))
-length(which(s2 > 1e-7 & s2 < (1 - 1e-7)))
-
-t(A)%*%s
-t(A)%*%pik
-
-library("microbenchmark")
-
-micro_timings = microbenchmark(ffphase(X,pik),
-                               ffphase_cpp(X,pik),
-                               ffphase_graf(pik,X),
-                               BalancedSampling::flightphase(pik,X),
-                               times = 30)
-
-
-plot(micro_timings)
-micro_timings
-
-
-
-
-
-
-
-
-
-
-
-rm(list = ls())
-# set.seed(3)
-N <-  1000
-n <-  300
-p <-  1
-q <-  7
-eps <- 1e-12
-z <-  runif(N)
-pik <-  inclusionprobabilities(z,n)
-X <-  cbind(pik,matrix(rnorm(N*p),c(N,p)))
-Z=cbind(matrix(rbinom(N*q,1,1/2),c(N,q)))
-B=cbind(Z,-Z)
-X <- cbind(X,B*pik)
-A <- X/pik
-pikfastflightcube <- round(fastflightcube(X,pik),9)
-pikffphase <- round(SamplingC::ffphase(pik,X),9)
-pikBal <-  round(SamplingC::flightphase(pik,X),9)
-dim(X)
-length(which(pikfastflightcube > eps & pikfastflightcube < (1-eps)))
-length(which(pikBal > eps & pikBal < (1-eps)))
-length(which(pikffphase > eps & pikffphase < (1-eps)))
-t(A)%*%pikfastflightcube
-t(A)%*%pikBal
-t(A)%*%pikffphase
-##########################################################################
-rm(list = ls())
-eps = 1e-12
-N = 5000
-n = 800
-p = 40
-pik=inclusionprobabilities(runif(N),n)
-X=cbind(pik,matrix(rnorm(N*p),c(N,p)))
-system.time(test1 <- SamplingC::flightphase(pik,X))
-system.time(test2 <- ffphase(pik,X))
-length(which(test1 > eps & test1 < (1-eps)))
-length(which(test2 > eps & test2 < (1-eps)))
-##############################################################################
-rm(list = ls())
-set.seed(1)
-eps <- 1e-13
-library(Matrix)
-N <- 200
-n1 <- floor(N/3)
-n2 <- floor(N/5)
-n3 <- floor(N/7)
-Pik <- matrix(c(sampling::inclusionprobabilities(runif(N),n1),
-                sampling::inclusionprobabilities(runif(N),n2),
-                sampling::inclusionprobabilities(runif(N),n3)),ncol = 3)
-X <- PM(Pik)$PM
-X <- cbind(rep(1,nrow(X)),X)
-pik <- PM(Pik)$P
-image(as(X,"sparseMatrix"))
-A <- X/pik
-system.time(test <- SamplingC::ffphase(pik,X,order = TRUE,redux = FALSE)) # order changed and no reduc.
-# t(A)%*%test
-system.time(test <- SamplingC::ffphase(pik,X,order = TRUE,redux = TRUE)) # order changed with reduc.
-# t(A)%*%test
-system.time(test <- SamplingC::ffphase(pik,X,order = FALSE,redux = TRUE)) # no change in the order and with reduc.
-# t(A)%*%test
-# t(A)%*%pik
-system.time(test <- sampling::fastflightcube(X,pik,order = 2))
-system.time(test <- BalancedSampling::flightphase(pik,X))
-# system.time(test <- flightphase_arma(X,pik))
-# system.time(test <- flightphase_arma2(X,pik))
-t(A)%*%pik
-t(A)%*%test
-t(A)%*%pik # correct
-t(A)%*%pikCube01
-length(which(test > eps & test < (1-eps)))
-length(which(test > eps & test < (1-eps)))
-test <- matrix(c(1:6,rep(0,6*4)),ncol = 6,nrow = 5,byrow = T)
-t <- matrix(rnorm(5*6),ncol = 6,nrow = 5)
-rrefBal(t)
-ukern(t)
-library(MASS)
-Null(t(test))
-rm(list = ls())
-N = 50
-n = 30
-p = 2
-pik=inclusionprobabilities(runif(N),n)
-X=cbind(pik,matrix(rnorm(N*p),c(N,p)))
-flightphaseSPOT(pik,X)
 */

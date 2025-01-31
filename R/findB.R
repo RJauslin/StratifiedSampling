@@ -16,7 +16,6 @@
 #'
 #' @export
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' @examples
 #' N <- 1000
 #' strata <-  sample(x = 1:6, size = N, replace = TRUE)

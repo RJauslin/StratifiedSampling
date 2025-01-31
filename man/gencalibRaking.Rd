@@ -33,6 +33,3 @@ More details on the different calibration methods can be read in Tillé Y. (2020
 \references{
 Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

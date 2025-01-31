@@ -6,11 +6,10 @@
 //' @description
 //' This function transforms a categorical vector into a matrix of indicators.
 //'
-//' @param strata A vector of integers that represents the categories.
+//' @param strata_input A vector of integers that represents the categories.
 //'
 //' @return A matrix of indicators.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' @examples
 //' strata <- rep(c(1,2,3),each = 4)
@@ -78,11 +77,10 @@ system.time(M <- sampling::disjunctive(strata))
 //' @description
 //' This function returns the number of factor in each column of a categorical matrix.
 //'
-//' @param Xcat A matrix of integers that contains categorical vector in each column.
+//' @param Xcat_input A matrix of integers that contains categorical vector in each column.
 //'
 //' @return A row vector that contains the number of categories in each column.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' @export
 //' 
@@ -129,7 +127,6 @@ system.time(test <- ncat(Xcat))
 
 
 
-
 arma::vec ncat_internal(arma::umat Xcat){
   int p = Xcat.n_cols;
   arma::vec out(p,arma::fill::zeros);
@@ -167,11 +164,10 @@ arma::umat disj_internal(arma::uvec strata) {
 //' @description
 //' This function transforms a categorical matrix into a matrix of indicators variables.
 //'
-//' @param strata A matrix of integers that contains categorical vector in each column.
+//' @param strata_input A matrix of integers that contains categorical vector in each column.
 //'
 //' @return A matrix of indicators.
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @examples
 //' Xcat <-  matrix(c(sample(x = 1:6, size = 100, replace = TRUE),

@@ -50,6 +50,3 @@ It is omitted if the \code{tore} option is equal to \code{FALSE}.
 \seealso{
 \code{\link[stats]{dist}}.
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

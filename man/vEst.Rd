@@ -47,6 +47,3 @@ Tillé, Y. (2020), Sampling and Estimation from finite populations, Wiley,
 \seealso{
 \code{\link{vDBS}} \code{\link{vApp}}
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

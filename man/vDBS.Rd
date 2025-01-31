@@ -49,6 +49,3 @@ Grafstr\"om, A. and Till\'e, Y. (2013), Doubly balanced spatial sampling with sp
 \seealso{
 \code{\link{vDBS}} \code{\link{vApp}}
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

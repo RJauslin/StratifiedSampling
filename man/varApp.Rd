@@ -50,6 +50,3 @@ Hasler, C. and Tillé, Y. (2014). Fast balanced sampling for highly stratified p
 \seealso{
 \code{\link{varEst}}
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

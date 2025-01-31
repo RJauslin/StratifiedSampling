@@ -27,6 +27,3 @@ The function is computing the number of unit \eqn{K} that we need to add such th
 \seealso{
 \code{\link{osod}}
 }
-\author{
-Raphael Jauslin \email{raphael.jauslin@unine.ch}
-}

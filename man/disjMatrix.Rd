@@ -7,7 +7,7 @@
 disjMatrix(strata_input)
 }
 \arguments{
-\item{strata}{A matrix of integers that contains categorical vector in each column.}
+\item{strata_input}{A matrix of integers that contains categorical vector in each column.}
 }
 \value{
 A matrix of indicators.
@@ -21,7 +21,4 @@ Xcat <-  matrix(c(sample(x = 1:6, size = 100, replace = TRUE),
             sample(x = 1:6, size = 100, replace = TRUE)),ncol = 3)
 disjMatrix(Xcat)
 
-}
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }

@@ -7,7 +7,7 @@
 ncat(Xcat_input)
 }
 \arguments{
-\item{Xcat}{A matrix of integers that contains categorical vector in each column.}
+\item{Xcat_input}{A matrix of integers that contains categorical vector in each column.}
 }
 \value{
 A row vector that contains the number of categories in each column.
@@ -20,7 +20,4 @@ Xcat <-  matrix(c(sample(x = 1:6, size = 100, replace = TRUE),
             sample(x = 1:6, size = 100, replace = TRUE),
             sample(x = 1:6, size = 100, replace = TRUE)),ncol = 3)
 ncat(Xcat)
-}
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }

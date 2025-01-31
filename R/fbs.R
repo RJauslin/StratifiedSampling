@@ -18,7 +18,6 @@
 #' @references 
 #' Hasler, C. and Tillé Y. (2014). Fast balanced sampling for highly stratified population. \emph{Computational Statistics and Data Analysis}, 74, 81-94
 #' 
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @importFrom sampling landingcube
 #' 

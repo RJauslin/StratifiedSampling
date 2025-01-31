@@ -20,7 +20,6 @@
 #'
 #' @seealso \code{\link{osod}}
 #'
-#' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' 
 #' @export
@@ -47,7 +46,6 @@ c_bound <- function(pik) {
 #'
 #' @seealso \code{\link{osod}}
 #'
-#' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' 
 #' @export
@@ -71,7 +69,6 @@ c_bound2 <- function(pik) {
 #'
 #' @return A vector, the value of the g-weights.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #'
 #' @references Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York
@@ -98,7 +95,6 @@ calibRaking <- function(Xs, d, total, q, max_iter = 500L, tol = 1e-9) {
 #'
 #' @return A vector, the value of the g-weights.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #'
 #' @references Tillé, Y. (2020). \emph{Sampling and estimation from finite populations}. Wiley, New York
@@ -113,11 +109,10 @@ gencalibRaking <- function(Xs, Zs, d, total, q, max_iter = 500L, tol = 1e-9) {
 #' @description
 #' This function transforms a categorical vector into a matrix of indicators.
 #'
-#' @param strata A vector of integers that represents the categories.
+#' @param strata_input A vector of integers that represents the categories.
 #'
 #' @return A matrix of indicators.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' @examples
 #' strata <- rep(c(1,2,3),each = 4)
@@ -133,11 +128,10 @@ disj <- function(strata_input) {
 #' @description
 #' This function returns the number of factor in each column of a categorical matrix.
 #'
-#' @param Xcat A matrix of integers that contains categorical vector in each column.
+#' @param Xcat_input A matrix of integers that contains categorical vector in each column.
 #'
 #' @return A row vector that contains the number of categories in each column.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' @export
 #' 
@@ -155,11 +149,10 @@ ncat <- function(Xcat_input) {
 #' @description
 #' This function transforms a categorical matrix into a matrix of indicators variables.
 #'
-#' @param strata A matrix of integers that contains categorical vector in each column.
+#' @param strata_input A matrix of integers that contains categorical vector in each column.
 #'
 #' @return A matrix of indicators.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @examples
 #' Xcat <-  matrix(c(sample(x = 1:6, size = 100, replace = TRUE),
@@ -208,7 +201,6 @@ disjMatrix <- function(strata_input) {
 #' @return a vector of length \eqn{N} that contains the distances from the unit \eqn{k} to all other units.
 #'
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' 
 #' @seealso
@@ -241,14 +233,12 @@ distUnitk <- function(X, k, tore, toreBound) {
 #' sample that respects the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
 #' For more information see (Chauvet and Tillé 2006).
 #' 
-#' This function is a modified version of \code{\link[BalancedSampling:flightphase]{flightphase}}
 #' 
 #'
 #' @return Updated vector of \code{pik} that contains 0 and 1 for unit that are rejected or selected.
 #'
-#' @seealso \code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:flightphase]{flightphase}}.
+#' @seealso \code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:cube]{cube}}.
 #' 
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' @examples
 #' N <- 100
@@ -278,7 +268,6 @@ ffphase <- function(Xbal, prob, order = TRUE) {
 #'
 #' @return A vector of inclusion probabilities proportional to \code{x} and such that the sum is equal to the value \code{n}.
 #'
-#' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' @seealso \code{\link[sampling]{inclusionprobabilities}}
 #' 
@@ -307,7 +296,6 @@ inclprob <- function(x, n) {
 #' 
 #' @return A matrix of size \code{N} x \code{n}, where \code{N} is equal to the length of the vector \code{w}.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @references 
 #' Tille, Y. (2006), Sampling Algorithms, springer
@@ -329,7 +317,6 @@ qfromw <- function(w, n) {
 #' 
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @references 
 #' Tille, Y. (2006), Sampling Algorithms, springer
@@ -351,7 +338,6 @@ sfromq <- function(q) {
 #' 
 #' @return A vector of inclusion probability computed from the matrix \code{q}.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @references 
 #' Tille, Y. (2006), Sampling Algorithms, springer
@@ -379,7 +365,6 @@ pikfromq <- function(q) {
 #' 
 #' @return An updated vector of inclusion probability.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @references 
 #' Tille, Y. (2006), Sampling Algorithms, springer
@@ -405,7 +390,6 @@ piktfrompik <- function(pik, max_iter = 500L, tol = 1e-8) {
 #' 
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @references 
 #' Tille, Y. (2006), Sampling Algorithms, springer
@@ -449,7 +433,6 @@ cps <- function(pik, eps = 1e-6) {
 #' More details could be find in Tille (2006).
 #' @return A matrix, the joint inclusion probabilities.
 #'
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @references 
 #' Tille, Y. (2006), Sampling Algorithms, springer
@@ -475,7 +458,6 @@ maxentpi2 <- function(pikr) {
 #' 
 #' @return A vector with elements equal to 0 or 1. The value 1 indicates that the unit is selected while the value 0 is for rejected units.
 #'
-#' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 #'
 #' @seealso \code{\link{c_bound}}
 #' 
@@ -506,7 +488,6 @@ osod <- function(pikr, full = FALSE) {
 #'
 #' @return Estimated variance of the horvitz-thompson estimator.
 #' 
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
 #' 
@@ -552,7 +533,6 @@ vEst <- function(Xauxs, piks, ys) {
 #'
 #' @return Estimated variance of the horvitz-thompson estimator.
 #' 
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
 #' 
@@ -598,7 +578,6 @@ vDBS <- function(Xauxs, Xspreads, piks, ys) {
 #' 
 #' @return Approximated variance of the Horvitz-Thompson estimator.
 #' 
-#' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 #' 
 #' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
 #' 

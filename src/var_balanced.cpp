@@ -18,7 +18,6 @@
 //'
 //' @return Estimated variance of the horvitz-thompson estimator.
 //' 
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
 //' 
@@ -107,7 +106,6 @@ vApp(Xaux,pik,y)
 //'
 //' @return Estimated variance of the horvitz-thompson estimator.
 //' 
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
 //' 
@@ -215,7 +213,6 @@ vDBS(Xaux[s,],Xspread[s,],pik[s],y[s])
 //' 
 //' @return Approximated variance of the Horvitz-Thompson estimator.
 //' 
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' @seealso \code{\link{vDBS}} \code{\link{vApp}} 
 //' 

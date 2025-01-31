@@ -24,7 +24,6 @@ using namespace Rcpp;
 //'
 //' @seealso \code{\link{osod}}
 //'
-//' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' 
 //' @export
@@ -108,7 +107,6 @@ cond(pik)
 //'
 //' @seealso \code{\link{osod}}
 //'
-//' @author Raphael Jauslin \email{raphael.jauslin@@unine.ch}
 //'
 //' 
 //' @export

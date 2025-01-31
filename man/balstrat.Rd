@@ -51,6 +51,3 @@ Chauvet, G. (2009). Stratified balanced sampling. \emph{Survey Methodology}, 35:
 \seealso{
 \code{\link{ffphase}}, \code{\link{landingRM}}
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

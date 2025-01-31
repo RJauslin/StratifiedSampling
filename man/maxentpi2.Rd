@@ -25,6 +25,3 @@ More details could be find in Tille (2006).
 \references{
 Tille, Y. (2006), Sampling Algorithms, springer
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

@@ -23,8 +23,6 @@ This function computes the flight phase of the cube method proposed by Chauvet a
 This function implements the method proposed by (Chauvet and Tillé 2006). It recursively transforms the vector of inclusion probabilities \code{pik} into a
 sample that respects the balancing equations. The algorithm stops when the null space of the sub-matrix \eqn{B} is empty.
 For more information see (Chauvet and Tillé 2006).
-
-This function is a modified version of \code{\link[BalancedSampling:flightphase]{flightphase}}
 }
 \examples{
 N <- 100
@@ -39,8 +37,5 @@ t(X/pik)\%*\%pik
 pikstar
 }
 \seealso{
-\code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:flightphase]{flightphase}}.
-}
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
+\code{\link[sampling:samplecube]{fastflightphase}}, \code{\link[BalancedSampling:cube]{cube}}.
 }

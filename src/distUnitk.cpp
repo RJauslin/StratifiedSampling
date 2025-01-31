@@ -38,7 +38,6 @@
 //' @return a vector of length \eqn{N} that contains the distances from the unit \eqn{k} to all other units.
 //'
 //'
-//' @author Raphaël Jauslin \email{raphael.jauslin@@unine.ch}
 //' 
 //' 
 //' @seealso

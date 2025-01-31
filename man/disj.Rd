@@ -7,7 +7,7 @@
 disj(strata_input)
 }
 \arguments{
-\item{strata}{A vector of integers that represents the categories.}
+\item{strata_input}{A vector of integers that represents the categories.}
 }
 \value{
 A matrix of indicators.
@@ -19,7 +19,4 @@ This function transforms a categorical vector into a matrix of indicators.
 strata <- rep(c(1,2,3),each = 4)
 disj(strata)
 
-}
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
 }

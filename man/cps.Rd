@@ -48,6 +48,3 @@ t <- (p-pik)/sqrt(pik*(1-pik)/SIM)
 \references{
 Tille, Y. (2006), Sampling Algorithms, springer
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}

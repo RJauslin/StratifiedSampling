@@ -31,6 +31,3 @@ X <- matrix(rnorm(N*p),ncol = 3)
 findB(X,strata)
 
 }
-\author{
-Raphaël Jauslin \email{raphael.jauslin@unine.ch}
-}
