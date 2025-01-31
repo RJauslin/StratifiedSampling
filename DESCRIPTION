@@ -28,7 +28,6 @@ Suggests:
     prettydoc,
     ggplot2,
     viridis,
-    rgeos,
     geojsonio,
     sf,
     rmapshaper
